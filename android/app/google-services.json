@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "7093278234",
+    "project_id": "ifeel-in-colors",
+    "storage_bucket": "ifeel-in-colors.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:7093278234:android:0706cfef4310c01d8ae3a3",
+        "android_client_info": {
+          "package_name": "com.ifeelin_color.ifeelin_color"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "7093278234-jj5s00knd8hpo5tfl27g54gf02o6lj3o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ifeelin_color.ifeelin_color",
+            "certificate_hash": "64cd7db97866f81aab47484f4b2528cf5ca5e042"
+          }
+        },
+        {
+          "client_id": "7093278234-s4rms0h24jk5sfp0fu3unej5rpqhpbs4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ifeelin_color.ifeelin_color",
+            "certificate_hash": "301fb20243777aaafe3ff53b49456d1d4064a84e"
+          }
+        },
+        {
+          "client_id": "7093278234-mdp7jpvool8baiqiobf7tf4a8agnpu2o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDiDa_3rB72X6Qt22qd6aL_PAj4-dN-RWk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "7093278234-mdp7jpvool8baiqiobf7tf4a8agnpu2o.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "7093278234-v47g69ugtmdppjfjfl55k1kq10jrvku3.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ifeelinColor.ifeelinColor"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,10 @@
+{
+  "configurations": [
+    {
+      "name": "ifeelin_color_master (Flutter)",
+      "program": "lib/main.dart",
+      "request": "launch",
+      "type": "dart"
+    }
+  ]
+}

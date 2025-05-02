@@ -1,0 +1,20 @@
+{
+  "buildFiles": [
+    "/Users/neosoft/Downloads/_flutter_setup/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/Users/neosoft/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/Users/neosoft/Downloads/CI-CD/ifeelin_color_master2/android/app/.cxx/RelWithDebInfo/l222a3f5/armeabi-v7a",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/Users/neosoft/Library/Android/sdk/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/Users/neosoft/Downloads/CI-CD/ifeelin_color_master2/android/app/.cxx/RelWithDebInfo/l222a3f5/armeabi-v7a",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {}
+}
