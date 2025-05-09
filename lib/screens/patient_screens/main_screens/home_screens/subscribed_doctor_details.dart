@@ -469,105 +469,122 @@ class SubscribedDoctorDetailsScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                child: Text(
-                  'Active Plan',
-                  style: Theme.of(context).textTheme.titleSmall,
-                ),
-              ),
-              Column(
-                children: subscriedDoctorsModel?.subscribedPlans?.map((item) {
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                        ),
-                        child: Card(
-                          color: Colors.white,
-                          elevation: 4,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                          child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(14)),
-                            padding: const EdgeInsets.only(top: 10),
-                            width: MediaQueryUtil.size(context).width,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  child: Text(
-                                    "${item.name} : \$${item.price}",
-                                    style:
-                                        Theme.of(context).textTheme.titleSmall,
-                                  ),
+              subscriedDoctorsModel?.subscribedPlans != null
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 10),
+                      child: Text(
+                        'Active Plan',
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
+                    )
+                  : const SizedBox.shrink(),
+              subscriedDoctorsModel?.subscribedPlans != null
+                  ? Column(
+                      children: subscriedDoctorsModel?.subscribedPlans
+                              ?.map((item) {
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                              ),
+                              child: Card(
+                                color: Colors.white,
+                                elevation: 4,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(14),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  child: Text(
-                                    "${item.details}",
-                                    style:
-                                        Theme.of(context).textTheme.bodySmall,
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 10),
-                                  child: Row(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(14)),
+                                  padding: const EdgeInsets.only(top: 10),
+                                  width: MediaQueryUtil.size(context).width,
+                                  child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
-                                        "Type: ${item.planType}",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodySmall,
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                        child: Text(
+                                          "${item.name} : \$${item.price}",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleSmall,
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10),
+                                        child: Text(
+                                          "${item.details}",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall,
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10, vertical: 10),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              "Type: ${item.planType}",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall,
+                                            ),
+                                            Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 10,
+                                                      vertical: 3),
+                                              decoration: BoxDecoration(
+                                                  color: greenColor,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10)),
+                                              child: Text(
+                                                '${item.status}',
+                                                style: const TextStyle(
+                                                    color: whiteColor,
+                                                    fontSize: 12),
+                                              ),
+                                            )
+                                          ],
+                                        ),
                                       ),
                                       Container(
+                                        decoration: BoxDecoration(
+                                            color: Colors.grey
+                                                .withValues(alpha: 0.3),
+                                            borderRadius:
+                                                const BorderRadius.only(
+                                                    bottomLeft:
+                                                        Radius.circular(14),
+                                                    bottomRight:
+                                                        Radius.circular(14))),
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 10, vertical: 3),
-                                        decoration: BoxDecoration(
-                                            color: greenColor,
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
+                                        width:
+                                            MediaQueryUtil.size(context).width,
                                         child: Text(
-                                          '${item.status}',
-                                          style: const TextStyle(
-                                              color: whiteColor, fontSize: 12),
+                                          'Validity :${MediaQueryUtil.formatDateWithSuffix(DateTime.parse(item.createdAt.toString()))}',
+                                          style: const TextStyle(fontSize: 12),
                                         ),
                                       )
                                     ],
                                   ),
                                 ),
-                                Container(
-                                  decoration: BoxDecoration(
-                                      color: Colors.grey.withValues(alpha: 0.3),
-                                      borderRadius: const BorderRadius.only(
-                                          bottomLeft: Radius.circular(14),
-                                          bottomRight: Radius.circular(14))),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 3),
-                                  width: MediaQueryUtil.size(context).width,
-                                  child: Text(
-                                    'Validity :${MediaQueryUtil.formatDateWithSuffix(DateTime.parse(item.createdAt.toString()))}',
-                                    style: const TextStyle(fontSize: 12),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    }).toList() ??
-                    [],
-              ),
+                              ),
+                            );
+                          }).toList() ??
+                          [],
+                    )
+                  : const SizedBox.shrink(),
               const SizedBox(
                 height: 30,
               ),
@@ -582,13 +599,16 @@ class SubscribedDoctorDetailsScreen extends StatelessWidget {
               ),
               SizedBox(
                 width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height *
-                    0.8, // Adjust the height as needed
+                // height: MediaQuery.of(context).size.height *
+                //     0.8, // Adjust the height as needed
                 child: SubscribedStepperWidget(
                   careerpathList:
                       subscriedDoctorsModel?.clinician?.careerpath ?? [],
                 ),
               ),
+              const SizedBox(
+                height: 50,
+              )
             ],
           ),
         ),

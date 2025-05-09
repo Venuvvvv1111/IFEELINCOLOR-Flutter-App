@@ -187,13 +187,13 @@ class _BranchListState extends State<OrganizationListView> {
                                 Navigator.pushNamed(context,
                                     AppRoutes.organizationDoctorsScreen,
                                     arguments: OrganizationArguments(
-                                      organizationId: organizationController
-                                          .filteredOrganizations[index].sId
-                                          .toString(),
-                                      organizationName: organizationController
-                                          .filteredOrganizations[index].name
-                                          .toString(),
-                                    ));
+                                        organizationId: organizationController
+                                            .filteredOrganizations[index].sId
+                                            .toString(),
+                                        organizationName: organizationController
+                                            .filteredOrganizations[index].name
+                                            .toString(),
+                                        isIndividual: false));
                               },
                               child: Container(
                                 decoration: BoxDecoration(

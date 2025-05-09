@@ -77,7 +77,7 @@ class GetDoctorProfileController extends GetxController {
   }
 
   String? validateEmail(String value) {
-    if (!GetUtils.isEmail(value)) {
+    if (!RegExp(r"^[^\s@]+@[^\s@]+\.[^\s@]+$").hasMatch(value)) {
       return "Provide a valid email";
     }
     return null;

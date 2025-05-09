@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -53,9 +54,10 @@ Future<void> initializeNotifications() async {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await GetStorage.init('user_data');
   await GetStorage.init();
-  Get.put(UserInfo());
+  // Get.put(UserInfo());
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -115,6 +117,13 @@ void main() async {
     provisional: true,
     sound: true,
   );*/
+  if (Platform.isIOS) {
+    FirebaseMessaging.instance.getAPNSToken().then((apnsToken) {
+      if (kDebugMode) {
+        print('APNs Token: $apnsToken');
+      }
+    });
+  }
 
   FlutterError.onError = (FlutterErrorDetails details) {
     // Handle errors gracefully
@@ -190,7 +199,7 @@ class _MyAppState extends State<MyApp> {
       }
     });
     super.initState();
-    initConnectivity();
+    // initConnectivity();
   }
 
   List<ConnectivityResult> _connectionStatus = [ConnectivityResult.none];

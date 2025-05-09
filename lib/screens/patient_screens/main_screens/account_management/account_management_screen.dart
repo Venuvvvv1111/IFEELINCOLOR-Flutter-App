@@ -1,4 +1,6 @@
 import 'package:flutter/foundation.dart';
+import 'package:get/get.dart';
+import 'package:ifeelin_color/models/patient_models/organization_model.dart';
 import 'package:ifeelin_color/utils/medial_query_util/media_query_util.dart';
 import 'package:ifeelin_color/utils/Route/app_routes.dart';
 import 'package:ifeelin_color/utils/constants/load_neatwork_image.dart';
@@ -20,6 +22,7 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreen extends State<SettingsScreen> {
+  final userinfo = Get.put(UserInfo());
   String userName = '';
   @override
   void initState() {
@@ -67,7 +70,7 @@ class _SettingsScreen extends State<SettingsScreen> {
                             decoration: BoxDecoration(
                               color: Colors.white,
                               border:
-                                  Border.all(color: primaryColor, width: 3.0),
+                                  Border.all(color: primaryColor, width: 0.0),
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(80.0)),
                             ),
@@ -150,7 +153,7 @@ class _SettingsScreen extends State<SettingsScreen> {
                 ),
                 SettingItems(
                   image: AppIcons.paymentMenthodMainIcon,
-                  title: 'Subscribe Portal',
+                  title: 'Portal Subscription',
                   ontap: () {
                     Navigator.pushNamed(
                       context,
@@ -166,6 +169,18 @@ class _SettingsScreen extends State<SettingsScreen> {
                       context,
                       AppRoutes.allOrganizationScreen,
                     );
+                  },
+                ),
+                SettingItems(
+                  image: AppIcons.paymentMenthodMainIcon,
+                  title: 'Doctor Subscription',
+                  ontap: () {
+                    Navigator.pushNamed(
+                        context, AppRoutes.individualDoctorsScreen,
+                        arguments: OrganizationArguments(
+                            organizationId: '',
+                            organizationName: '',
+                            isIndividual: true));
                   },
                 ),
                 SettingItems(

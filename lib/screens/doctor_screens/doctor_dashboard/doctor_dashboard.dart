@@ -339,7 +339,7 @@ class DoctorDashboard extends StatelessWidget {
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 border:
-                                    Border.all(color: primaryColor, width: 3.0),
+                                    Border.all(color: primaryColor, width: 0.0),
                                 borderRadius: const BorderRadius.all(
                                     Radius.circular(80.0)),
                               ),

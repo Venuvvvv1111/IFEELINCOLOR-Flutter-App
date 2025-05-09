@@ -69,8 +69,7 @@ class _DoctorSettingsScreen extends State<DoctorSettingsScreen> {
                             width: 110.0,
                             decoration: BoxDecoration(
                               color: Colors.white,
-                              border:
-                                  Border.all(color: primaryColor, width: 3.0),
+                              border: Border.all(color: primaryColor, width: 0),
                               borderRadius:
                                   const BorderRadius.all(Radius.circular(80.0)),
                             ),

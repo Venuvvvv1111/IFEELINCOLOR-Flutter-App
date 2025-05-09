@@ -22,7 +22,7 @@ let controller: FlutterViewController = window?.rootViewController as! FlutterVi
         result(FlutterMethodNotImplemented)
       }
     }
-     GMSServices.provideAPIKey("AIzaSyDYnSt88OMQBytz2HAtEGjeiEMQ6HcwpQY")
+     GMSServices.provideAPIKey("AIzaSyD-p4jGpq9LNkTgRK-k12BQ4kU9y6KFiVo")
     FirebaseApp.configure()
     
     GeneratedPluginRegistrant.register(with: self)

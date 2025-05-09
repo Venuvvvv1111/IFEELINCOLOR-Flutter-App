@@ -25,9 +25,10 @@ class SubscribeClinicController extends GetxController {
     super.onClose();
   }
 
-  Future<void> fetchDoctorPlans() async {
+  Future<void> fetchDoctorPlans(bool isIndividual) async {
     final response = await http.get(
-      Uri.parse('${Constants.baseUrl}/${Constants.listDoctorPlans}'),
+      Uri.parse(
+          '${Constants.baseUrl}/${isIndividual ? Constants.listIndDoctorPlans : Constants.listOrgDoctorPlans}'),
       headers: {
         'Content-Type': 'application/json',
         'authorization': 'Bearer ${UserInfo().getUserToken}'

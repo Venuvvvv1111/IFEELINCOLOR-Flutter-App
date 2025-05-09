@@ -51,8 +51,6 @@ import 'package:ifeelin_color/models/patient_models/nearby_doctor_model.dart'
     as doctor;
 import 'package:ifeelin_color/models/patient_models/home_models/subscribed_doctor_model.dart'
     as subscribed_doctor;
-import 'package:ifeelin_color/models/patient_models/organization_doctors_model.dart'
-    as orgnaization_doctor;
 
 class AppRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -85,20 +83,24 @@ class AppRouter {
         return CupertinoPageRoute(
             builder: (_) => const SubscribePortalScreen(), settings: settings);
       case AppRoutes.subscribeClinicScreen:
-        String doctorId = settings.arguments as String;
+        final args = settings.arguments as SubscribeClinicArguments;
         return CupertinoPageRoute(
-            builder: (_) => SubscribeClinicScreen(
-                  doctorId: doctorId,
-                ),
-            settings: settings);
+          builder: (_) => SubscribeClinicScreen(
+            doctorId: args.doctorId,
+            isIndividual: args.isIndividual,
+          ),
+          settings: settings,
+        );
       case AppRoutes.organizationDoctorDetailsScreen:
-        final orgnaizationDoctorData =
-            settings.arguments as orgnaization_doctor.OrganizationDoctorsData;
+        final args = settings.arguments as OrganizationDoctorArguments;
+
         return CupertinoPageRoute(
-            builder: (_) => OrganizationDoctorDetailsScreen(
-                  organizationDoctorsData: orgnaizationDoctorData,
-                ),
-            settings: settings);
+          builder: (_) => OrganizationDoctorDetailsScreen(
+            organizationDoctorsData: args.doctorData,
+            isIndividual: args.isIndividual,
+          ),
+          settings: settings,
+        );
 
       case AppRoutes.homeScreen:
         return CupertinoPageRoute(
@@ -112,12 +114,12 @@ class AppRouter {
       case AppRoutes.moodInfoScreen:
         return CupertinoPageRoute(
             builder: (_) => const SubscribePortalScreen(), settings: settings);
-      case AppRoutes.acountMnagementScreen:
-        return CupertinoPageRoute(
-            builder: (_) => const SubscribeClinicScreen(
-                  doctorId: '123',
-                ),
-            settings: settings);
+      // case AppRoutes.acountMnagementScreen:
+      //   return CupertinoPageRoute(
+      //       builder: (_) => const SubscribeClinicScreen(
+      //             doctorId: '123',
+      //           ),
+      //       settings: settings);
       case AppRoutes.doctorDetailScreen:
         final nearbyDoctorsModel = settings.arguments as doctor.Body;
         return CupertinoPageRoute(
@@ -241,8 +243,20 @@ class AppRouter {
             builder: (_) => OrganizationDoctorsScreen(
                   organizationId: args.organizationId,
                   organizationName: args.organizationName,
+                  isIndividual: false,
                 ),
             settings: settings);
+
+      case AppRoutes.individualDoctorsScreen:
+        final args = settings.arguments as OrganizationArguments;
+        return CupertinoPageRoute(
+            builder: (_) => OrganizationDoctorsScreen(
+                  organizationId: args.organizationId,
+                  organizationName: args.organizationName,
+                  isIndividual: true,
+                ),
+            settings: settings);
+
       default:
         return CupertinoPageRoute(
             builder: (_) => Scaffold(

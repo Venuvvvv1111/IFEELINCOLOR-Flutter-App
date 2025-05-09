@@ -16,7 +16,7 @@ class _AddressSearchScreenState extends State<AddressSearchScreen> {
   List<String> predictions = [];
   // String accessToken =
   //     'pk.f242a135794c6dd00503bc2b331f77e3'; // Replace with your API access token
-  String accessToken = 'AIzaSyDYnSt88OMQBytz2HAtEGjeiEMQ6HcwpQY';
+  String accessToken = 'AIzaSyD-p4jGpq9LNkTgRK-k12BQ4kU9y6KFiVo';
 
   bool isLoading = false;
   String query = "";

@@ -107,7 +107,7 @@ class OrganizationDoctorsData {
     experince = json['experince'] ?? "";
     highlights = json['highlights'] ?? "";
     location = json['location'] ?? '';
-    ratings = json['ratings'] ?? '';
+    ratings = json['ratings'] ?? '4.0';
     distance = json['distance'] ?? "";
 
     planDetails = json['planDetails'] != null

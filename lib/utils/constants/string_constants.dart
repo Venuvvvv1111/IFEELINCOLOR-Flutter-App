@@ -36,7 +36,8 @@ class Constants {
   static const String login = "auth/patient-login";
   static const String getProfile = "patients/profile";
   static const String register = "auth/patient-register";
-  static const String listDoctorPlans = "patients/list-doctor-plans";
+  static const String listOrgDoctorPlans = "patients/list-organization-plans";
+  static const String listIndDoctorPlans = "patients/list-doctor-plans";
   static const String listPortalPlans = "patients/list-portal-plans";
   static const String getSubscribedPlans = "patients/profile/my-subscriptions";
   static const String getNotification = "patients/notifications";
@@ -59,6 +60,7 @@ class Constants {
       "patients/list-all-organizations";
   static const String getOrganizationDoctorsUrl =
       "patients/get-organization-doctors";
+  static const String getIndividualDoctorsUrl = "patients/get-doctors";
 
   //doctor apis
   static const String doctorRegister = "auth/doctor-register";
@@ -67,7 +69,7 @@ class Constants {
   static const String intakeDetailsUrl =
       "doctor/subscribed-patient-assessment-infos";
 
-  static const String doctorApplistPortalPlans = "clinicistPlan/active";
+  static const String doctorApplistPortalPlans = "clinicistPlan";
 
   static const String doctorLogin = "auth/doctor-login";
   static const String subscribedPatients = "doctor/subscribed-patients";
@@ -99,5 +101,5 @@ class Constants {
   static const String doctorAppSubscribeToPortal = "doctorSub/create";
   static const String doctorAppNotifications = "doctor/notifications";
 
-  static const String notificationStatusChange = "doctor/notifications";
+  static const String notificationStatusChange = "notification-alerts";
 }

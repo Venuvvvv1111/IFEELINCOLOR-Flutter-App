@@ -17,8 +17,11 @@ import 'package:ifeelin_color/models/patient_models/organization_doctors_model.d
 
 class OrganizationDoctorDetailsScreen extends StatelessWidget {
   final doctor.OrganizationDoctorsData? organizationDoctorsData;
+  final bool isIndividual;
   const OrganizationDoctorDetailsScreen(
-      {super.key, required this.organizationDoctorsData});
+      {super.key,
+      required this.organizationDoctorsData,
+      required this.isIndividual});
 
   @override
   Widget build(BuildContext context) {
@@ -596,8 +599,15 @@ class OrganizationDoctorDetailsScreen extends StatelessWidget {
           width: MediaQueryUtil.size(context).width,
           child: ElevatedButton(
             onPressed: () {
-              Navigator.pushNamed(context, AppRoutes.subscribeClinicScreen,
-                  arguments: organizationDoctorsData?.sId);
+              Navigator.pushNamed(
+                context,
+                AppRoutes.subscribeClinicScreen,
+                arguments: SubscribeClinicArguments(
+                  doctorId: organizationDoctorsData?.sId ?? '',
+                  isIndividual:
+                      isIndividual, // or false depending on your logic
+                ),
+              );
             },
             child: const Text('Subscribe Now'),
           ),
@@ -606,4 +616,14 @@ class OrganizationDoctorDetailsScreen extends StatelessWidget {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
+}
+
+class SubscribeClinicArguments {
+  final String doctorId;
+  final bool isIndividual;
+
+  SubscribeClinicArguments({
+    required this.doctorId,
+    required this.isIndividual,
+  });
 }

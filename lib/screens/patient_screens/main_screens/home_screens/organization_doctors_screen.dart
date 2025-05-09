@@ -1,7 +1,11 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:ifeelin_color/controllers/patient_controllers/organization_list_controller/organization_controller.dart';
+import 'package:ifeelin_color/models/patient_models/organization_doctors_model.dart'
+    as doctor;
 import 'package:ifeelin_color/utils/Route/app_routes.dart';
 import 'package:ifeelin_color/utils/constants/load_neatwork_image.dart';
 import 'package:ifeelin_color/utils/constants/loader.dart';
@@ -11,10 +15,12 @@ import 'package:ifeelin_color/utils/helpers/custom_colors.dart';
 class OrganizationDoctorsScreen extends StatefulWidget {
   final String organizationId;
   final String organizationName;
+  final bool isIndividual;
   const OrganizationDoctorsScreen(
       {super.key,
       required this.organizationId,
-      required this.organizationName});
+      required this.organizationName,
+      required this.isIndividual});
 
   @override
   State<OrganizationDoctorsScreen> createState() =>
@@ -28,7 +34,14 @@ class _OrganizationDoctorsScreenState extends State<OrganizationDoctorsScreen> {
   @override
   void initState() {
     super.initState();
-    organizationController.fetchOrganizationDoctorsList(widget.organizationId);
+    print(widget.isIndividual);
+    if (widget.organizationId.isEmpty) {
+      organizationController.fetchIndividualDoctorsList();
+    } else {
+      organizationController
+          .fetchOrganizationDoctorsList(widget.organizationId);
+    }
+
     // Ensure state updates happen after the widget is built
   }
 
@@ -144,8 +157,9 @@ class _OrganizationDoctorsScreenState extends State<OrganizationDoctorsScreen> {
                                     height: 3,
                                   ),
                                   RatingBarIndicator(
-                                    rating:
-                                        double.parse(doctor.ratings ?? "4.0"),
+                                    rating: double.parse(doctor.ratings!.isEmpty
+                                        ? "4.0"
+                                        : doctor.ratings ?? "4.0"),
 
                                     itemCount: 5,
                                     itemSize:
@@ -191,7 +205,11 @@ class _OrganizationDoctorsScreenState extends State<OrganizationDoctorsScreen> {
                                             context,
                                             AppRoutes
                                                 .organizationDoctorDetailsScreen,
-                                            arguments: doctor,
+                                            arguments:
+                                                OrganizationDoctorArguments(
+                                              doctorData: doctor,
+                                              isIndividual: widget.isIndividual,
+                                            ),
                                           );
                                         },
                                         child: Align(
@@ -247,4 +265,14 @@ class _OrganizationDoctorsScreenState extends State<OrganizationDoctorsScreen> {
           ],
         ));
   }
+}
+
+class OrganizationDoctorArguments {
+  final doctor.OrganizationDoctorsData doctorData;
+  final bool isIndividual;
+
+  OrganizationDoctorArguments({
+    required this.doctorData,
+    required this.isIndividual,
+  });
 }

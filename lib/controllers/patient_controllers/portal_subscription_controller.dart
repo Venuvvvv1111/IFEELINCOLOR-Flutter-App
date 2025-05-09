@@ -170,6 +170,7 @@ class SubscribePortalController extends GetxController {
           'authorization': 'Bearer ${UserInfo().getUserToken}'
         },
       );
+
       if (kDebugMode) {
         print(response.statusCode);
       }

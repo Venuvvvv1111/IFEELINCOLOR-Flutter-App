@@ -48,7 +48,7 @@ class LoginController extends GetxController {
     if (value.isEmpty) {
       return "Email can't be empty";
     }
-    if (!GetUtils.isEmail(value)) {
+    if (!RegExp(r"^[^\s@]+@[^\s@]+\.[^\s@]+$").hasMatch(value)) {
       return "Enter a valid email";
     }
     return null;
@@ -85,7 +85,7 @@ class LoginController extends GetxController {
 
       if (kDebugMode) {
         print(
-            '${Constants.baseUrl}/${Constants.login} ${emailController.text} $isGmail');
+            'base url ${Constants.baseUrl}/${Constants.login} ${emailController.text} $isGmail');
       }
 
       final res = await http.post(
@@ -172,7 +172,7 @@ class LoginController extends GetxController {
   }
 
   Future<void> getAPNSToken() async {
-    String? apnsToken = await FirebaseMessaging.instance.getAPNSToken();
+    String? apnsToken = await FirebaseMessaging.instance.getAPNSToken() ?? "";
     if (kDebugMode) {
       print("APNS Token: $apnsToken");
     }

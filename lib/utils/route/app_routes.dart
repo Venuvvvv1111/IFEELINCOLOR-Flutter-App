@@ -9,6 +9,7 @@ class AppRoutes {
   static const String subscribePortalScreen = '/subscribePortalScreen';
   static const String allOrganizationScreen = '/allOrganizationScreen';
   static const String organizationDoctorsScreen = '/organizationDoctorsScreen';
+  static const String individualDoctorsScreen = '/individualDoctorsScreen';
   static const String organizationDoctorDetailsScreen =
       '/organizationDoctorDetailsScreen';
   static const String subscribeClinicScreen = '/subscribeClinicScreen';

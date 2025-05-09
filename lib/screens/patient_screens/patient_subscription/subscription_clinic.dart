@@ -9,7 +9,12 @@ import '../../../controllers/patient_controllers/clinic_subscription_controller.
 
 class SubscribeClinicScreen extends StatefulWidget {
   final String? doctorId;
-  const SubscribeClinicScreen({super.key, required this.doctorId});
+  final bool isIndividual;
+  const SubscribeClinicScreen({
+    super.key,
+    required this.doctorId,
+    required this.isIndividual,
+  });
 
   @override
   State<SubscribeClinicScreen> createState() => _SubscribeClinicScreenState();
@@ -20,7 +25,7 @@ class _SubscribeClinicScreenState extends State<SubscribeClinicScreen> {
       Get.put(SubscribeClinicController());
   @override
   void initState() {
-    controller.fetchDoctorPlans();
+    controller.fetchDoctorPlans(widget.isIndividual);
     Stripeservice().initializeStripe();
 
     super.initState();

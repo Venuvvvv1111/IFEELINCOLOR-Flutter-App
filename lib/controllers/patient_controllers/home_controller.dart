@@ -191,10 +191,9 @@ class HomeController extends GetxController {
         },
       );
       isLoading(false);
-      if (kDebugMode) {
-        print(res.statusCode);
-        print(res.body);
-      }
+      // if (kDebugMode) {
+
+      // }
 
       if (res.statusCode == 200) {
         subscribedDoctorsModel = subscribedDoctorsModelFromJson(res.body);

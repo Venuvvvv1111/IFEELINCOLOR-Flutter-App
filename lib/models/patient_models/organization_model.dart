@@ -141,9 +141,11 @@ class SocialProfile {
 class OrganizationArguments {
   final String organizationId;
   final String organizationName;
+  final bool isIndividual;
 
   OrganizationArguments({
     required this.organizationId,
     required this.organizationName,
+    required this.isIndividual,
   });
 }

@@ -56,6 +56,7 @@ class PatientRecomendationController extends GetxController {
           'authorization': 'Bearer ${UserInfo().getUserToken}'
         },
       );
+
       isLoading.value = false;
       if (kDebugMode) {
         print(response.body);
@@ -67,6 +68,7 @@ class PatientRecomendationController extends GetxController {
 
         // Initialize categories and items
       } else {
+        totalPatientRecomendations(0);
         // Handle error
         if (kDebugMode) {
           print(response.body);
@@ -74,9 +76,11 @@ class PatientRecomendationController extends GetxController {
       }
     } catch (e) {
       // Handle error
-      if (kDebugMode) {
-        print(e);
-      }
+      // if (kDebugMode) {
+
+      totalPatientRecomendations(0);
+
+      // }
     } finally {
       isLoading.value = false;
     }

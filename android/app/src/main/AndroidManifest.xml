@@ -33,7 +33,9 @@ xmlns:tools="http://schemas.android.com/tools">
                         <!-- added api key --> 
  <meta-data
       android:name="com.google.android.geo.API_KEY"
-      android:value="AIzaSyDYnSt88OMQBytz2HAtEGjeiEMQ6HcwpQY"/>
+      android:value="AIzaSyD-p4jGpq9LNkTgRK-k12BQ4kU9y6KFiVo"/>
+    <meta-data android:name="com.google.android.maps.v2.Renderer" android:value="legacy" />
+
                   <!-- Firebase Messaging Service -->
 
                 <meta-data

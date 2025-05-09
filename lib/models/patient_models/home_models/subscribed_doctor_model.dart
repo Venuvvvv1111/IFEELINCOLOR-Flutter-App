@@ -45,11 +45,8 @@ class SubscribedList {
     clinician = json['clinician'] != null
         ? Clinician.fromJson(json['clinician'])
         : null;
-    if (json['subscribedPlans'] != null) {
-      subscribedPlans = <SubscribedPlans>[];
-      json['subscribedPlans'].forEach((v) {
-        subscribedPlans!.add(SubscribedPlans.fromJson(v));
-      });
+    if (json['plan'] != null) {
+      subscribedPlans = [SubscribedPlans.fromJson(json['plan'])];
     }
   }
 
@@ -58,9 +55,8 @@ class SubscribedList {
     if (clinician != null) {
       data['clinician'] = clinician!.toJson();
     }
-    if (subscribedPlans != null) {
-      data['subscribedPlans'] =
-          subscribedPlans!.map((v) => v.toJson()).toList();
+    if (subscribedPlans != null && subscribedPlans!.isNotEmpty) {
+      data['plan'] = subscribedPlans!.first.toJson(); // Store just one
     }
     return data;
   }
@@ -227,7 +223,7 @@ class Careerpath {
 class SubscribedPlans {
   String? sId;
   String? name;
-  double? price;
+  String? price;
   String? details;
   int? validity;
   String? status;

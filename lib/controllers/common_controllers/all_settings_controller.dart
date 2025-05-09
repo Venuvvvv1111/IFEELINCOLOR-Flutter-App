@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,7 +14,7 @@ class AllSettingsController extends GetxController {
 
   void toggleNotification(bool value) {
     notificationsEnabled.value = value;
-    String status = value ? "on" : "off";
+    String status = value ? "true" : "false";
     sendNotificationStatusToAPI(status);
   }
 
@@ -21,12 +24,15 @@ class AllSettingsController extends GetxController {
         Uri.parse('${Constants.baseUrl}/${Constants.notificationStatusChange}');
 
     try {
-      final response = await http.post(url, headers: {
-        'Content-Type': 'application/json',
-        'authorization': 'Bearer ${userInfo.getUserToken}'
-      }, body: {
-        'status': status
-      });
+      final response = await http.post(url,
+          headers: {
+            'Content-Type': 'application/json',
+            'authorization': 'Bearer ${userInfo.getUserToken}'
+          },
+          body: jsonEncode({
+            "deviceToken": await FirebaseMessaging.instance.getToken() ?? "",
+            'alloowed': status,
+          }));
 
       if (kDebugMode) {
         print(response.body);
@@ -34,6 +40,11 @@ class AllSettingsController extends GetxController {
       }
 
       if (response.statusCode == 200) {
+        MyToast.showGetToast(
+            title: 'Success',
+            message: 'Notification status changed',
+            backgroundColor: Colors.green,
+            color: Colors.white);
         // final data = json.decode(response.body);
       } else {
         MyToast.showGetToast(

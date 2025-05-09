@@ -115,6 +115,56 @@ class OrganizationController extends GetxController {
     }
   }
 
+  Future<void> fetchIndividualDoctorsList() async {
+    try {
+      isDoctorsLoading.value = true;
+      final response = await http.get(
+        Uri.parse('${Constants.baseUrl}/${Constants.getIndividualDoctorsUrl}'),
+        headers: {
+          'Content-Type': 'application/json',
+          'authorization': 'Bearer ${UserInfo().getUserToken}'
+        },
+      );
+
+      isDoctorsLoading.value = false;
+
+      if (response.statusCode == 200) {
+        // final json = jsonDecode(response.body);
+        organizationDoctorsModel =
+            organizationDoctorsModelFromJson(response.body);
+        if (organizationDoctorsModel?.body != null) {
+          filteredOrganizationDoctors
+              .assignAll(organizationDoctorsModel!.body!);
+          if (kDebugMode) {
+            print(filteredOrganizationDoctors[0]);
+          }
+        } else {
+          if (kDebugMode) {
+            print('No nearby doctors found');
+          }
+        }
+      } else {
+        isDoctorsLoading.value = false;
+        error('error');
+        Get.snackbar('Error', 'Failed to Doctors');
+      }
+    } catch (e) {
+      isDoctorsLoading.value = false;
+
+      error('error');
+      if (kDebugMode) {
+        print('error in $e');
+      }
+      MyToast.showGetToast(
+          title: 'Error',
+          message: 'Something went wrong. Please try again.',
+          backgroundColor: Colors.red,
+          color: Colors.white);
+    } finally {
+      isDoctorsLoading.value = false;
+    }
+  }
+
   void filterOrganizationDoctors(String query) {
     if (query.isEmpty) {
       filteredOrganizationDoctors
