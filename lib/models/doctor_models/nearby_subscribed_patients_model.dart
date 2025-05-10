@@ -77,6 +77,8 @@ class Patient {
   String? dateOfBirth;
   String? mobile;
   Address? address;
+  String? image;
+    String? location;
 
   Patient(
       {this.sId,
@@ -84,7 +86,10 @@ class Patient {
       this.email,
       this.dateOfBirth,
       this.mobile,
-      this.address});
+      this.address,
+      this.image,
+      this.location
+      });
 
   Patient.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -92,6 +97,8 @@ class Patient {
     email = json['email'];
     dateOfBirth = json['dateOfBirth'];
     mobile = json['mobile'];
+      image = json['image'];
+    location = json['location'];
     address =
         json['address'] != null ? Address.fromJson(json['address']) : null;
   }
@@ -103,9 +110,11 @@ class Patient {
     data['email'] = email;
     data['dateOfBirth'] = dateOfBirth;
     data['mobile'] = mobile;
+        data['image'] = image;
     if (address != null) {
       data['address'] = address!.toJson();
     }
+        data['location'] = location;
     return data;
   }
 }

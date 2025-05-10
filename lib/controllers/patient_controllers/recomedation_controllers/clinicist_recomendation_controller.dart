@@ -43,6 +43,9 @@ class ClinicistRecomendationController extends GetxController {
         },
       );
       isLoading.value = false;
+      if (kDebugMode) {
+        print("venu doctorRecommendations ${response.body}");
+      }
       if (response.statusCode == 200) {
         doctorRecomendationsModel =
             doctorRecomendationsModelFromJson(response.body);

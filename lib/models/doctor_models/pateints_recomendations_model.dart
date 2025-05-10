@@ -201,20 +201,94 @@ class Videos {
 }
 
 class RecommendedBy {
+  String? experience;
   String? sId;
   String? name;
+  String? email;
+  String? mobileNum;
+  String? dob;
+  String? password;
+  String? specializedIn;
 
-  RecommendedBy({this.sId, this.name});
+  String? about;
+  String? services;
+  String? verified;
+  String? licenseImage;
+  int? iV;
+  String? image;
+
+  String? experince;
+  String? highlights;
+  String? location;
+  String? ratings;
+
+  RecommendedBy(
+      {this.experience,
+      this.sId,
+      this.name,
+      this.email,
+      this.mobileNum,
+      this.dob,
+      this.password,
+      this.specializedIn,
+
+      this.about,
+      this.services,
+      this.verified,
+      this.licenseImage,
+      this.iV,
+      this.image,
+
+      this.experince,
+      this.highlights,
+      this.location,
+      this.ratings});
 
   RecommendedBy.fromJson(Map<String, dynamic> json) {
+    experience = json['experience'];
     sId = json['_id'];
     name = json['name'];
+    email = json['email'];
+    mobileNum = json['mobileNum'];
+    dob = json['dob'];
+    password = json['password'];
+    specializedIn = json['specializedIn'];
+  
+    about = json['about'];
+    services = json['services'];
+    verified = json['verified'];
+    licenseImage = json['licenseImage'];
+    iV = json['__v'];
+    image = json['image'];
+  
+    experince = json['experince'];
+    highlights = json['highlights'];
+    location = json['location'];
+    ratings = json['ratings'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
+    data['experience'] = experience;
     data['_id'] = sId;
     data['name'] = name;
+    data['email'] = email;
+    data['mobileNum'] = mobileNum;
+    data['dob'] = dob;
+    data['password'] = password;
+    data['specializedIn'] = specializedIn;
+   
+    data['about'] = about;
+    data['services'] = services;
+    data['verified'] = verified;
+    data['licenseImage'] = licenseImage;
+    data['__v'] = iV;
+    data['image'] = image;
+  
+    data['experince'] = experince;
+    data['highlights'] = highlights;
+    data['location'] = location;
+    data['ratings'] = ratings;
     return data;
   }
 }

@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -34,7 +33,7 @@ class _OrganizationDoctorsScreenState extends State<OrganizationDoctorsScreen> {
   @override
   void initState() {
     super.initState();
-    print(widget.isIndividual);
+   
     if (widget.organizationId.isEmpty) {
       organizationController.fetchIndividualDoctorsList();
     } else {

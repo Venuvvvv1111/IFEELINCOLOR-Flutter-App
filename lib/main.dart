@@ -15,7 +15,7 @@ import 'package:ifeelin_color/firebase_options.dart';
 import 'package:ifeelin_color/screens/common_screens/no_internet_screen/no_internet_screen.dart';
 import 'package:ifeelin_color/utils/Route/app_routes.dart';
 import 'package:ifeelin_color/utils/Route/route_helper.dart';
-import 'package:ifeelin_color/utils/constants/user_data.dart';
+
 
 import 'package:ifeelin_color/utils/helpers/custom_colors.dart';
 
@@ -117,12 +117,12 @@ void main() async {
     provisional: true,
     sound: true,
   );*/
-  if (Platform.isIOS) {
-    FirebaseMessaging.instance.getAPNSToken().then((apnsToken) {
-      if (kDebugMode) {
-        print('APNs Token: $apnsToken');
-      }
-    });
+  if(Platform.isIOS){
+FirebaseMessaging.instance.getAPNSToken().then((apnsToken) {
+  if (kDebugMode) {
+    print('APNs Token: $apnsToken');
+  }
+});
   }
 
   FlutterError.onError = (FlutterErrorDetails details) {

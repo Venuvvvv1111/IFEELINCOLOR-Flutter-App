@@ -37,10 +37,17 @@ class DoctorPortalRecomendationController extends GetxController {
           'authorization': 'Bearer ${UserInfo().getUserToken}'
         },
       );
+      if (kDebugMode) {
+        print("Constants.doctorPortalRecommendations${response.body}");
+      }
       isLoading.value = false;
       if (response.statusCode == 200) {
         doctorPortalRecomendationsModel =
             doctorPortalRecomendationsModelFromJson(response.body);
+
+            if (kDebugMode) {
+              print('doctorPortalRecomendationsModel?.body?.length${doctorPortalRecomendationsModel?.body?.length}');
+            }
         totalportalRecomendations(
             doctorPortalRecomendationsModel?.body?.length);
 

@@ -70,16 +70,16 @@ class _NearestPatientsState extends State<NearestPatients> {
               return Center(child: LoaderHelper.lottiWidget());
             }
 
-            if (allPatientsController.filterSubscribedPatients.isEmpty) {
+            if (allPatientsController.filteredNearbyPatients.isEmpty) {
               return const Center(child: Text('No Patients found.'));
             }
 
             return ListView.builder(
-              itemCount: allPatientsController.filterSubscribedPatients.length,
+              itemCount: allPatientsController.filteredNearbyPatients.length,
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               itemBuilder: (context, index) {
                 final patient =
-                    allPatientsController.filterSubscribedPatients[index];
+                    allPatientsController.filteredNearbyPatients[index];
                 return Card(
                   elevation: 5,
                   color: whiteColor,

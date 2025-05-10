@@ -16,11 +16,16 @@ import 'package:readmore/readmore.dart';
 import 'package:ifeelin_color/models/patient_models/home_models/subscribed_doctor_model.dart'
     as subscribed_doctor;
 
-class SubscribedDoctorDetailsScreen extends StatelessWidget {
+class SubscribedDoctorDetailsScreen extends StatefulWidget {
   final subscribed_doctor.SubscribedList? subscriedDoctorsModel;
   const SubscribedDoctorDetailsScreen(
       {super.key, required this.subscriedDoctorsModel});
 
+  @override
+  State<SubscribedDoctorDetailsScreen> createState() => _SubscribedDoctorDetailsScreenState();
+}
+
+class _SubscribedDoctorDetailsScreenState extends State<SubscribedDoctorDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,7 +83,7 @@ class SubscribedDoctorDetailsScreen extends StatelessWidget {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Text(
-                                    subscriedDoctorsModel?.clinician?.name ??
+                                    widget.subscriedDoctorsModel?.clinician?.name ??
                                         'User',
                                     style: const TextStyle(
                                       fontSize: 20,
@@ -90,7 +95,7 @@ class SubscribedDoctorDetailsScreen extends StatelessWidget {
                                     child: Wrap(
                                       children: [
                                         Text(
-                                          subscriedDoctorsModel
+                                          widget.subscriedDoctorsModel
                                                   ?.clinician?.specializedIn ??
                                               '--------------------',
                                           overflow: TextOverflow.ellipsis,
@@ -110,7 +115,7 @@ class SubscribedDoctorDetailsScreen extends StatelessWidget {
                                     height: 10,
                                   ),
                                   RatingBarIndicator(
-                                    rating: double.parse(subscriedDoctorsModel
+                                    rating: double.parse(widget.subscriedDoctorsModel
                                             ?.clinician?.ratings ??
                                         "3.0"),
 
@@ -156,7 +161,7 @@ class SubscribedDoctorDetailsScreen extends StatelessWidget {
                                               ),
                                               Expanded(
                                                 child: AutoSizeText(
-                                                    subscriedDoctorsModel
+                                                    widget.subscriedDoctorsModel
                                                             ?.clinician
                                                             ?.mobileNum
                                                             .toString() ??
@@ -202,7 +207,7 @@ class SubscribedDoctorDetailsScreen extends StatelessWidget {
                                               ),
                                               Expanded(
                                                 child: AutoSizeText(
-                                                    subscriedDoctorsModel
+                                                    widget.subscriedDoctorsModel
                                                             ?.clinician
                                                             ?.email ??
                                                         'XXXXXX@gmail.com',
@@ -254,7 +259,7 @@ class SubscribedDoctorDetailsScreen extends StatelessWidget {
                                               ),
                                               Expanded(
                                                 child: AutoSizeText(
-                                                    "${subscriedDoctorsModel?.clinician?.experience}"
+                                                    "${widget.subscriedDoctorsModel?.clinician?.experience}"
                                                     ' Experience',
                                                     minFontSize: 8,
                                                     style: Theme.of(context)
@@ -297,7 +302,7 @@ class SubscribedDoctorDetailsScreen extends StatelessWidget {
                                               ),
                                               Expanded(
                                                 child: AutoSizeText(
-                                                    subscriedDoctorsModel
+                                                    widget.subscriedDoctorsModel
                                                             ?.clinician
                                                             ?.location
                                                             .toString() ??
@@ -335,7 +340,7 @@ class SubscribedDoctorDetailsScreen extends StatelessWidget {
                                   color: whiteColor,
                                   border: Border.all(color: primaryColor)),
                               child: LoadNetworkImage(
-                                subscriedDoctorsModel?.clinician?.image ?? '',
+                                widget.subscriedDoctorsModel?.clinician?.image ?? '',
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -379,7 +384,7 @@ class SubscribedDoctorDetailsScreen extends StatelessWidget {
                                 style: Theme.of(context).textTheme.titleSmall,
                               ),
                               ReadMoreText(
-                                "${subscriedDoctorsModel?.clinician?.about}",
+                                "${widget.subscriedDoctorsModel?.clinician?.about}",
                                 trimLines: 5,
                                 // colorClickableText: Colors.white,
                                 colorClickableText: Colors.black,
@@ -441,7 +446,7 @@ class SubscribedDoctorDetailsScreen extends StatelessWidget {
                                 style: Theme.of(context).textTheme.titleSmall,
                               ),
                               ReadMoreText(
-                                "${subscriedDoctorsModel?.clinician?.highlights}",
+                                "${widget.subscriedDoctorsModel?.clinician?.highlights}",
                                 trimLines: 5,
                                 // colorClickableText: Colors.white,
                                 colorClickableText: Colors.black,
@@ -469,7 +474,7 @@ class SubscribedDoctorDetailsScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              subscriedDoctorsModel?.subscribedPlans != null
+              widget.subscriedDoctorsModel?.subscribedPlans != null
                   ? Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 10),
@@ -479,9 +484,9 @@ class SubscribedDoctorDetailsScreen extends StatelessWidget {
                       ),
                     )
                   : const SizedBox.shrink(),
-              subscriedDoctorsModel?.subscribedPlans != null
+              widget.subscriedDoctorsModel?.subscribedPlans != null
                   ? Column(
-                      children: subscriedDoctorsModel?.subscribedPlans
+                      children: widget.subscriedDoctorsModel?.subscribedPlans
                               ?.map((item) {
                             return Padding(
                               padding: const EdgeInsets.symmetric(
@@ -603,7 +608,7 @@ class SubscribedDoctorDetailsScreen extends StatelessWidget {
                 //     0.8, // Adjust the height as needed
                 child: SubscribedStepperWidget(
                   careerpathList:
-                      subscriedDoctorsModel?.clinician?.careerpath ?? [],
+                      widget.subscriedDoctorsModel?.clinician?.careerpath ?? [],
                 ),
               ),
               const SizedBox(
@@ -613,6 +618,7 @@ class SubscribedDoctorDetailsScreen extends StatelessWidget {
           ),
         ),
       ),
+     
       floatingActionButton: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: SizedBox(
@@ -620,7 +626,7 @@ class SubscribedDoctorDetailsScreen extends StatelessWidget {
           child: ElevatedButton(
             onPressed: () {
               var phoneNumber =
-                  'tel:+${subscriedDoctorsModel?.clinician?.mobileNum}';
+                  'tel:+${widget.subscriedDoctorsModel?.clinician?.mobileNum}';
               if (kDebugMode) {
                 print(phoneNumber);
               }

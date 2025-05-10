@@ -48,6 +48,9 @@ class PatientRecomendationController extends GetxController {
   Future<void> fetchRecommendations(String? id) async {
     try {
       isLoading.value = true;
+      if (kDebugMode) {
+        print('venu ptainet recomendations "${Constants.baseUrl}/${Constants.patientRecommendations}/$id"');
+      }
       final response = await http.get(
         Uri.parse(
             '${Constants.baseUrl}/${Constants.patientRecommendations}/$id'),

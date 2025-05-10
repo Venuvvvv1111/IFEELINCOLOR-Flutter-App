@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+
 import 'package:get/get.dart';
 import 'package:ifeelin_color/controllers/doctor_controllers/recomendation_controllers/patient_recomendation_controller.dart';
 
@@ -8,6 +8,7 @@ import 'package:ifeelin_color/utils/constants/loader.dart';
 import 'package:ifeelin_color/utils/helpers/app_icons.dart';
 import 'package:ifeelin_color/utils/helpers/custom_colors.dart';
 import 'package:ifeelin_color/utils/helpers/url_launcher_helper.dart';
+import 'package:ifeelin_color/utils/medial_query_util/media_query_util.dart';
 import 'package:readmore/readmore.dart';
 
 class PatientRecomendationScreen extends StatefulWidget {
@@ -26,12 +27,16 @@ class _PatientRecomendationScreenState
   @override
   void initState() {
     super.initState();
-    controller.fetchRecommendations(widget.patientId.toString());
+    WidgetsBinding.instance.addPostFrameCallback((_){
+        controller.fetchRecommendations(widget.patientId.toString());
+    });
+  
   }
 
   @override
   Widget build(BuildContext context) {
     return Obx(() {
+
       return controller.isLoading.value
           ? Center(child: LoaderHelper.lottiWidget())
           : controller.totalPatientRecomendations.value == 0
@@ -65,7 +70,7 @@ class _PatientRecomendationScreenState
                                     height: 50,
                                     width: 50,
                                     child: ClipOval(
-                                      child: SvgPicture.asset(
+                                      child: Image.asset(
                                         AppIcons.logoIcon,
                                         // "${allRecomendations?.recommendedBy?.image.toString()}",
                                         fit: BoxFit.cover,
@@ -115,7 +120,7 @@ class _PatientRecomendationScreenState
                                                     maxLines: 2,
                                                   ),
                                                   Text(
-                                                    'spetialized in ',
+                                                     allRecomendations?.recommendedBy?.specializedIn??"",
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .bodySmall,
@@ -140,7 +145,11 @@ class _PatientRecomendationScreenState
                                                               secondaryFontColor),
                                                 ),
                                                 Text(
-                                                  'July 07 2024',
+                                                   MediaQueryUtil
+                                                            .formatDateWithSuffix(
+                                                                DateTime.parse(
+                                                                     '${allRecomendations?.timestamp}',)),
+                                                
                                                   style: Theme.of(context)
                                                       .textTheme
                                                       .titleSmall!
