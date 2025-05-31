@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:ifeelin_color/services/payment_gateway/stripe_service.dart';
+import 'package:ifeelin_color/utils/constants/loader.dart';
 import 'package:ifeelin_color/utils/helpers/app_images.dart';
 import 'package:ifeelin_color/utils/helpers/custom_colors.dart';
 import '../../../controllers/patient_controllers/clinic_subscription_controller.dart';
@@ -37,25 +38,30 @@ class _SubscribeClinicScreenState extends State<SubscribeClinicScreen> {
       body: Obx(() {
         return Stack(
           children: [
-            PageView(
-              controller: controller.pageController,
-              onPageChanged: controller.onPageChanged,
-              children: controller.plans.map((plan) {
-                return _buildPage(
-                  plan.name ?? 'Plan ',
-                  'Pick a plan that is best for you',
-                  '\$ ${plan.price ?? 0.0}',
-                  AppImages
-                      .subscribePlanImage, // Assuming the image is the same
-                  plan.details ?? '',
-                  plan.planType ?? '',
+            controller.intialLoading.value
+                ? Center(child: LoaderHelper.lottiWidget())
+                : controller.plans.isEmpty
+                    ? const Center(
+                        child: Text('Sorry! there are no plans available'))
+                    : PageView(
+                        controller: controller.pageController,
+                        onPageChanged: controller.onPageChanged,
+                        children: controller.plans.map((plan) {
+                          return _buildPage(
+                            plan.name ?? 'Unknown Plan',
+                            'Pick a plan that is best for you',
+                            '\$ ${plan.price ?? 0.0}',
+                            AppImages
+                                .subscribePlanImage, // Assuming the image is the same
+                            plan.details ?? '',
+                            plan.planType ?? '',
 
-                  () => controller.onGetStarted(
-                      context, Stripeservice(), widget.doctorId!),
-                  context,
-                );
-              }).toList(),
-            ),
+                            () => controller.onGetStarted(
+                                context, Stripeservice(), widget.doctorId!),
+                            context,
+                          );
+                        }).toList(),
+                      ),
             Positioned(
               left: 0,
               right: 0,
@@ -67,19 +73,25 @@ class _SubscribeClinicScreenState extends State<SubscribeClinicScreen> {
                     }),
                   )),
             ),
-            controller.plans.isEmpty
-                ? const Center(
-                    child: Text('Sorry! there are no plans available'))
-                : const SizedBox(),
-            Positioned(
-                top: 10,
-                left: 16,
-                child: SafeArea(
-                    child: IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: const Icon(Icons.arrow_back_ios))))
+            Obx(() => controller.intialLoading.value
+                ? const SizedBox()
+                : Positioned(
+                    top: 10,
+                    left: 16,
+                    child: SafeArea(
+                        child: IconButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(Icons.arrow_back_ios))))),
+            Obx(() {
+              return controller.isloading.value
+                  ? Container(
+                      color: Colors.black.withValues(alpha: 0.5),
+                      child: Center(child: LoaderHelper.lottiWidget()),
+                    )
+                  : const SizedBox.shrink();
+            }),
           ],
         );
       }),

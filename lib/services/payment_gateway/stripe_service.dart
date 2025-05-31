@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:ifeelin_color/utils/constants/loader.dart';
+
 import 'package:ifeelin_color/utils/constants/user_data.dart';
 
 class Stripeservice {
@@ -29,7 +29,6 @@ class Stripeservice {
 
   Future<bool> makePayment(context, double amount, String? name) async {
     try {
-      LoaderHelper.showLoader(context);
       paymentIntent = await createPaymentIntent(amount, name);
 
       if (paymentIntent != null) {
@@ -43,9 +42,7 @@ class Stripeservice {
         print(e);
       }
       // Display a specific error message
-    } finally {
-      LoaderHelper.hideLoader(context);
-    }
+    } finally {}
     return false;
   }
 

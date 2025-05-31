@@ -123,9 +123,10 @@ class DoctorHomeController extends GetxController {
             nearbySubscriptionDoctorsModelFromJson(res.body);
 
         totalNearbyPateints(nearbySubscriptionDoctorsModel?.body?.length);
-                    if (kDebugMode) {
-                      print("nearbySubscriptionDoctorsModel?.body?.length${nearbySubscriptionDoctorsModel?.body?.length}");
-                    }
+        if (kDebugMode) {
+          print(
+              "nearbySubscriptionDoctorsModel?.body?.length${nearbySubscriptionDoctorsModel?.body?.length}");
+        }
         if (nearbySubscriptionDoctorsModel?.body != null) {
           filteredNearbyPatients
               .assignAll(nearbySubscriptionDoctorsModel?.body ?? []);
@@ -133,8 +134,7 @@ class DoctorHomeController extends GetxController {
           if (kDebugMode) {
             print('No nearby Patients found');
           }
-          filteredNearbyPatients
-              .assignAll([]);
+          filteredNearbyPatients.assignAll([]);
         }
       } else {
         if (kDebugMode) {

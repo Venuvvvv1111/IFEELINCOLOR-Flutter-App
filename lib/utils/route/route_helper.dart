@@ -45,7 +45,7 @@ import '../../screens/patient_screens/main_screens/home_screens/organization_doc
 import '../../screens/patient_screens/main_screens/main_sreen_tabs/MainScreenTab.dart.dart';
 import '../../screens/patient_screens/patient_subscription/subscription_clinic.dart';
 import '../../screens/patient_screens/patient_subscription/subscription_portal.dart';
-import '../../screens/patient_screens/patient_subscription/suscription_type.dart';
+
 import 'app_routes.dart';
 import 'package:ifeelin_color/models/patient_models/nearby_doctor_model.dart'
     as doctor;
@@ -76,9 +76,7 @@ class AppRouter {
       case AppRoutes.privacyPolicyScreen:
         return CupertinoPageRoute(
             builder: (_) => const PrivacyPolicyScreen(), settings: settings);
-      case AppRoutes.subscriptionTypeScreen:
-        return CupertinoPageRoute(
-            builder: (_) => const SubscriptionTypeView(), settings: settings);
+
       case AppRoutes.subscribePortalScreen:
         return CupertinoPageRoute(
             builder: (_) => const SubscribePortalScreen(), settings: settings);
@@ -108,9 +106,7 @@ class AppRouter {
       case AppRoutes.mainScreenTabs:
         return CupertinoPageRoute(
             builder: (_) => const MainTabsScreen(), settings: settings);
-      case AppRoutes.recomendationScreen:
-        return CupertinoPageRoute(
-            builder: (_) => const SubscriptionTypeView(), settings: settings);
+
       case AppRoutes.moodInfoScreen:
         return CupertinoPageRoute(
             builder: (_) => const SubscribePortalScreen(), settings: settings);

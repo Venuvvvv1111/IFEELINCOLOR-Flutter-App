@@ -231,14 +231,12 @@ class RecommendedBy {
       this.dob,
       this.password,
       this.specializedIn,
-
       this.about,
       this.services,
       this.verified,
       this.licenseImage,
       this.iV,
       this.image,
-
       this.experince,
       this.highlights,
       this.location,
@@ -253,14 +251,14 @@ class RecommendedBy {
     dob = json['dob'];
     password = json['password'];
     specializedIn = json['specializedIn'];
-  
+
     about = json['about'];
     services = json['services'];
     verified = json['verified'];
     licenseImage = json['licenseImage'];
     iV = json['__v'];
     image = json['image'];
-  
+
     experince = json['experince'];
     highlights = json['highlights'];
     location = json['location'];
@@ -277,14 +275,14 @@ class RecommendedBy {
     data['dob'] = dob;
     data['password'] = password;
     data['specializedIn'] = specializedIn;
-   
+
     data['about'] = about;
     data['services'] = services;
     data['verified'] = verified;
     data['licenseImage'] = licenseImage;
     data['__v'] = iV;
     data['image'] = image;
-  
+
     data['experince'] = experince;
     data['highlights'] = highlights;
     data['location'] = location;

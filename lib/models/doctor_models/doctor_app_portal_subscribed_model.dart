@@ -97,6 +97,7 @@ class Plan {
   double? price;
   String? details;
   int? validity;
+  String? planType;
   bool? active;
 
   Plan(
@@ -105,6 +106,7 @@ class Plan {
       this.price,
       this.details,
       this.validity,
+      this.planType,
       this.active});
 
   Plan.fromJson(Map<String, dynamic> json) {
@@ -113,6 +115,7 @@ class Plan {
     price = json['price'];
     details = json['details'];
     validity = json['validity'];
+    planType = json["planType"];
     active = json['active'];
   }
 
@@ -124,6 +127,7 @@ class Plan {
     data['details'] = details;
     data['validity'] = validity;
     data['active'] = active;
+    data["planType"] = planType;
     return data;
   }
 }

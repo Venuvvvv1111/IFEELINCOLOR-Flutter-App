@@ -22,10 +22,12 @@ class SubscribedDoctorDetailsScreen extends StatefulWidget {
       {super.key, required this.subscriedDoctorsModel});
 
   @override
-  State<SubscribedDoctorDetailsScreen> createState() => _SubscribedDoctorDetailsScreenState();
+  State<SubscribedDoctorDetailsScreen> createState() =>
+      _SubscribedDoctorDetailsScreenState();
 }
 
-class _SubscribedDoctorDetailsScreenState extends State<SubscribedDoctorDetailsScreen> {
+class _SubscribedDoctorDetailsScreenState
+    extends State<SubscribedDoctorDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,7 +85,8 @@ class _SubscribedDoctorDetailsScreenState extends State<SubscribedDoctorDetailsS
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Text(
-                                    widget.subscriedDoctorsModel?.clinician?.name ??
+                                    widget.subscriedDoctorsModel?.clinician
+                                            ?.name ??
                                         'User',
                                     style: const TextStyle(
                                       fontSize: 20,
@@ -115,8 +118,10 @@ class _SubscribedDoctorDetailsScreenState extends State<SubscribedDoctorDetailsS
                                     height: 10,
                                   ),
                                   RatingBarIndicator(
-                                    rating: double.parse(widget.subscriedDoctorsModel
-                                            ?.clinician?.ratings ??
+                                    rating: double.parse(widget
+                                            .subscriedDoctorsModel
+                                            ?.clinician
+                                            ?.ratings ??
                                         "3.0"),
 
                                     itemCount: 5,
@@ -162,8 +167,7 @@ class _SubscribedDoctorDetailsScreenState extends State<SubscribedDoctorDetailsS
                                               Expanded(
                                                 child: AutoSizeText(
                                                     widget.subscriedDoctorsModel
-                                                            ?.clinician
-                                                            ?.mobileNum
+                                                            ?.clinician?.mobileNum
                                                             .toString() ??
                                                         '+91 XXXXXXXXXX',
                                                     minFontSize: 8,
@@ -208,8 +212,7 @@ class _SubscribedDoctorDetailsScreenState extends State<SubscribedDoctorDetailsS
                                               Expanded(
                                                 child: AutoSizeText(
                                                     widget.subscriedDoctorsModel
-                                                            ?.clinician
-                                                            ?.email ??
+                                                            ?.clinician?.email ??
                                                         'XXXXXX@gmail.com',
                                                     minFontSize: 8,
                                                     style: Theme.of(context)
@@ -303,8 +306,7 @@ class _SubscribedDoctorDetailsScreenState extends State<SubscribedDoctorDetailsS
                                               Expanded(
                                                 child: AutoSizeText(
                                                     widget.subscriedDoctorsModel
-                                                            ?.clinician
-                                                            ?.location
+                                                            ?.clinician?.location
                                                             .toString() ??
                                                         'XXXXXXX',
                                                     minFontSize: 8,
@@ -340,7 +342,9 @@ class _SubscribedDoctorDetailsScreenState extends State<SubscribedDoctorDetailsS
                                   color: whiteColor,
                                   border: Border.all(color: primaryColor)),
                               child: LoadNetworkImage(
-                                widget.subscriedDoctorsModel?.clinician?.image ?? '',
+                                widget.subscriedDoctorsModel?.clinician
+                                        ?.image ??
+                                    '',
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -618,7 +622,6 @@ class _SubscribedDoctorDetailsScreenState extends State<SubscribedDoctorDetailsS
           ),
         ),
       ),
-     
       floatingActionButton: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: SizedBox(

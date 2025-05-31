@@ -67,14 +67,24 @@ class _MySubscriptionScreenState extends State<MySubscriptionScreen> {
               var allSubscriptions =
                   controller.mySubscriptionsModel?.body?[index];
               return Card(
-                color: Colors.white,
+                color: (allSubscriptions?.endDate != null &&
+                        DateTime.parse(allSubscriptions!.endDate!)
+                            .isBefore(DateTime.now()))
+                    ? disabledButtonColor
+                    : Colors.white,
                 elevation: 4,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: Container(
-                  decoration:
-                      BoxDecoration(borderRadius: BorderRadius.circular(14)),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(14),
+                    color: (allSubscriptions?.endDate != null &&
+                            DateTime.parse(allSubscriptions!.endDate!)
+                                .isBefore(DateTime.now()))
+                        ? disabledButtonColor
+                        : Colors.white,
+                  ),
                   padding: const EdgeInsets.only(top: 10),
                   width: MediaQueryUtil.size(context).width,
                   child: Column(
@@ -109,10 +119,20 @@ class _MySubscriptionScreenState extends State<MySubscriptionScreen> {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 10, vertical: 3),
                               decoration: BoxDecoration(
-                                  color: greenColor,
+                                  color: (allSubscriptions?.endDate != null &&
+                                          DateTime.parse(
+                                                  allSubscriptions!.endDate!)
+                                              .isBefore(DateTime.now()))
+                                      ? alertColor
+                                      : greenColor,
                                   borderRadius: BorderRadius.circular(10)),
-                              child: const Text(
-                                'Active',
+                              child: Text(
+                                (allSubscriptions?.endDate != null &&
+                                        DateTime.parse(
+                                                allSubscriptions!.endDate!)
+                                            .isBefore(DateTime.now()))
+                                    ? "Expired"
+                                    : "Active",
                                 style:
                                     TextStyle(color: whiteColor, fontSize: 12),
                               ),

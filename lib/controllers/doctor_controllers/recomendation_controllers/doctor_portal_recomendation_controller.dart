@@ -45,9 +45,10 @@ class DoctorPortalRecomendationController extends GetxController {
         doctorPortalRecomendationsModel =
             doctorPortalRecomendationsModelFromJson(response.body);
 
-            if (kDebugMode) {
-              print('doctorPortalRecomendationsModel?.body?.length${doctorPortalRecomendationsModel?.body?.length}');
-            }
+        if (kDebugMode) {
+          print(
+              'doctorPortalRecomendationsModel?.body?.length${doctorPortalRecomendationsModel?.body?.length}');
+        }
         totalportalRecomendations(
             doctorPortalRecomendationsModel?.body?.length);
 

@@ -40,16 +40,13 @@ class DoctorAppPortalSubscriptionController extends GetxController {
         print(response.statusCode);
         print(
             '${Constants.baseUrl}/${Constants.doctorAppPortalSubscriptionsUrl}');
-        print(response.body);
       }
 
       final json = jsonDecode(response.body);
       if (response.statusCode == 200) {
         doctorAppSubscribedSubscriptionsModel =
             doctorAppSubscribedSubscriptionsModelFromJson(response.body);
-        if (kDebugMode) {
-          print(json);
-        }
+
         update();
         // NotificationsModel notificationsModel =
         //     notificationsModelFromJson(response.body);

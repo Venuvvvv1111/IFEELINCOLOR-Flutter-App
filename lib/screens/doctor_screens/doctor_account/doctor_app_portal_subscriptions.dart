@@ -74,14 +74,24 @@ class _DoctorAppPortalSubscriptionScreenState
               var allSubscriptions = controller
                   .doctorAppSubscribedSubscriptionsModel?.body?[index];
               return Card(
-                color: Colors.white,
+                color: (allSubscriptions?.endDate != null &&
+                        DateTime.parse(allSubscriptions!.endDate!)
+                            .isBefore(DateTime.now()))
+                    ? disabledButtonColor
+                    : whiteColor,
                 elevation: 4,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: Container(
-                  decoration:
-                      BoxDecoration(borderRadius: BorderRadius.circular(14)),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(14),
+                    color: (allSubscriptions?.endDate != null &&
+                            DateTime.parse(allSubscriptions!.endDate!)
+                                .isBefore(DateTime.now()))
+                        ? disabledButtonColor
+                        : whiteColor,
+                  ),
                   padding: const EdgeInsets.only(top: 10),
                   width: MediaQueryUtil.size(context).width,
                   child: Column(
@@ -97,7 +107,7 @@ class _DoctorAppPortalSubscriptionScreenState
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: Text(
-                          allSubscriptions?.plan?.details ?? 'NA',
+                          "Details: ${allSubscriptions?.plan?.details ?? 'NA'}",
                           style: Theme.of(context).textTheme.bodySmall,
                         ),
                       ),
@@ -109,17 +119,27 @@ class _DoctorAppPortalSubscriptionScreenState
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'Type: Portal-Plan',
+                              'Type: ${allSubscriptions?.plan?.planType}',
                               style: Theme.of(context).textTheme.bodySmall,
                             ),
                             Container(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 10, vertical: 3),
                               decoration: BoxDecoration(
-                                  color: greenColor,
+                                  color: (allSubscriptions?.endDate != null &&
+                                          DateTime.parse(
+                                                  allSubscriptions!.endDate!)
+                                              .isBefore(DateTime.now()))
+                                      ? alertColor
+                                      : greenColor,
                                   borderRadius: BorderRadius.circular(10)),
-                              child: const Text(
-                                'Active',
+                              child: Text(
+                                (allSubscriptions?.endDate != null &&
+                                        DateTime.parse(
+                                                allSubscriptions!.endDate!)
+                                            .isBefore(DateTime.now()))
+                                    ? "Expired"
+                                    : "Active",
                                 style:
                                     TextStyle(color: whiteColor, fontSize: 12),
                               ),

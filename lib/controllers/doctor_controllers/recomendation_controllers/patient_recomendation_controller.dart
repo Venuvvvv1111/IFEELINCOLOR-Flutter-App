@@ -49,7 +49,8 @@ class PatientRecomendationController extends GetxController {
     try {
       isLoading.value = true;
       if (kDebugMode) {
-        print('venu ptainet recomendations "${Constants.baseUrl}/${Constants.patientRecommendations}/$id"');
+        print(
+            'venu ptainet recomendations "${Constants.baseUrl}/${Constants.patientRecommendations}/$id"');
       }
       final response = await http.get(
         Uri.parse(

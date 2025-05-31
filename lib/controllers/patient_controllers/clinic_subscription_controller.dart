@@ -18,7 +18,8 @@ class SubscribeClinicController extends GetxController {
   RxInt currentPage = 0.obs;
   RxBool showViewMore = true.obs;
   RxList<Body> plans = <Body>[].obs;
-
+  Rx<bool> isloading = false.obs;
+  Rx<bool> intialLoading = false.obs;
   @override
   void onClose() {
     pageController.dispose();
@@ -26,26 +27,36 @@ class SubscribeClinicController extends GetxController {
   }
 
   Future<void> fetchDoctorPlans(bool isIndividual) async {
-    final response = await http.get(
-      Uri.parse(
-          '${Constants.baseUrl}/${isIndividual ? Constants.listIndDoctorPlans : Constants.listOrgDoctorPlans}'),
-      headers: {
-        'Content-Type': 'application/json',
-        'authorization': 'Bearer ${UserInfo().getUserToken}'
-      },
-    );
-    if (kDebugMode) {
-      print('venu ${response.body}');
-    }
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      final portalPlansModel = PortalPlansModel.fromJson(data);
-      plans.value = portalPlansModel.body ?? [];
-    } else {
+    try {
+      intialLoading.value = true;
+      final response = await http.get(
+        Uri.parse(
+            '${Constants.baseUrl}/${isIndividual ? Constants.listIndDoctorPlans : Constants.listOrgDoctorPlans}'),
+        headers: {
+          'Content-Type': 'application/json',
+          'authorization': 'Bearer ${UserInfo().getUserToken}'
+        },
+      );
       if (kDebugMode) {
-        print(response.body);
+        print('venu ${response.body}');
       }
-      throw Exception('Failed to load doctor plans');
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final portalPlansModel = PortalPlansModel.fromJson(data);
+        plans.value = portalPlansModel.body ?? [];
+      } else {
+        if (kDebugMode) {
+          print(response.body);
+        }
+        throw Exception('Failed to load doctor plans');
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    } finally {
+      intialLoading.value = false;
     }
   }
 
@@ -53,6 +64,7 @@ class SubscribeClinicController extends GetxController {
       context, Stripeservice stripeService, String doctorId) async {
     final bool hasActiveSubscription = await checkActiveSubscription(doctorId);
     try {
+      isloading.value = true;
       if (hasActiveSubscription == true) {
         MyToast.showGetToast(
           title: "Active Subscription Found",
@@ -64,40 +76,47 @@ class SubscribeClinicController extends GetxController {
         return;
       } else {
         final currentPlan = plans[currentPage.value];
-        bool paymentSuccess = await stripeService.makePayment(
-            // ignore: use_build_context_synchronously
-            context,
-            double.parse(currentPlan.price!),
-            currentPlan.name);
-        // String planId = '${currentPlan.sId}';
-        if (kDebugMode) {
-          print('ID: ${currentPlan.sId}');
-        }
 
-        if (paymentSuccess) {
-          MyToast.showGetToast(
-            title: "Thank you",
-            message: "Your payment has been succesfull completed",
-            backgroundColor: Colors.green,
-            color: whiteColor,
-          );
-          // Proceed with subscript
-          //ion only if payment succeeds
+        if (currentPlan.name == "FREE TRAIL") {
           await subscribeDoctor(context, doctorId);
         } else {
-          // Show payment failure message
-          MyToast.showGetToast(
-            title: "Payment Failed",
-            message: "Your payment was failed. Please try again.",
-            backgroundColor: Colors.red,
-            color: whiteColor,
-          );
+          bool paymentSuccess = await stripeService.makePayment(
+              // ignore: use_build_context_synchronously
+              context,
+              double.parse(currentPlan.price!),
+              currentPlan.name);
+          // String planId = '${currentPlan.sId}';
+          if (kDebugMode) {
+            print('ID: ${currentPlan.sId}');
+          }
+
+          if (paymentSuccess) {
+            MyToast.showGetToast(
+              title: "Thank you",
+              message: "Your payment has been succesfull completed",
+              backgroundColor: Colors.green,
+              color: whiteColor,
+            );
+            // Proceed with subscript
+            //ion only if payment succeeds
+            await subscribeDoctor(context, doctorId);
+          } else {
+            // Show payment failure message
+            MyToast.showGetToast(
+              title: "Payment Failed",
+              message: "Your payment was failed. Please try again.",
+              backgroundColor: Colors.red,
+              color: whiteColor,
+            );
+          }
         }
       }
     } catch (e) {
       if (kDebugMode) {
         print(e);
       }
+    } finally {
+      isloading.value = false;
     }
   }
 
@@ -110,6 +129,7 @@ class SubscribeClinicController extends GetxController {
     }
 
     try {
+      isloading.value = true;
       if (kDebugMode) {
         print('${Constants.baseUrl}/${Constants.doctorSubscriptionCheckViaId}');
       }
@@ -158,6 +178,8 @@ class SubscribeClinicController extends GetxController {
         color: whiteColor,
       );
       return true;
+    } finally {
+      isloading.value = false;
     }
   }
 
@@ -173,6 +195,7 @@ class SubscribeClinicController extends GetxController {
     }
 
     try {
+      isloading.value = true;
       GetStorage box = GetStorage();
       final response = await http.post(
           Uri.parse(
@@ -205,6 +228,8 @@ class SubscribeClinicController extends GetxController {
       if (kDebugMode) {
         print(e);
       }
+    } finally {
+      isloading.value = false;
     }
   }
 

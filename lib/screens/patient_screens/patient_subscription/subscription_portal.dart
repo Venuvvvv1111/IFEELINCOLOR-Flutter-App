@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:ifeelin_color/services/payment_gateway/stripe_service.dart';
+import 'package:ifeelin_color/utils/constants/loader.dart';
 
 import '../../../controllers/patient_controllers/portal_subscription_controller.dart';
 import '../../../utils/helpers/app_images.dart';
@@ -31,23 +32,30 @@ class _SubscribePortalScreenState extends State<SubscribePortalScreen> {
       body: Stack(
         children: [
           Obx(() {
-            return PageView(
-              controller: controller.pageController,
-              onPageChanged: controller.onPageChanged,
-              children: List.generate(controller.plans.length, (index) {
-                final plan = controller.plans[index];
-                return _buildPage(
-                  plan.name ?? 'Unknown Plan ',
-                  'Pick a plan that is best for you',
-                  '\$ ${plan.price ?? 0.0}',
-                  AppImages.subscribePlanImage,
-                  plan.details ?? '',
-                  plan.planType ?? 'Unknown',
-                  () => controller.onGetStarted(context, Stripeservice()),
-                  context,
-                );
-              }),
-            );
+            return controller.intialLoading.value
+                ? Center(child: LoaderHelper.lottiWidget())
+                : controller.plans.isEmpty
+                    ? const Center(
+                        child: Text('Sorry! there are no plans available'))
+                    : PageView(
+                        controller: controller.pageController,
+                        onPageChanged: controller.onPageChanged,
+                        children:
+                            List.generate(controller.plans.length, (index) {
+                          final plan = controller.plans[index];
+                          return _buildPage(
+                            plan.name ?? 'Unknown Plan ',
+                            'Pick a plan that is best for you',
+                            '\$ ${plan.price ?? 0.00}',
+                            AppImages.subscribePlanImage,
+                            plan.details ?? '',
+                            plan.planType ?? 'Unknown',
+                            () => controller.onGetStarted(
+                                context, Stripeservice()),
+                            context,
+                          );
+                        }),
+                      );
           }),
           Positioned(
             left: 0,
@@ -60,21 +68,27 @@ class _SubscribePortalScreenState extends State<SubscribePortalScreen> {
                   }),
                 )),
           ),
+          Obx(
+            () => controller.intialLoading.value
+                ? const SizedBox()
+                : Positioned(
+                    top: 10,
+                    left: 16,
+                    child: SafeArea(
+                        child: IconButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(Icons.arrow_back_ios)))),
+          ),
           Obx(() {
-            return controller.plans.isEmpty
-                ? const Center(
-                    child: Text('Sorry! there are no plans available'))
-                : const SizedBox();
+            return controller.isloading.value
+                ? Container(
+                    color: Colors.black.withValues(alpha: 0.5),
+                    child: Center(child: LoaderHelper.lottiWidget()),
+                  )
+                : const SizedBox.shrink();
           }),
-          Positioned(
-              top: 10,
-              left: 16,
-              child: SafeArea(
-                  child: IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: const Icon(Icons.arrow_back_ios))))
         ],
       ),
     );

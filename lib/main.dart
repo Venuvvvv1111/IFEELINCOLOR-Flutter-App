@@ -16,7 +16,6 @@ import 'package:ifeelin_color/screens/common_screens/no_internet_screen/no_inter
 import 'package:ifeelin_color/utils/Route/app_routes.dart';
 import 'package:ifeelin_color/utils/Route/route_helper.dart';
 
-
 import 'package:ifeelin_color/utils/helpers/custom_colors.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -117,12 +116,12 @@ void main() async {
     provisional: true,
     sound: true,
   );*/
-  if(Platform.isIOS){
-FirebaseMessaging.instance.getAPNSToken().then((apnsToken) {
-  if (kDebugMode) {
-    print('APNs Token: $apnsToken');
-  }
-});
+  if (Platform.isIOS) {
+    FirebaseMessaging.instance.getAPNSToken().then((apnsToken) {
+      if (kDebugMode) {
+        print('APNs Token: $apnsToken');
+      }
+    });
   }
 
   FlutterError.onError = (FlutterErrorDetails details) {

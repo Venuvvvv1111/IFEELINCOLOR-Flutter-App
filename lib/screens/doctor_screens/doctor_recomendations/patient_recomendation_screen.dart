@@ -27,16 +27,14 @@ class _PatientRecomendationScreenState
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_){
-        controller.fetchRecommendations(widget.patientId.toString());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.fetchRecommendations(widget.patientId.toString());
     });
-  
   }
 
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-
       return controller.isLoading.value
           ? Center(child: LoaderHelper.lottiWidget())
           : controller.totalPatientRecomendations.value == 0
@@ -120,7 +118,10 @@ class _PatientRecomendationScreenState
                                                     maxLines: 2,
                                                   ),
                                                   Text(
-                                                     allRecomendations?.recommendedBy?.specializedIn??"",
+                                                    allRecomendations
+                                                            ?.recommendedBy
+                                                            ?.specializedIn ??
+                                                        "",
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .bodySmall,
@@ -145,11 +146,11 @@ class _PatientRecomendationScreenState
                                                               secondaryFontColor),
                                                 ),
                                                 Text(
-                                                   MediaQueryUtil
-                                                            .formatDateWithSuffix(
-                                                                DateTime.parse(
-                                                                     '${allRecomendations?.timestamp}',)),
-                                                
+                                                  MediaQueryUtil
+                                                      .formatDateWithSuffix(
+                                                          DateTime.parse(
+                                                    '${allRecomendations?.timestamp}',
+                                                  )),
                                                   style: Theme.of(context)
                                                       .textTheme
                                                       .titleSmall!

@@ -19,7 +19,8 @@ class SubscribePortalController extends GetxController {
   RxInt currentPage = 0.obs;
   RxBool showViewMore = true.obs;
   RxList<Body> plans = <Body>[].obs;
-
+  Rx<bool> isloading = false.obs;
+  Rx<bool> intialLoading = false.obs;
   @override
   void onClose() {
     pageController.dispose();
@@ -35,6 +36,7 @@ class SubscribePortalController extends GetxController {
     // Check if there is an active subscription
     final bool hasActiveSubscription = await checkActiveSubscription();
     try {
+      isloading.value = true;
       if (kDebugMode) {
         print('hasActiveSubscription' "$hasActiveSubscription");
       }
@@ -50,31 +52,36 @@ class SubscribePortalController extends GetxController {
         return; // Stop the process if there's an active subscription
       } else {
         final currentPlan = plans[currentPage.value];
-        bool paymentSuccess = await stripeService.makePayment(
-            context, double.parse(currentPlan.price!), currentPlan.name);
         String planId = '${currentPlan.sId}';
-        if (kDebugMode) {
-          print('ID: ${currentPlan.sId}');
-        }
-
-        if (paymentSuccess) {
-          MyToast.showGetToast(
-            title: "Thank you",
-            message: "Your payment has been successfully completed.",
-            backgroundColor: Colors.green,
-            color: whiteColor,
-          );
-
-          // Proceed with subscription only if payment succeeds
+        if (currentPlan.name == "FREE TRAIL") {
           await subscribePortal(context, planId);
         } else {
-          // Show payment failure message
-          MyToast.showGetToast(
-            title: "Payment Failed",
-            message: "Your payment was not successful. Please try again.",
-            backgroundColor: Colors.red,
-            color: whiteColor,
-          );
+          bool paymentSuccess = await stripeService.makePayment(
+              context, double.parse(currentPlan.price!), currentPlan.name);
+
+          if (kDebugMode) {
+            print('ID: ${currentPlan.sId}');
+          }
+
+          if (paymentSuccess) {
+            MyToast.showGetToast(
+              title: "Thank you",
+              message: "Your payment has been successfully completed.",
+              backgroundColor: Colors.green,
+              color: whiteColor,
+            );
+
+            // Proceed with subscription only if payment succeeds
+            await subscribePortal(context, planId);
+          } else {
+            // Show payment failure message
+            MyToast.showGetToast(
+              title: "Payment Failed",
+              message: "Your payment was not successful. Please try again.",
+              backgroundColor: Colors.red,
+              color: whiteColor,
+            );
+          }
         }
       }
 
@@ -83,6 +90,8 @@ class SubscribePortalController extends GetxController {
       if (kDebugMode) {
         print(e);
       }
+    } finally {
+      isloading.value = false;
     }
   }
 
@@ -95,6 +104,7 @@ class SubscribePortalController extends GetxController {
     }
 
     try {
+      isloading.value = true;
       final response = await http.get(
         Uri.parse(userInfo.getUserLogin
             ? '${Constants.baseUrl}/${Constants.patientSubscriptionCheck}'
@@ -134,6 +144,8 @@ class SubscribePortalController extends GetxController {
         color: whiteColor,
       );
       return true;
+    } finally {
+      isloading.value = false;
     }
   }
 
@@ -156,6 +168,7 @@ class SubscribePortalController extends GetxController {
   Future<void> fetchPlans() async {
     Get.put(UserInfo());
     try {
+      intialLoading.value = true;
       if (kDebugMode) {
         print('is user logged in');
         print(UserInfo().getUserLogin);
@@ -188,12 +201,13 @@ class SubscribePortalController extends GetxController {
       if (kDebugMode) {
         print('Error: $e');
       }
+    } finally {
+      intialLoading.value = false;
     }
   }
 
   Future<void> subscribePortal(context, String doctorId) async {
     Get.put(UserInfo());
-
     final currentPlan = plans[currentPage.value];
     if (kDebugMode) {
       print('Get Started tapped on Page ${currentPage.value + 1}');
@@ -205,6 +219,7 @@ class SubscribePortalController extends GetxController {
     }
 
     try {
+      isloading.value = true;
       final response = await http.post(
           Uri.parse(UserInfo().getUserLogin
               ? '${Constants.baseUrl}/${Constants.subscribeToDoctor}/${currentPlan.sId}'
@@ -241,6 +256,8 @@ class SubscribePortalController extends GetxController {
       if (kDebugMode) {
         print(e);
       }
+    } finally {
+      isloading.value = false;
     }
   }
 
