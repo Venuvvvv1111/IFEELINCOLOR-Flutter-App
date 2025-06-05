@@ -102,4 +102,8 @@ class Constants {
   static const String doctorAppNotifications = "doctor/notifications";
 
   static const String notificationStatusChange = "notification-alerts";
+
+ static const String chekPreviusSubscriptionPatient = "patients/check-previous-subscription";
+  static const String chekPreviusSubscriptionDoctor = "doctorsub/check-previous-subscription";
+
 }

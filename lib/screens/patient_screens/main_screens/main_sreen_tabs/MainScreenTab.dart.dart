@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+
 import 'package:ifeelin_color/utils/constants/user_data.dart';
 import 'package:ifeelin_color/utils/helpers/app_icons.dart';
 import 'package:ifeelin_color/utils/helpers/custom_colors.dart';
@@ -32,13 +33,15 @@ class _MainTabsScreenState extends State<MainTabsScreen>
   void initState() {
     super.initState();
     WidgetsBinding.instance
-        .addObserver(this); // Add observer to listen to app state changes
+        .addObserver(this); 
+         
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     _fetchUserInfo();
+ 
   }
 
   void _fetchUserInfo() {

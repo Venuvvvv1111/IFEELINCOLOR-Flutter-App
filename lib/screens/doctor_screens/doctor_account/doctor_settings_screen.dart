@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:ifeelin_color/controllers/common_controllers/all_settings_controller.dart';
 import 'package:ifeelin_color/screens/common_screens/settings/logout_dailog.dart';
 import 'package:ifeelin_color/utils/medial_query_util/media_query_util.dart';
 import 'package:ifeelin_color/utils/Route/app_routes.dart';
@@ -8,6 +9,7 @@ import 'package:ifeelin_color/utils/constants/user_data.dart';
 import 'package:ifeelin_color/utils/helpers/app_icons.dart';
 import 'package:ifeelin_color/utils/helpers/custom_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:marquee/marquee.dart';
 
 import '../../patient_screens/auth/login_screen_view.dart';
 
@@ -30,9 +32,11 @@ class _DoctorSettingsScreen extends State<DoctorSettingsScreen> {
 
     userName = userInfo.getUserName ?? 'Hi User';
   }
-
+ final AllSettingsController allSettingsController =
+      Get.put(AllSettingsController());
   @override
   Widget build(BuildContext context) {
+      allSettingsController.getIsFreeTrailActive();
     userName = userInfo.getUserName ?? 'Hi User';
     return MediaQuery.removePadding(
       context: context,
@@ -118,6 +122,30 @@ class _DoctorSettingsScreen extends State<DoctorSettingsScreen> {
               ),
             ],
           ),
+           Obx(() {
+            if (allSettingsController.isFreeTrailActive.value) {
+              return Container(
+                height: 30,
+                color: Colors.amber.shade50,
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Marquee(
+                  text:
+                      '🎉 Your free trial is active and expiring soon! Enjoy full access to all features.',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                  scrollAxis: Axis.horizontal,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  blankSpace: 20.0,
+                  velocity: 40.0,
+                  pauseAfterRound: Duration(seconds: 1),
+                  startPadding: 10.0,
+                  accelerationDuration: Duration(seconds: 1),
+                  decelerationDuration: Duration(milliseconds: 500),
+                ),
+              );
+            } else {
+              return const SizedBox.shrink();
+            }
+          }),
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(

@@ -325,11 +325,14 @@ class _MoodInfoScreenViewState extends State<MoodInfoScreenView>
                         image: AppIcons.treatmentHistory,
                         submitType: userInfo.getTreatmentHistory.value,
                         onTap: () async {
-                          await subscriptionController
-                              .checkPatientPortalSubscription();
+                          // await subscriptionController
+                          //     .checkFreeTrailActive();
+                          // await subscriptionController
+                          //     .checkPremiumActiveSubscription();
 
-                          if (subscriptionController
-                              .hasActiveSubscription.value) {
+                          if (await subscriptionController
+                              .checkFreeTrailActive() ||await subscriptionController
+                              .checkPremiumActiveSubscription()) {
                             if (!context.mounted) {
                               return;
                             }
@@ -339,7 +342,7 @@ class _MoodInfoScreenViewState extends State<MoodInfoScreenView>
                             MyToast.showGetToast(
                               title: 'Error',
                               message:
-                                  'Please subscribe to the portal in settings before accessing this feature',
+                                  'Please subscribe or start a free trial from Doctor/Portal Plans in Settings.',
                               color: whiteColor,
                               backgroundColor: Colors.red,
                             );
@@ -363,11 +366,10 @@ class _MoodInfoScreenViewState extends State<MoodInfoScreenView>
                         image: AppIcons.socialInformationIcon,
                         submitType: userInfo.getSocialHealthHistory.value,
                         onTap: () async {
-                          await subscriptionController
-                              .checkPatientPortalSubscription();
 
-                          if (subscriptionController
-                              .hasActiveSubscription.value) {
+                          if (await subscriptionController
+                              .checkFreeTrailActive() ||await subscriptionController
+                              .checkPremiumActiveSubscription()) {
                             if (!context.mounted) {
                               return;
                             }
@@ -377,7 +379,7 @@ class _MoodInfoScreenViewState extends State<MoodInfoScreenView>
                             MyToast.showGetToast(
                               title: 'Error',
                               message:
-                                  'Please subscribe to the portal in settings before accessing this feature',
+                                  'Please subscribe or start a free trial from Doctor/Portal Plans in Settings.',
                               color: whiteColor,
                               backgroundColor: Colors.red,
                             );
@@ -401,11 +403,10 @@ class _MoodInfoScreenViewState extends State<MoodInfoScreenView>
                             : userInfo.getBodyAssesment.value,
                         image: AppIcons.familyMentalHealthHistoryIcon,
                         onTap: () async {
-                          await subscriptionController
-                              .checkPatientPortalSubscription();
-
-                          if (subscriptionController
-                              .hasActiveSubscription.value) {
+                  
+                        if (await subscriptionController
+                              .checkFreeTrailActive() ||await subscriptionController
+                              .checkPremiumActiveSubscription()) {
                             if (!context.mounted) {
                               return;
                             }
@@ -418,7 +419,7 @@ class _MoodInfoScreenViewState extends State<MoodInfoScreenView>
                             MyToast.showGetToast(
                               title: 'Error',
                               message:
-                                  'Please subscribe to the portal in settings before accessing this feature',
+                                  'Please subscribe or start a free trial from Doctor/Portal Plans in Settings.',
                               color: whiteColor,
                               backgroundColor: Colors.red,
                             );

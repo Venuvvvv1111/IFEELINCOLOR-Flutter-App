@@ -25,6 +25,7 @@ class AllSettingsScreenState extends State<AllSettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+      notificationController.getIsFreeTrailActive();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),

@@ -6,8 +6,10 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:geolocator/geolocator.dart';
 import 'package:ifeelin_color/models/patient_models/home_models/subscribed_doctor_model.dart';
+import 'package:ifeelin_color/utils/constants/my_toast.dart';
 import 'package:ifeelin_color/utils/constants/string_constants.dart';
 import 'package:ifeelin_color/utils/constants/user_data.dart';
+import 'package:ifeelin_color/utils/helpers/custom_colors.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../models/patient_models/nearby_doctor_model.dart';
@@ -26,6 +28,7 @@ class HomeController extends GetxController {
   RxList<SubscribedList> filterSubscribedDoctors = RxList<SubscribedList>();
   var currentLocation = Rx<Position?>(null);
   var center = Rx<LatLng?>(null);
+
 
   @override
   void onInit() {
@@ -63,6 +66,7 @@ class HomeController extends GetxController {
       }
     }
   }
+
 
   Future<void> checkAndRequestLocationPermission() async {
     LocationPermission permission = await Geolocator.checkPermission();

@@ -183,7 +183,7 @@ class SubscribeClinicController extends GetxController {
     }
   }
 
-  Future<void> subscribeDoctor(context, String doctorId) async {
+  Future<void> subscribeDoctor(context, String doctorId,{title=""}) async {
     final currentPlan = plans[currentPage.value];
     if (kDebugMode) {
       print('Get Started tapped on Page ${currentPage.value + 1}');
@@ -210,6 +210,9 @@ class SubscribeClinicController extends GetxController {
       }
       final json = jsonDecode(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {
+        if(currentPlan.name=="FREE TRAIL"){
+           MyToast.showGetToast(title: '🎉 Free Trial Activated!', message: "Enjoy full access to all features during your trial period",color: whiteColor,backgroundColor: greenColor);
+        }
         _handlePaymentSuccess(context, box.read('isLogin') ?? false);
       } else {
         MyToast.showGetToast(

@@ -44,7 +44,7 @@ class Body {
   String? endDate;
   String? createdAt;
   String? updatedAt;
-  int? iV;
+
   String? clinicianName;
 
   Body(
@@ -56,7 +56,7 @@ class Body {
       this.endDate,
       this.createdAt,
       this.updatedAt,
-      this.iV,
+  
       this.clinicianName});
 
   Body.fromJson(Map<String, dynamic> json) {
@@ -68,7 +68,7 @@ class Body {
     endDate = json['endDate'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
-    iV = json['__v'];
+
     clinicianName = json['clinicianName'];
   }
 
@@ -84,7 +84,7 @@ class Body {
     data['endDate'] = endDate;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
-    data['__v'] = iV;
+
     data['clinicianName'] = clinicianName;
     return data;
   }
@@ -101,7 +101,7 @@ class Plan {
   String? planType;
   String? createdAt;
   String? updatedAt;
-  int? iV;
+
 
   Plan(
       {this.sId,
@@ -114,12 +114,17 @@ class Plan {
       this.planType,
       this.createdAt,
       this.updatedAt,
-      this.iV});
+    });
 
   Plan.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     name = json['name'];
-    price = json['price'];
+    final rawPrice = json['price'];
+  if (rawPrice is int) {
+    price = rawPrice.toDouble();
+  } else if (rawPrice is double) {
+    price = rawPrice;
+  }
     details = json['details'];
     validity = json['validity'];
     status = json['status'];
@@ -129,7 +134,7 @@ class Plan {
     planType = json['planType'];
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
-    iV = json['__v'];
+
   }
 
   Map<String, dynamic> toJson() {
@@ -146,7 +151,7 @@ class Plan {
     data['planType'] = planType;
     data['createdAt'] = createdAt;
     data['updatedAt'] = updatedAt;
-    data['__v'] = iV;
+
     return data;
   }
 }
@@ -166,7 +171,7 @@ class CreatedBy {
   String? services;
   String? verified;
   String? licenseImage;
-  int? iV;
+
   String? image;
   List<Careerpath>? careerpath;
   String? experince;
@@ -189,7 +194,7 @@ class CreatedBy {
       this.services,
       this.verified,
       this.licenseImage,
-      this.iV,
+ 
       this.image,
       this.careerpath,
       this.experince,
@@ -213,7 +218,7 @@ class CreatedBy {
     services = json['services'];
     verified = json['verified'];
     licenseImage = json['licenseImage'];
-    iV = json['__v'];
+
     image = json['image'];
     if (json['careerpath'] != null) {
       careerpath = <Careerpath>[];
@@ -245,7 +250,7 @@ class CreatedBy {
     data['services'] = services;
     data['verified'] = verified;
     data['licenseImage'] = licenseImage;
-    data['__v'] = iV;
+
     data['image'] = image;
     if (careerpath != null) {
       data['careerpath'] = careerpath!.map((v) => v.toJson()).toList();

@@ -62,7 +62,12 @@ class Body {
 
   Body.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
-    price = json['price'];
+    final rawPrice = json['price'];
+     if (rawPrice is int) {
+    price = rawPrice.toDouble();
+  } else if (rawPrice is double) {
+    price = rawPrice;
+  }
     startDate = json['startDate'];
     endDate = json['endDate'];
     validity = json['validity'];
@@ -112,7 +117,12 @@ class Plan {
   Plan.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     name = json['name'];
-    price = json['price'];
+      final rawPrice = json['price'];
+     if (rawPrice is int) {
+    price = rawPrice.toDouble();
+  } else if (rawPrice is double) {
+    price = rawPrice;
+  }
     details = json['details'];
     validity = json['validity'];
     planType = json["planType"];

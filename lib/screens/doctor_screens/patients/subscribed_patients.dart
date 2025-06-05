@@ -174,11 +174,10 @@ class _SubscribedPatientsState extends State<SubscribedPatients> {
                               // Allow each column to take available space
                               child: InkWell(
                                 onTap: () async {
-                                  await subscriptionController
-                                      .checkDoctorPortalSubscription();
-
-                                  if (subscriptionController
-                                      .hasActiveSubscription.value) {
+                 
+                                if (await subscriptionController
+                              .checkFreeTrailActive() ||await subscriptionController
+                              .checkPremiumActiveSubscription()) {
                                     if (!context.mounted) {
                                       return;
                                     }
@@ -193,7 +192,7 @@ class _SubscribedPatientsState extends State<SubscribedPatients> {
                                     MyToast.showGetToast(
                                       title: 'Error',
                                       message:
-                                          'Please subscribe to the portal in settings before accessing this feature',
+                                          'Please subscribe or start a free trial from Portal Plans in Settings.',
                                       color: whiteColor,
                                       backgroundColor: Colors.red,
                                     );
@@ -238,11 +237,10 @@ class _SubscribedPatientsState extends State<SubscribedPatients> {
                             Expanded(
                               child: InkWell(
                                 onTap: () async {
-                                  await subscriptionController
-                                      .checkDoctorPortalSubscription();
-
-                                  if (subscriptionController
-                                      .hasActiveSubscription.value) {
+                              
+                                 if (await subscriptionController
+                              .checkFreeTrailActive() ||await subscriptionController
+                              .checkPremiumActiveSubscription()){
                                     if (!context.mounted) {
                                       return;
                                     }
@@ -258,7 +256,7 @@ class _SubscribedPatientsState extends State<SubscribedPatients> {
                                     MyToast.showGetToast(
                                       title: 'Error',
                                       message:
-                                          'Please subscribe to the portal in settings before accessing this feature',
+                                          'Please subscribe or start a free trial from Portal Plans in Settings.',
                                       color: whiteColor,
                                       backgroundColor: Colors.red,
                                     );

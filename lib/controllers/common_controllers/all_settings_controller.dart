@@ -11,11 +11,51 @@ import 'package:http/http.dart' as http;
 
 class AllSettingsController extends GetxController {
   RxBool notificationsEnabled = true.obs;
-
+  Rx<bool> isFreeTrailActive = false.obs;
   void toggleNotification(bool value) {
     notificationsEnabled.value = value;
     String status = value ? "true" : "false";
     sendNotificationStatusToAPI(status);
+  }
+
+  Future<void> getIsFreeTrailActive() async {
+    UserInfo userInfo = Get.put(UserInfo());
+    if (kDebugMode) {
+      print('is user loged in ');
+      print(userInfo.getUserLogin);
+    }
+
+    try {
+      if (kDebugMode) {
+        print(
+            '${Constants.baseUrl}/${Constants.chekPreviusSubscriptionPatient}/${userInfo.getUserToken}');
+      }
+      
+      final response = await http.get(
+        Uri.parse(userInfo.getUserLogin?
+            '${Constants.baseUrl}/${Constants.chekPreviusSubscriptionPatient}':'${Constants.baseUrl}/${Constants.chekPreviusSubscriptionDoctor}'),
+        headers: {
+          'Content-Type': 'application/json',
+          'authorization': 'Bearer ${userInfo.getUserToken}'
+        },
+      );
+      print("check previus${response.body}");
+      if (response.statusCode == 200) {
+        // Parse the response JSON
+        var data = jsonDecode(response.body);
+        if (kDebugMode) {
+          print(
+              "free trail checking${data['body']['hasPreviousSubscription']}");
+        }
+        isFreeTrailActive.value = data['body']['hasPreviousSubscription'];
+      } else {
+        isFreeTrailActive.value = false;
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
   }
 
   Future<void> sendNotificationStatusToAPI(String status) async {
