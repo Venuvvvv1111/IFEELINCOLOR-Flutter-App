@@ -53,7 +53,7 @@ class SubscribePortalController extends GetxController {
       } else {
         final currentPlan = plans[currentPage.value];
         String planId = '${currentPlan.sId}';
-        if (currentPlan.name == "FREE TRAIL") {
+        if (currentPlan.price == "0.00") {
           await subscribePortal(context, planId,title:currentPlan.name );
         } else {
           bool paymentSuccess = await stripeService.makePayment(
@@ -238,7 +238,7 @@ class SubscribePortalController extends GetxController {
       }
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        if(currentPlan.name=="FREE TRAIL"){
+        if(currentPlan.price=="0.00"){
            MyToast.showGetToast(title: '🎉 Free Trial Activated!', message: "Enjoy full access to all features during your trial period",color: whiteColor,backgroundColor: greenColor);
         }
         _handlePaymentSuccess(context, UserInfo().getUserLogin ? true : false);

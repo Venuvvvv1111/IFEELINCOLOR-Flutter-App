@@ -15,5 +15,4 @@ For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 
-//places serch api in locationQ
-pk.f242a135794c6dd00503bc2b331f77e3
+

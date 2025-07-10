@@ -416,21 +416,27 @@ class level2Form extends StatelessWidget {
                               style: Theme.of(context).textTheme.titleSmall,
                             ),
                             const SizedBox(height: 16),
-                            Column(
-                              children: question!.answer!.map((option) {
-                                return RadioListTile<String>(
-                                  title: Text(option.option!),
-                                  value: option.option!,
-                                  groupValue:
-                                      controller.level2selectedAnswer.value,
-                                  onChanged: (value) {
-                                    if (value != null) {
-                                      controller.level2selectedAnswer.value =
-                                          value;
-                                    }
-                                  },
+                            Obx(
+                  
+                              () {
+                                return Column(
+                                  children: question!.answer!.map((option) {
+                                    return RadioListTile<String>(
+                                      title: Text(option.option!),
+                                      value: option.option!,
+                                      groupValue:
+                                          controller.level2selectedAnswer.value,
+                                      onChanged: (value) {
+                                        if (value != null) {
+                                          controller.level2selectedAnswer.value =
+                                              value;
+                                               controller.updateLevel2Answer(question!.sId!, value); 
+                                        }
+                                      },
+                                    );
+                                  }).toList(),
                                 );
-                              }).toList(),
+                              }
                             ),
                             const SizedBox(height: 20),
                             Row(

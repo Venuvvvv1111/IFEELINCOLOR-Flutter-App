@@ -312,13 +312,7 @@ class AssesmentController extends GetxController {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: level2Questions.map((question) {
-            String selectedAnswerText = question.answer
-                    ?.firstWhere(
-                      (ans) => ans.sId == level2Answers[question.sId],
-                      orElse: () => Answer(option: 'Not Answered'),
-                    )
-                    .option ??
-                'Not Answered';
+            String selectedAnswerText = level2Answers[question.sId!] ?? 'Not Answered';
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

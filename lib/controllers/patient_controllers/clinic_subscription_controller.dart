@@ -77,7 +77,7 @@ class SubscribeClinicController extends GetxController {
       } else {
         final currentPlan = plans[currentPage.value];
 
-        if (currentPlan.name == "FREE TRAIL") {
+        if (currentPlan.price == "0.00") {
           await subscribeDoctor(context, doctorId);
         } else {
           bool paymentSuccess = await stripeService.makePayment(
@@ -210,7 +210,7 @@ class SubscribeClinicController extends GetxController {
       }
       final json = jsonDecode(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {
-        if(currentPlan.name=="FREE TRAIL"){
+        if(currentPlan.price=="0.00"){
            MyToast.showGetToast(title: '🎉 Free Trial Activated!', message: "Enjoy full access to all features during your trial period",color: whiteColor,backgroundColor: greenColor);
         }
         _handlePaymentSuccess(context, box.read('isLogin') ?? false);

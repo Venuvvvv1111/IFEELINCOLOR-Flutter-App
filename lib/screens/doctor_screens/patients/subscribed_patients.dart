@@ -54,7 +54,7 @@ class _SubscribedPatientsState extends State<SubscribedPatients> {
                   ),
                   filled: true,
                   fillColor: whiteColor,
-                  hintText: 'Find nearest doctors',
+                  hintText: 'Find subscribed patients',
                   hintStyle: Theme.of(context).textTheme.labelLarge,
                   border: InputBorder.none),
               onChanged: (query) {
