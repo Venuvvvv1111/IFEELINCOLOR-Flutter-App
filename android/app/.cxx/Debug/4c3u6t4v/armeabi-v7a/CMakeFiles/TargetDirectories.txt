@@ -1,0 +1,2 @@
+/Users/neosoft/Downloads/CI-CD/ifeelin_color_master2/android/app/.cxx/Debug/4c3u6t4v/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/neosoft/Downloads/CI-CD/ifeelin_color_master2/android/app/.cxx/Debug/4c3u6t4v/armeabi-v7a/CMakeFiles/rebuild_cache.dir

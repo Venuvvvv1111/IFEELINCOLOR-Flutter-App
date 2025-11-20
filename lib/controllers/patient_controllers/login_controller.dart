@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -74,11 +75,14 @@ class LoginController extends GetxController {
   Future<void> login(
       context, bool isGmail, String? gMail, String? gPassword) async {
     try {
-      await getAPNSToken();
+      if(Platform.isIOS){
+    await getAPNSToken();
+      }
+  
       if (kDebugMode) {
         print('token in login $gMail $isGmail ');
       }
-
+String deviceToken = await FirebaseMessaging.instance.getToken() ?? "";
       LoaderHelper.showLoader(context);
       // ProgressDialogue.showw(context, 'logging in...');
       // isLoggedIn.value = true;
@@ -93,12 +97,12 @@ class LoginController extends GetxController {
         body: jsonEncode({
           "email": isGmail ? gMail : emailController.text,
           "password": isGmail ? gPassword : passwordController.text,
-          "deviceToken": await FirebaseMessaging.instance.getToken() ?? "",
+          "deviceToken":deviceToken,
         }),
         headers: {
           'Content-Type': 'application/json',
         },
-      );
+      ).timeout(const Duration(seconds: 15));
 
       LoaderHelper.hideLoader(context);
       final json = jsonDecode(res.body);

@@ -253,6 +253,13 @@ class _MyAppState extends State<MyApp> {
         initialRoute: AppRoutes.splash,
         onGenerateRoute: AppRouter.generateRoute,
         theme: themdata(context),
+          builder: (context, child) {
+    final padding = MediaQuery.of(context).padding;
+    return Padding(
+      padding: EdgeInsets.only(bottom: padding.bottom),
+      child: child!,
+    );
+  },
       ),
     );
   }
