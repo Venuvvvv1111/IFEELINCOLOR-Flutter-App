@@ -13,7 +13,6 @@ class UserInfo extends GetxService {
   set addTreatmentHistory(bool url) {
     _userData.write('checkTreatmentHistory', url);
   }
-
   @override
   void onInit() {
     super.onInit();
