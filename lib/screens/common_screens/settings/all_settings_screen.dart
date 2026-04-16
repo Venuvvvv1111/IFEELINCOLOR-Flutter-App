@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ifeelin_color/controllers/common_controllers/all_settings_controller.dart';
+import 'package:ifeelin_color/services/tts_service.dart';
 
 import 'package:ifeelin_color/utils/Route/app_routes.dart';
 import 'package:ifeelin_color/utils/constants/user_data.dart';
@@ -55,8 +56,25 @@ class AllSettingsScreenState extends State<AllSettingsScreen> {
                   icon: Icons.notifications_active,
                 )),
 
+            const SizedBox(height: 10.0),
+            Obx(() => _buildSwitchTile(
+                  title: 'Voice Assistance',
+                  subtitle: 'Enable text to speech',
+                  value: _userInfo.isTtsEnabled.value,
+                  onChanged: (val) {
+                    _userInfo.setTtsEnabled = val;
+                    if (!val) {
+                      TTSService()
+                          .speak("You Turned of the text to speech feature");
+                    } else {
+                      TTSService().speak(
+                          "Now you can long press on text to listen the text");
+                    }
+                   
+                  },
+                  icon: Icons.volume_up,
+                )),
             const SizedBox(height: 20.0),
-
             // Account Settings Section
             _buildSectionTitle('Account'),
             _buildListTile(

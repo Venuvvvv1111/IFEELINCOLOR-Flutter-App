@@ -108,6 +108,8 @@ PODS:
     - Flutter
   - flutter_local_notifications (0.0.1):
     - Flutter
+  - flutter_tts (0.0.1):
+    - Flutter
   - fluttertoast (0.0.2):
     - Flutter
   - geocoding_ios (1.0.5):
@@ -298,6 +300,7 @@ DEPENDENCIES:
   - flutter_google_places_sdk_ios (from `.symlinks/plugins/flutter_google_places_sdk_ios/ios`)
   - flutter_keyboard_visibility (from `.symlinks/plugins/flutter_keyboard_visibility/ios`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
+  - flutter_tts (from `.symlinks/plugins/flutter_tts/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - geocoding_ios (from `.symlinks/plugins/geocoding_ios/ios`)
   - geolocator_apple (from `.symlinks/plugins/geolocator_apple/darwin`)
@@ -368,6 +371,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/flutter_keyboard_visibility/ios"
   flutter_local_notifications:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
+  flutter_tts:
+    :path: ".symlinks/plugins/flutter_tts/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
   geocoding_ios:
@@ -421,6 +426,7 @@ SPEC CHECKSUMS:
   flutter_google_places_sdk_ios: c2236643eea32395f32d1667651d796f4377996a
   flutter_keyboard_visibility: 4625131e43015dbbe759d9b20daaf77e0e3f6619
   flutter_local_notifications: ad39620c743ea4c15127860f4b5641649a988100
+  flutter_tts: 35ac3c7d42412733e795ea96ad2d7e05d0a75113
   fluttertoast: 2c67e14dce98bbdb200df9e1acf610d7a6264ea1
   geocoding_ios: bcbdaa6bddd7d3129c9bcb8acddc5d8778689768
   geolocator_apple: ab36aa0e8b7d7a2d7639b3b4e48308394e8cef5e

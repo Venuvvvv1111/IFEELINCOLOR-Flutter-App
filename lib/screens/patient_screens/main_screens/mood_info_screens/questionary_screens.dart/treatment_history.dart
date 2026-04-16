@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ifeelin_color/controllers/patient_controllers/mood_info_controller/treatment_hostory_controller.dart';
+import 'package:ifeelin_color/services/tts_service.dart';
 import 'package:ifeelin_color/utils/medial_query_util/media_query_util.dart';
 import 'package:ifeelin_color/utils/Route/app_routes.dart';
 import 'package:ifeelin_color/utils/constants/load_neatwork_image.dart';
 import 'package:ifeelin_color/utils/constants/user_data.dart';
 import 'package:ifeelin_color/utils/helpers/app_icons.dart';
 import 'package:ifeelin_color/utils/helpers/custom_colors.dart';
+import 'package:ifeelin_color/utils/widgets/speakable.dart';
 
 class TreatmentHistory extends StatefulWidget {
   const TreatmentHistory({super.key});
@@ -153,46 +155,54 @@ class _TreatmentHistoryState extends State<TreatmentHistory> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                controller.questions[
-                                    controller.currentQuestionIndex.value],
-                                style: Theme.of(context).textTheme.titleSmall,
+                              Speakable(
+                                text: controller.questions[
+                                      controller.currentQuestionIndex.value],
+                                child: Text(
+                                  controller.questions[
+                                      controller.currentQuestionIndex.value],
+                                  style: Theme.of(context).textTheme.titleSmall,
+                                ),
                               ),
                               const SizedBox(height: 16),
-                              Container(
-                                decoration: BoxDecoration(
-                                  border:
-                                      Border.all(color: primaryColor, width: 1),
-                                  borderRadius: BorderRadius.circular(5),
-                                ),
-                                child: DropdownButtonHideUnderline(
-                                  child: DropdownButton<String>(
-                                    isDense: true,
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 10),
-                                    isExpanded: true,
-                                    hint: const Text('Please select any one'),
-                                    style:
-                                        Theme.of(context).textTheme.labelLarge,
-                                    value:
-                                        controller.selectedAnswer.value.isEmpty
-                                            ? null
-                                            : controller.selectedAnswer.value,
-                                    items: <String>[
-                                      'Yes',
-                                      'No',
-                                    ].map<DropdownMenuItem<String>>(
-                                      (String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(value),
-                                        );
+                              Speakable(
+                                text: "Please select any one. Options are Yes or No.",
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border:
+                                        Border.all(color: primaryColor, width: 1),
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton<String>(
+                                      isDense: true,
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 10),
+                                      isExpanded: true,
+                                      hint: const Text('Please select any one'),
+                                      style:
+                                          Theme.of(context).textTheme.labelLarge,
+                                      value:
+                                          controller.selectedAnswer.value.isEmpty
+                                              ? null
+                                              : controller.selectedAnswer.value,
+                                      items: <String>[
+                                        'Yes',
+                                        'No',
+                                      ].map<DropdownMenuItem<String>>(
+                                        (String value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Text(value),
+                                          );
+                                        },
+                                      ).toList(),
+                                      onChanged: (String? newValue) {
+                                        controller.selectedAnswer.value =
+                                            newValue!;
+                                             TTSService().speak("You selected $newValue");
                                       },
-                                    ).toList(),
-                                    onChanged: (String? newValue) {
-                                      controller.selectedAnswer.value =
-                                          newValue!;
-                                    },
+                                    ),
                                   ),
                                 ),
                               ),
@@ -235,22 +245,31 @@ class _TreatmentHistoryState extends State<TreatmentHistory> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      controller.previousQuestion(context);
-                                    },
-                                    child: const Text('Back'),
+                                  Speakable(
+                                    text: "This is for Go Back",
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        controller.previousQuestion(context);
+                                      },
+                                      child: const Text('Back'),
+                                    ),
                                   ),
                                   const SizedBox(width: 16),
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      controller.nextQuestion(context);
-                                    },
-                                    child: Text(
-                                      controller.currentQuestionIndex.value <
-                                              controller.questions.length - 1
-                                          ? 'Next'
-                                          : 'Review',
+                                  Speakable(
+                                       text: "This is for ${ controller.currentQuestionIndex.value <
+                                                controller.questions.length - 1
+                                            ? 'Go to next question'
+                                            : 'Review the form'}",
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        controller.nextQuestion(context);
+                                      },
+                                      child: Text(
+                                        controller.currentQuestionIndex.value <
+                                                controller.questions.length - 1
+                                            ? 'Next'
+                                            : 'Review',
+                                      ),
                                     ),
                                   ),
                                 ],

@@ -13,8 +13,10 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:ifeelin_color/firebase_options.dart';
 import 'package:ifeelin_color/screens/common_screens/no_internet_screen/no_internet_screen.dart';
+import 'package:ifeelin_color/services/tts_service.dart';
 import 'package:ifeelin_color/utils/Route/app_routes.dart';
 import 'package:ifeelin_color/utils/Route/route_helper.dart';
+import 'package:ifeelin_color/utils/constants/user_data.dart';
 
 import 'package:ifeelin_color/utils/helpers/custom_colors.dart';
 
@@ -133,6 +135,8 @@ void main() async {
   // await Firebase.initializeApp(
   //   options: DefaultFirebaseOptions.currentPlatform,
   // );
+  Get.put(UserInfo(), permanent: true);
+    await TTSService().init(); 
   runApp(const MyApp());
 }
 

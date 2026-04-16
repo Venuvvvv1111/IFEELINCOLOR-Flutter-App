@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:ifeelin_color/utils/constants/user_data.dart';
 import 'package:ifeelin_color/utils/route/app_routes.dart';
 import 'package:ifeelin_color/utils/helpers/app_icons.dart';
 import 'package:ifeelin_color/utils/helpers/app_images.dart';
@@ -20,11 +22,47 @@ class SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
+  void showTtsSelectionDialog(BuildContext context) {
+    final userInfo = Get.find<UserInfo>();
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) {
+        return AlertDialog(
+          title: Text("Choose Mode"),
+          content: Text("Do you want to use voice assistance?"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                userInfo.setTtsEnabled = false;
+                Navigator.pop(context);
+              },
+              child: Text("Text Only"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                userInfo.setTtsEnabled = true;
+                Navigator.pop(context);
+              },
+              child: Text("Enable Voice"),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   void initState() {
     super.initState();
+    final userInfo = Get.find<UserInfo>();
 
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!userInfo.isTtsEnabled.value) {
+        showTtsSelectionDialog(context);
+      }
+    });
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 700),

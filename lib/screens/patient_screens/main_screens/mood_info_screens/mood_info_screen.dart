@@ -15,6 +15,7 @@ import 'package:ifeelin_color/utils/constants/user_data.dart';
 import 'package:ifeelin_color/utils/helpers/app_icons.dart';
 import 'package:ifeelin_color/utils/helpers/app_images.dart';
 import 'package:ifeelin_color/utils/helpers/custom_colors.dart';
+import 'package:ifeelin_color/utils/widgets/speakable.dart';
 import 'package:readmore/readmore.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -320,39 +321,42 @@ class _MoodInfoScreenViewState extends State<MoodInfoScreenView>
                     ),
 
                     Obx(() {
-                      return ArrowButton(
-                        text: "Treatment History",
-                        image: AppIcons.treatmentHistory,
-                        submitType: userInfo.getTreatmentHistory.value,
-                        onTap: () async {
-                          // await subscriptionController
-                          //     .checkFreeTrailActive();
-                          // await subscriptionController
-                          //     .checkPremiumActiveSubscription();
-
-                          if (await subscriptionController
-                              .checkFreeTrailActive() ||await subscriptionController
-                              .checkPremiumActiveSubscription()) {
-                            if (!context.mounted) {
-                              return;
+                      return Speakable(
+                         text: "It will open Treatment History Form",
+                        child: ArrowButton(
+                          text: "Treatment History",
+                          image: AppIcons.treatmentHistory,
+                          submitType: userInfo.getTreatmentHistory.value,
+                          onTap: () async {
+                            // await subscriptionController
+                            //     .checkFreeTrailActive();
+                            // await subscriptionController
+                            //     .checkPremiumActiveSubscription();
+                        
+                            if (await subscriptionController
+                                .checkFreeTrailActive() ||await subscriptionController
+                                .checkPremiumActiveSubscription()) {
+                              if (!context.mounted) {
+                                return;
+                              }
+                              Navigator.pushNamed(
+                                  context, AppRoutes.treatmentHistory);
+                            } else {
+                              MyToast.showGetToast(
+                                title: 'Error',
+                                message:
+                                    'Please subscribe or start a free trial from Doctor/Portal Plans in Settings.',
+                                color: whiteColor,
+                                backgroundColor: Colors.red,
+                              );
                             }
-                            Navigator.pushNamed(
-                                context, AppRoutes.treatmentHistory);
-                          } else {
-                            MyToast.showGetToast(
-                              title: 'Error',
-                              message:
-                                  'Please subscribe or start a free trial from Doctor/Portal Plans in Settings.',
-                              color: whiteColor,
-                              backgroundColor: Colors.red,
-                            );
-                          }
-
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (_) => Treatmenthistory()));
-                        },
+                        
+                            // Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //         builder: (_) => Treatmenthistory()));
+                          },
+                        ),
                       );
                     }),
 
@@ -361,75 +365,82 @@ class _MoodInfoScreenViewState extends State<MoodInfoScreenView>
                     ),
 
                     Obx(() {
-                      return ArrowButton(
+                      return Speakable(
                         text: "Health And Social Information",
-                        image: AppIcons.socialInformationIcon,
-                        submitType: userInfo.getSocialHealthHistory.value,
-                        onTap: () async {
 
-                          if (await subscriptionController
-                              .checkFreeTrailActive() ||await subscriptionController
-                              .checkPremiumActiveSubscription()) {
-                            if (!context.mounted) {
-                              return;
+                        child: ArrowButton(
+                          text: "Health And Social Information",
+                          image: AppIcons.socialInformationIcon,
+                          submitType: userInfo.getSocialHealthHistory.value,
+                          onTap: () async {
+                        
+                            if (await subscriptionController
+                                .checkFreeTrailActive() ||await subscriptionController
+                                .checkPremiumActiveSubscription()) {
+                              if (!context.mounted) {
+                                return;
+                              }
+                              Navigator.pushNamed(
+                                  context, AppRoutes.healthSocialInformation);
+                            } else {
+                              MyToast.showGetToast(
+                                title: 'Error',
+                                message:
+                                    'Please subscribe or start a free trial from Doctor/Portal Plans in Settings.',
+                                color: whiteColor,
+                                backgroundColor: Colors.red,
+                              );
                             }
-                            Navigator.pushNamed(
-                                context, AppRoutes.healthSocialInformation);
-                          } else {
-                            MyToast.showGetToast(
-                              title: 'Error',
-                              message:
-                                  'Please subscribe or start a free trial from Doctor/Portal Plans in Settings.',
-                              color: whiteColor,
-                              backgroundColor: Colors.red,
-                            );
-                          }
-
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (_) => Healthsocialinformation()));
-                        },
+                        
+                            // Navigator.push(
+                            //     context,
+                            //     MaterialPageRoute(
+                            //         builder: (_) => Healthsocialinformation()));
+                          },
+                        ),
                       );
                     }),
                     const SizedBox(
                       height: 20,
                     ),
                     Obx(() {
-                      return ArrowButton(
-                        text: "Assesment",
-                        submitType: userInfo.getAssesment.value
-                            ? userInfo.getAssesment.value
-                            : userInfo.getBodyAssesment.value,
-                        image: AppIcons.familyMentalHealthHistoryIcon,
-                        onTap: () async {
-                  
-                        if (await subscriptionController
-                              .checkFreeTrailActive() ||await subscriptionController
-                              .checkPremiumActiveSubscription()) {
-                            if (!context.mounted) {
-                              return;
+                      return Speakable(
+                            text: "It will open Assesment Form",
+                        child: ArrowButton(
+                          text: "Assesment",
+                          submitType: userInfo.getAssesment.value
+                              ? userInfo.getAssesment.value
+                              : userInfo.getBodyAssesment.value,
+                          image: AppIcons.familyMentalHealthHistoryIcon,
+                          onTap: () async {
+                                          
+                          if (await subscriptionController
+                                .checkFreeTrailActive() ||await subscriptionController
+                                .checkPremiumActiveSubscription()) {
+                              if (!context.mounted) {
+                                return;
+                              }
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return const AssessmentDialog();
+                                  });
+                            } else {
+                              MyToast.showGetToast(
+                                title: 'Error',
+                                message:
+                                    'Please subscribe or start a free trial from Doctor/Portal Plans in Settings.',
+                                color: whiteColor,
+                                backgroundColor: Colors.red,
+                              );
                             }
-                            showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return const AssessmentDialog();
-                                });
-                          } else {
-                            MyToast.showGetToast(
-                              title: 'Error',
-                              message:
-                                  'Please subscribe or start a free trial from Doctor/Portal Plans in Settings.',
-                              color: whiteColor,
-                              backgroundColor: Colors.red,
-                            );
-                          }
-
-                          // Navigator.pushNamed(
-                          //     context, AppRoutes.familyMentalHealth);
-                          // Navigator.push(context,
-                          //     MaterialPageRoute(builder: (_) => Treatment()));
-                        },
+                        
+                            // Navigator.pushNamed(
+                            //     context, AppRoutes.familyMentalHealth);
+                            // Navigator.push(context,
+                            //     MaterialPageRoute(builder: (_) => Treatment()));
+                          },
+                        ),
                       );
                     }),
                     const SizedBox(
