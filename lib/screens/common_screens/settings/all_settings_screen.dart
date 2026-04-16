@@ -48,15 +48,19 @@ class AllSettingsScreenState extends State<AllSettingsScreen> {
             // General Settings Section
             _buildSectionTitle('General'),
 
-            Obx(() => _buildSwitchTile(
-                  title: 'Notifications',
-                  subtitle: 'Receive notifications for updates',
-                  value: notificationController.notificationsEnabled.value,
-                  onChanged: notificationController.toggleNotification,
-                  icon: Icons.notifications_active,
-                )),
-
-            const SizedBox(height: 10.0),
+            Obx(() => Card(
+              elevation: 5,
+              color: Colors.white,
+              child: Column(
+                children: [
+                  _buildSwitchTile(
+                        title: 'Notifications',
+                        subtitle: 'Receive notifications for updates',
+                        value: notificationController.notificationsEnabled.value,
+                        onChanged: notificationController.toggleNotification,
+                        icon: Icons.notifications_active,
+                      ),
+     
             Obx(() => _buildSwitchTile(
                   title: 'Voice Assistance',
                   subtitle: 'Enable text to speech',
@@ -74,19 +78,29 @@ class AllSettingsScreenState extends State<AllSettingsScreen> {
                   },
                   icon: Icons.volume_up,
                 )),
+                ],
+              ),
+            )),
+
+            
             const SizedBox(height: 20.0),
             // Account Settings Section
             _buildSectionTitle('Account'),
-            _buildListTile(
-              title: 'Manage Account',
-              subtitle: 'change password',
-              icon: Icons.person,
-              onTap: () {
-                Navigator.pushNamed(context, AppRoutes.resetPasswordScreen);
-                // Navigate to Manage Account Screen
-              },
-            ),
-            _buildListTile(
+            Card(
+              elevation: 5,
+              color: Colors.white,
+              child: Column(
+                children: [
+                  _buildListTile(
+                    title: 'Manage Account',
+                    subtitle: 'change password',
+                    icon: Icons.person,
+                    onTap: () {
+                      Navigator.pushNamed(context, AppRoutes.resetPasswordScreen);
+                      // Navigate to Manage Account Screen
+                    },
+                  ),
+                   _buildListTile(
               title: 'Privacy & Security Policy',
               subtitle: 'Manage privacy and security',
               icon: Icons.lock,
@@ -95,20 +109,29 @@ class AllSettingsScreenState extends State<AllSettingsScreen> {
                 // Navigate to Privacy Settings Screen
               },
             ),
+                ],
+              ),
+            ),
+           
 
             const SizedBox(height: 20.0),
 
             // Help Section
             _buildSectionTitle('Help'),
-            _buildListTile(
-              title: 'Help & Support',
-              subtitle: 'Get assistance with your issues',
-              icon: Icons.help,
-              onTap: () {
-                Navigator.pushNamed(context, AppRoutes.helpScreen);
-              },
-            ),
-            _buildListTile(
+             Card(
+              elevation: 5,
+              color: Colors.white,
+              child: Column(
+                children: [
+                  _buildListTile(
+                    title: 'Help & Support',
+                    subtitle: 'Get assistance with your issues',
+                    icon: Icons.help,
+                    onTap: () {
+                      Navigator.pushNamed(context, AppRoutes.helpScreen);
+                    },
+                  ),
+                   _buildListTile(
               title: 'About',
               subtitle: 'Learn more about the app',
               icon: Icons.info,
@@ -117,6 +140,10 @@ class AllSettingsScreenState extends State<AllSettingsScreen> {
                 // Navigate to About Screen
               },
             ),
+                ],
+              ),
+            ),
+           
 
             const SizedBox(height: 20.0),
 
@@ -187,13 +214,13 @@ class AllSettingsScreenState extends State<AllSettingsScreen> {
       leading: Icon(icon, color: isDarkMode ? Colors.tealAccent : Colors.teal),
       title: Text(
         title,
-        style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
+        style: TextStyle(color: isDarkMode ? Colors.white : Colors.black,fontSize: 15),
       ),
       subtitle: Text(
         subtitle,
-        style: TextStyle(color: isDarkMode ? Colors.grey : Colors.grey[600]),
+        style: TextStyle(color: isDarkMode ? Colors.grey : Colors.grey[600],fontSize: 13),
       ),
-      trailing: const Icon(Icons.arrow_forward_ios, size: 16.0),
+      trailing: const Icon(Icons.arrow_forward_ios, size: 12.0),
     );
   }
 
@@ -204,23 +231,39 @@ class AllSettingsScreenState extends State<AllSettingsScreen> {
     required ValueChanged<bool> onChanged,
     required IconData icon,
   }) {
-    return SwitchListTile(
+    return  ListTile(
+      
+  dense: true,
+  contentPadding: EdgeInsets.symmetric(horizontal: 15,vertical: 5),
+  leading: Icon(
+    icon,
+    color: isDarkMode ? Colors.tealAccent : Colors.teal,
+    size: 22,
+  ),
+  title: Text(
+    title,
+    style: TextStyle(
+      color: isDarkMode ? Colors.white : Colors.black,
+      fontSize: 15,
+    ),
+  ),
+  subtitle: Text(
+    subtitle,
+    style: TextStyle(
+      color: isDarkMode ? Colors.grey : Colors.grey[600],
+      fontSize: 13,
+    ),
+  ),
+  trailing: Transform.scale(
+    scale: 0.8, 
+    child: Switch(
       value: value,
       onChanged: onChanged,
-      title: Text(
-        title,
-        style: TextStyle(color: isDarkMode ? Colors.white : Colors.black),
-      ),
-      subtitle: Text(
-        subtitle,
-        style: TextStyle(color: isDarkMode ? Colors.grey : Colors.grey[600]),
-      ),
       activeColor: Colors.teal,
-      secondary:
-          Icon(icon, color: isDarkMode ? Colors.tealAccent : Colors.teal),
-    );
-  }
-}
+    ),
+  ),
+);
+}}
 
 void main() => runApp(const MaterialApp(
       debugShowCheckedModeBanner: false,
