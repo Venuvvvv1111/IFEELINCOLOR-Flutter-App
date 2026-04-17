@@ -14,6 +14,7 @@ import 'package:ifeelin_color/utils/constants/my_toast.dart';
 import 'package:ifeelin_color/utils/constants/user_data.dart';
 import 'package:ifeelin_color/utils/helpers/app_icons.dart';
 import 'package:ifeelin_color/utils/helpers/custom_colors.dart';
+import 'package:ifeelin_color/utils/widgets/speakable.dart';
 import 'package:lottie/lottie.dart';
 import 'package:readmore/readmore.dart';
 
@@ -282,15 +283,22 @@ class ColorWheelScreenState extends State<ColorWheelScreen> {
                                           const SizedBox(
                                             width: 5,
                                           ),
-                                          Text(
-                                            assessmentController
-                                                        .colorCategory.value ==
-                                                    ''
-                                                ? "Error"
-                                                : "${assessmentController.mainColor.value} (${assessmentController.colorCategory.value})",
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .titleMedium,
+                                          Speakable(
+                                            text:   assessmentController
+                                                          .colorCategory.value ==
+                                                      ''
+                                                  ? "Error"
+                                                  : "${assessmentController.mainColor.value} (${assessmentController.colorCategory.value})",
+                                            child: Text(
+                                              assessmentController
+                                                          .colorCategory.value ==
+                                                      ''
+                                                  ? "Error"
+                                                  : "${assessmentController.mainColor.value} (${assessmentController.colorCategory.value})",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .titleMedium,
+                                            ),
                                           ),
                                         ],
                                       )
@@ -340,55 +348,79 @@ class ColorWheelScreenState extends State<ColorWheelScreen> {
                                               const SizedBox(
                                                 width: 5,
                                               ),
-                                              Text(
-                                                bodyController.colorCategory
-                                                            .value ==
-                                                        ''
-                                                    ? 'Error'
-                                                    : "${bodyController.mainColor.value} (${bodyController.colorCategory.value})",
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .titleMedium,
+                                              Speakable(
+                                                text: bodyController.colorCategory
+                                                              .value ==
+                                                          ''
+                                                      ? 'Error'
+                                                      : "${bodyController.mainColor.value} (${bodyController.colorCategory.value})",
+                                                child: Text(
+                                                  bodyController.colorCategory
+                                                              .value ==
+                                                          ''
+                                                      ? 'Error'
+                                                      : "${bodyController.mainColor.value} (${bodyController.colorCategory.value})",
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .titleMedium,
+                                                ),
                                               ),
                                             ],
                                           )
                                         : const SizedBox(),
                                 const SizedBox(height: 16),
                                 Obx(() {
-                                  return ReadMoreText(
-                                    widget.isAssesment
-                                        ? assessmentController
-                                                    .colorSubtitle.value ==
-                                                ''
-                                            ? 'Sorry! Please submit new assesment.'
-                                            : assessmentController
-                                                .colorSubtitle.value
-                                        : widget.isBodyAssesment
-                                            ? bodyController
-                                                        .colorSubtitle.value ==
-                                                    ''
-                                                ? 'Sorry! Please submit new assesment.'
-                                                : bodyController
-                                                    .colorSubtitle.value
-                                            : "Sorry! Please submit new assesment.",
-                                    trimLines: 4,
-                                    // colorClickableText: Colors.white,
-                                    colorClickableText: Colors.black,
-                                    trimMode: TrimMode.Line,
-                                    trimCollapsedText: '   Read more..',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodySmall!
-                                        .copyWith(fontSize: 13),
-                                    trimExpandedText: '    Read less..',
-                                    moreStyle: const TextStyle(
-                                        color: newIdentitiyPrimaryColor,
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.bold),
-                                    lessStyle: const TextStyle(
-                                        color: newIdentitiyPrimaryColor,
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.bold),
+                                  return Speakable(
+                                    text: widget.isAssesment
+                                          ? assessmentController
+                                                      .colorSubtitle.value ==
+                                                  ''
+                                              ? 'Sorry! Please submit new assesment.'
+                                              : assessmentController
+                                                  .colorSubtitle.value
+                                          : widget.isBodyAssesment
+                                              ? bodyController
+                                                          .colorSubtitle.value ==
+                                                      ''
+                                                  ? 'Sorry! Please submit new assesment.'
+                                                  : bodyController
+                                                      .colorSubtitle.value
+                                              : "Sorry! Please submit new assesment.",
+                                    child: ReadMoreText(
+                                      widget.isAssesment
+                                          ? assessmentController
+                                                      .colorSubtitle.value ==
+                                                  ''
+                                              ? 'Sorry! Please submit new assesment.'
+                                              : assessmentController
+                                                  .colorSubtitle.value
+                                          : widget.isBodyAssesment
+                                              ? bodyController
+                                                          .colorSubtitle.value ==
+                                                      ''
+                                                  ? 'Sorry! Please submit new assesment.'
+                                                  : bodyController
+                                                      .colorSubtitle.value
+                                              : "Sorry! Please submit new assesment.",
+                                      trimLines: 4,
+                                      // colorClickableText: Colors.white,
+                                      colorClickableText: Colors.black,
+                                      trimMode: TrimMode.Line,
+                                      trimCollapsedText: '   Read more..',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall!
+                                          .copyWith(fontSize: 13),
+                                      trimExpandedText: '    Read less..',
+                                      moreStyle: const TextStyle(
+                                          color: newIdentitiyPrimaryColor,
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.bold),
+                                      lessStyle: const TextStyle(
+                                          color: newIdentitiyPrimaryColor,
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.bold),
+                                    ),
                                   );
                                 }),
                                 const SizedBox(

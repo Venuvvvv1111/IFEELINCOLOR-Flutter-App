@@ -24,21 +24,25 @@ class TTSService {
     _isInitialized = true;
   }
 
-  Future speak(String text) async {
-    try {
-      final userInfo = Get.find<UserInfo>();
+Future speak(String text) async {
+  try {
+    final userInfo = Get.find<UserInfo>();
 
-      //  Respect user setting
-      if (!userInfo.isTtsEnabled.value) return;
+    if (!userInfo.isTtsEnabled.value) return;
+    if (text.trim().isEmpty) return;
 
-      if (text.trim().isEmpty) return;
+    // 🔴 Force stop immediately
+    await _tts.stop();
 
-      await _tts.stop(); // stop previous speech
-      await _tts.speak(text);
-    } catch (e) {
-      print("TTS Error: $e");
-    }
+    // 🔴 Small delay ensures stop completes
+    await Future.delayed(const Duration(milliseconds: 100));
+
+    // 🔴 Speak new text
+    await _tts.speak(text);
+  } catch (e) {
+    print("TTS Error: $e");
   }
+}
 
   Future stop() async {
     await _tts.stop();

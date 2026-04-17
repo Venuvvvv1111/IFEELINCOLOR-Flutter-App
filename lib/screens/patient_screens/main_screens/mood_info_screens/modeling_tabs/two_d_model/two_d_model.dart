@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ifeelin_color/controllers/patient_controllers/mood_info_controller/two_d_model_controller.dart';
+import 'package:ifeelin_color/services/tts_service.dart';
 import 'package:ifeelin_color/utils/Route/app_Routes.dart';
 
 import 'package:ifeelin_color/utils/helpers/app_icons.dart';
 import 'package:ifeelin_color/utils/helpers/app_images.dart';
 import 'package:ifeelin_color/utils/helpers/custom_colors.dart';
+import 'package:ifeelin_color/utils/widgets/speakable.dart';
 import 'package:lottie/lottie.dart';
 
 class TwoDModelScreen extends StatefulWidget {
@@ -19,6 +21,12 @@ class TwoDModelScreen extends StatefulWidget {
 class _TwoDModelScreenState extends State<TwoDModelScreen> {
   final TwoDModelController controller = Get.put(TwoDModelController());
 
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    TTSService().speak("Please select a black circle to get assesment form");
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,9 +88,12 @@ class _TwoDModelScreenState extends State<TwoDModelScreen> {
             if (controller.questions.isEmpty) {
               return const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 30),
-                child: Text(
-                  'Please select a circle to get assessment.',
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                child: Speakable(
+                  text: 'Please select a circle to get assessment.',
+                  child: Text(
+                    'Please select a circle to get assessment.',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ),
               );
             } else {
@@ -114,9 +125,12 @@ class _TwoDModelScreenState extends State<TwoDModelScreen> {
                           ],
                         ),
                         const SizedBox(height: 16),
-                        Text(
-                          currentQuestion.question ?? '',
-                          style: Theme.of(context).textTheme.titleSmall,
+                        Speakable(
+                          text:   currentQuestion.question ?? '',
+                          child: Text(
+                            currentQuestion.question ?? '',
+                            style: Theme.of(context).textTheme.titleSmall,
+                          ),
                         ),
                         const SizedBox(height: 16),
                         Container(
@@ -145,6 +159,9 @@ class _TwoDModelScreenState extends State<TwoDModelScreen> {
                               onChanged: (String? newValue) {
                                 controller.selectAnswer(
                                     currentQuestion.sId ?? '', newValue ?? '');
+                                if (newValue != null && newValue.isNotEmpty) {
+                                  TTSService().speak(newValue);
+                                }
                               },
                             ),
                           ),
@@ -153,23 +170,30 @@ class _TwoDModelScreenState extends State<TwoDModelScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            ElevatedButton(
-                              onPressed: () {
-                                controller.previousQuestion();
-                              },
-                              child: const Text('Back'),
+                            Speakable(
+                              text: "Click here to go back",
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  controller.previousQuestion();
+                                },
+                                child: const Text('Back'),
+                              ),
                             ),
                             const SizedBox(width: 16),
-                            ElevatedButton(
-                              onPressed: () {
-                                controller
-                                    .nextQuestion(context); // Pass context here
-                              },
-                              child: Text(
-                                controller.currentQuestionIndex.value <
-                                        controller.questions.length - 1
-                                    ? 'Next'
-                                    : 'Submit',
+                            Speakable(
+                              text:
+                                  "This is for ${controller.currentQuestionIndex.value < controller.questions.length - 1 ? 'Go to next question' : 'Review the form and submit'}",
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  controller.nextQuestion(
+                                      context); // Pass context here
+                                },
+                                child: Text(
+                                  controller.currentQuestionIndex.value <
+                                          controller.questions.length - 1
+                                      ? 'Next'
+                                      : 'Submit',
+                                ),
                               ),
                             ),
                           ],

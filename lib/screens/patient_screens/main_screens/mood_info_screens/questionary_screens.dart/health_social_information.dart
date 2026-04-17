@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ifeelin_color/controllers/patient_controllers/mood_info_controller/health_information_controller.dart';
+import 'package:ifeelin_color/services/tts_service.dart';
 import 'package:ifeelin_color/utils/medial_query_util/media_query_util.dart';
 import 'package:ifeelin_color/utils/Route/app_routes.dart';
 import 'package:ifeelin_color/utils/constants/load_neatwork_image.dart';
 import 'package:ifeelin_color/utils/constants/user_data.dart';
 import 'package:ifeelin_color/utils/helpers/app_icons.dart';
 import 'package:ifeelin_color/utils/helpers/custom_colors.dart';
+import 'package:ifeelin_color/utils/widgets/speakable.dart';
 
 class HealthSocialInformation extends StatefulWidget {
   const HealthSocialInformation({super.key});
@@ -156,31 +158,42 @@ class _HealthSocialInformationState extends State<HealthSocialInformation> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                controller.questions[
-                                    controller.currentQuestionIndex.value],
-                                style: Theme.of(context).textTheme.titleSmall,
+                              Speakable(
+                                text: controller.questions[
+                                      controller.currentQuestionIndex.value],
+                                child: Text(
+                                  controller.questions[
+                                      controller.currentQuestionIndex.value],
+                                  style: Theme.of(context).textTheme.titleSmall,
+                                ),
                               ),
                               const SizedBox(height: 16),
                               ...['Yes', 'No', 'I don\'t know']
                                   .map((String value) {
-                                return CheckboxListTile(
-                                  visualDensity: VisualDensity.compact,
-                                  contentPadding: const EdgeInsets.all(0),
-                                  controlAffinity:
-                                      ListTileControlAffinity.leading,
-                                  dense: true,
-                                  title: Text(value),
-                                  value: controller.selectedAnswers[controller
-                                          .currentQuestionIndex.value] ==
-                                      value, // Check current answer for each question
-                                  onChanged: (bool? checked) {
-                                    controller.selectedAnswers[
-                                        controller.currentQuestionIndex
-                                            .value] = checked == true
-                                        ? value
-                                        : ''; // Update only the current question's answer
-                                  },
+                                return Speakable(
+                                   text: value,
+                                  child: CheckboxListTile(
+                                    visualDensity: VisualDensity.compact,
+                                    contentPadding: const EdgeInsets.all(0),
+                                    controlAffinity:
+                                        ListTileControlAffinity.leading,
+                                    dense: true,
+                                    title: Text(value),
+                                    value: controller.selectedAnswers[controller
+                                            .currentQuestionIndex.value] ==
+                                        value, // Check current answer for each question
+                                    onChanged: (bool? checked) {
+                                      controller.selectedAnswers[
+                                          controller.currentQuestionIndex
+                                              .value] = checked == true
+                                          ? value
+                                          : ''; // Update only the current question's answer
+                                            if (checked == true) {
+                                        TTSService()
+                                            .speak("You selected $value");
+                                      }
+                                    },
+                                  ),
                                 );
                                 // ignore: unnecessary_to_list_in_spreads
                               }).toList(),
@@ -234,44 +247,53 @@ class _HealthSocialInformationState extends State<HealthSocialInformation> {
                                   SizedBox(
                                     width: MediaQueryUtil.size(context).width /
                                         3.5,
-                                    child: ElevatedButton(
-                                      onPressed: controller
-                                                  .currentQuestionIndex.value >
-                                              0
-                                          ? () {
-                                              controller.previousQuestion();
-                                            }
-                                          : () {
-                                              Navigator.pop(context);
-                                            },
-                                      child: const Text('Back'),
+                                    child: Speakable(
+                                      text: "Click here to go back",
+                                      child: ElevatedButton(
+                                        onPressed: controller
+                                                    .currentQuestionIndex.value >
+                                                0
+                                            ? () {
+                                                controller.previousQuestion();
+                                              }
+                                            : () {
+                                                Navigator.pop(context);
+                                              },
+                                        child: const Text('Back'),
+                                      ),
                                     ),
                                   ),
                                   const SizedBox(width: 10),
                                   SizedBox(
                                     width: MediaQueryUtil.size(context).width /
                                         3.5,
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        // Check if the selected answer is not empty for the current question
-                                        if (controller
-                                            .selectedAnswers[controller
-                                                .currentQuestionIndex.value]
-                                            .isNotEmpty) {
-                                          controller.nextQuestion(context);
-                                        } else {
-                                          Get.snackbar('Error',
-                                              'Please select an option',
-                                              colorText: whiteColor,
-                                              backgroundColor: Colors.red
-                                                  .withValues(alpha: 0.7));
-                                        }
-                                      },
-                                      child: Text(controller
-                                                  .currentQuestionIndex.value <
-                                              controller.questions.length - 1
-                                          ? 'Next'
-                                          : 'Submit'),
+                                    child: Speakable(
+                                       text: "This is for ${ controller.currentQuestionIndex.value <
+                                                controller.questions.length - 1
+                                            ? 'Go to next question'
+                                            : 'Review the form and submit'}",
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          // Check if the selected answer is not empty for the current question
+                                          if (controller
+                                              .selectedAnswers[controller
+                                                  .currentQuestionIndex.value]
+                                              .isNotEmpty) {
+                                            controller.nextQuestion(context);
+                                          } else {
+                                            Get.snackbar('Error',
+                                                'Please select an option',
+                                                colorText: whiteColor,
+                                                backgroundColor: Colors.red
+                                                    .withValues(alpha: 0.7));
+                                          }
+                                        },
+                                        child: Text(controller
+                                                    .currentQuestionIndex.value <
+                                                controller.questions.length - 1
+                                            ? 'Next'
+                                            : 'Submit'),
+                                      ),
                                     ),
                                   ),
                                 ],

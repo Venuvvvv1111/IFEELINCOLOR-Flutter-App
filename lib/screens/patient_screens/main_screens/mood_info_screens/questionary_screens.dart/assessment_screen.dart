@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:ifeelin_color/controllers/patient_controllers/mood_info_controller/assesment_controller.dart';
 import 'package:ifeelin_color/models/patient_models/Mood_info_models/assesemnt_level2_model.dart';
 import 'package:ifeelin_color/models/patient_models/Mood_info_models/get_assesment_questions_model.dart';
+import 'package:ifeelin_color/services/tts_service.dart';
 import 'package:ifeelin_color/utils/constants/load_neatwork_image.dart';
 import 'package:ifeelin_color/utils/constants/loader.dart';
 
@@ -11,6 +12,7 @@ import 'package:ifeelin_color/utils/Route/app_routes.dart';
 import 'package:ifeelin_color/utils/constants/user_data.dart';
 import 'package:ifeelin_color/utils/helpers/app_icons.dart';
 import 'package:ifeelin_color/utils/helpers/custom_colors.dart';
+import 'package:ifeelin_color/utils/widgets/speakable.dart';
 
 class AssesmentScreen extends StatefulWidget {
   const AssesmentScreen({super.key});
@@ -227,22 +229,25 @@ class levelOneForm extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              question!.question!,
-                              style: Theme.of(context).textTheme.titleSmall,
+                            Speakable(
+                              text:  question?.question??'',
+                              child: Text(
+                                question?.question??'',
+                                style: Theme.of(context).textTheme.titleSmall,
+                              ),
                             ),
                             const SizedBox(height: 16),
                             if (question!.type == 'blanks')
                               Column(
                                 children: [
-                                  question!.media != null ||
-                                          question!.media == ''
-                                      ? LoadNetworkImage(
-                                          question!.media!,
+                                  question?.media == null ||
+                                          question?.media == ''
+                                      ? const SizedBox(): LoadNetworkImage(
+                                          question?.media??'',
                                           height: 200,
                                           fit: BoxFit.cover,
-                                        )
-                                      : const SizedBox(),
+                                        ),
+                                      
                                   const SizedBox(height: 16),
                                   TextField(
                                     controller:
@@ -264,6 +269,7 @@ class levelOneForm extends StatelessWidget {
                                     groupValue: controller.selectedAnswer.value,
                                     onChanged: (value) {
                                       if (value != null) {
+                                        TTSService().speak(value);
                                         controller.selectedAnswer.value = value;
                                       }
                                     },
@@ -277,17 +283,20 @@ class levelOneForm extends StatelessWidget {
                                 SizedBox(
                                   width:
                                       MediaQuery.of(context).size.width / 3.5,
-                                  child: ElevatedButton(
-                                    onPressed:
-                                        controller.currentQuestionIndex.value >
-                                                0
-                                            ? () {
-                                                controller.previousQuestion();
-                                              }
-                                            : () {
-                                                Navigator.pop(context);
-                                              },
-                                    child: const Text('Back'),
+                                  child: Speakable(
+                                    text: "Click here to go back",
+                                    child: ElevatedButton(
+                                      onPressed:
+                                          controller.currentQuestionIndex.value >
+                                                  0
+                                              ? () {
+                                                  controller.previousQuestion();
+                                                }
+                                              : () {
+                                                  Navigator.pop(context);
+                                                },
+                                      child: const Text('Back'),
+                                    ),
                                   ),
                                 ),
                                 const SizedBox(width: 10),
@@ -411,33 +420,38 @@ class level2Form extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              "${question?.question}",
-                              style: Theme.of(context).textTheme.titleSmall,
+                            Speakable(
+                              text: "${question?.question}",
+                              child: Text(
+                                "${question?.question}",
+                                style: Theme.of(context).textTheme.titleSmall,
+                              ),
                             ),
                             const SizedBox(height: 16),
-                            Obx(
-                  
-                              () {
-                                return Column(
-                                  children: question!.answer!.map((option) {
-                                    return RadioListTile<String>(
-                                      title: Text(option.option!),
-                                      value: option.option!,
-                                      groupValue:
-                                          controller.level2selectedAnswer.value,
-                                      onChanged: (value) {
-                                        if (value != null) {
-                                          controller.level2selectedAnswer.value =
-                                              value;
-                                               controller.updateLevel2Answer(question!.sId!, value); 
-                                        }
-                                      },
+                            Column(
+                                  children: (question?.answer ?? []).map((option) {
+                                    return Obx(
+                                       () {
+                                        return RadioListTile<String>(
+                                          title: Text(option.option!),
+                                          value: option.option!,
+                                          groupValue:
+                                              controller.level2selectedAnswer.value,
+                                          onChanged: (value) {
+                                            if (value != null) {
+                                              controller.level2selectedAnswer.value =
+                                                  value;
+                                                   controller.updateLevel2Answer(question!.sId!, value); 
+                                                       TTSService().speak(value);
+                                            }
+                                        
+                                          },
+                                        );
+                                      }
                                     );
                                   }).toList(),
-                                );
-                              }
-                            ),
+                                ),
+                             
                             const SizedBox(height: 20),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -445,41 +459,53 @@ class level2Form extends StatelessWidget {
                                 SizedBox(
                                   width:
                                       MediaQuery.of(context).size.width / 3.5,
-                                  child: ElevatedButton(
-                                    onPressed: controller
-                                                .currentQuestionIndex.value >
-                                            0
-                                        ? () {
-                                            controller.level2PreviousQuestion();
-                                          }
-                                        : null,
-                                    child: const Text('Back'),
+                                  child: Speakable(
+                                    text: "Click here to go back",
+                                    child: ElevatedButton(
+                                      onPressed: controller
+                                                  .currentQuestionIndex.value >
+                                              0
+                                          ? () {
+                                              controller.level2PreviousQuestion();
+                                            }
+                                          : null,
+                                      child: const Text('Back'),
+                                    ),
                                   ),
                                 ),
                                 const SizedBox(width: 10),
                                 SizedBox(
                                   width:
                                       MediaQuery.of(context).size.width / 3.5,
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      if (controller.level2selectedAnswer.value
-                                          .isNotEmpty) {
-                                        controller.level2nextQuestion(context);
-                                      } else {
-                                        Get.snackbar('Error',
-                                            'Please answer the question',
-                                            colorText: whiteColor,
-                                            backgroundColor: Colors.red
-                                                .withValues(alpha: 0.7));
-                                      }
-                                    },
-                                    child: Text(controller
-                                                .level2currentQuestionIndex
-                                                .value <
-                                            controller.level2Questions.length -
-                                                1
-                                        ? 'Next'
-                                        : 'Submit'),
+                                  child: Speakable(
+                                 text: "This is for ${controller
+                                                  .level2currentQuestionIndex
+                                                  .value <
+                                              controller.level2Questions.length -
+                                                  1
+                                            ? 'Go to next question'
+                                            : 'Review the form and submit'}",
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        if (controller.level2selectedAnswer.value
+                                            .isNotEmpty) {
+                                          controller.level2nextQuestion(context);
+                                        } else {
+                                          Get.snackbar('Error',
+                                              'Please answer the question',
+                                              colorText: whiteColor,
+                                              backgroundColor: Colors.red
+                                                  .withValues(alpha: 0.7));
+                                        }
+                                      },
+                                      child: Text(controller
+                                                  .level2currentQuestionIndex
+                                                  .value <
+                                              controller.level2Questions.length -
+                                                  1
+                                          ? 'Next'
+                                          : 'Submit'),
+                                    ),
                                   ),
                                 ),
                               ],

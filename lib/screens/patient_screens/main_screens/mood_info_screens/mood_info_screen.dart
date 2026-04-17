@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:ifeelin_color/controllers/announcement_controller/announcement_controller.dart';
 import 'package:ifeelin_color/controllers/common_controllers/check_portal_subscroption.dart';
 import 'package:ifeelin_color/screens/patient_screens/main_screens/mood_info_screens/widgets/assessment_dialog.dart';
+import 'package:ifeelin_color/services/tts_service.dart';
 import 'package:ifeelin_color/utils/medial_query_util/media_query_util.dart';
 import 'package:ifeelin_color/screens/patient_screens/main_screens/mood_info_screens/widgets/arrow_buttons.dart';
 import 'package:ifeelin_color/utils/Route/app_routes.dart';
@@ -446,26 +447,30 @@ class _MoodInfoScreenViewState extends State<MoodInfoScreenView>
                     const SizedBox(
                       height: 20,
                     ),
-                    Align(
-                        alignment: Alignment.centerRight,
-                        child: ElevatedButton(
-                            onPressed: () {
-                              if ((userInfo.getAssesment.value ||
-                                      userInfo.getBodyAssesment.value) &&
-                                  userInfo.getSocialHealthHistory.value &&
-                                  userInfo.getTreatmentHistory.value) {
-                                // userInfo.removeData();
-                                Navigator.pushReplacementNamed(
-                                    context, AppRoutes.modelingTabsScreen);
-                              } else {
-                                MyToast.showGetToast(
-                                    title: 'Error',
-                                    message: 'Please fill required forms',
-                                    color: whiteColor,
-                                    backgroundColor: Colors.red);
-                              }
-                            },
-                            child: const Text('Submit & Get Result'))),
+                    Speakable(
+                      text: "'Submit & Get Result'",
+                      child: Align(
+                          alignment: Alignment.centerRight,
+                          child: ElevatedButton(
+                              onPressed: () {
+                                if ((userInfo.getAssesment.value ||
+                                        userInfo.getBodyAssesment.value) &&
+                                    userInfo.getSocialHealthHistory.value &&
+                                    userInfo.getTreatmentHistory.value) {
+                                  // userInfo.removeData();
+                                  Navigator.pushReplacementNamed(
+                                      context, AppRoutes.modelingTabsScreen);
+                                } else {
+                                  TTSService().speak("Please fill required forms");
+                                  MyToast.showGetToast(
+                                      title: 'Error',
+                                      message: 'Please fill required forms',
+                                      color: whiteColor,
+                                      backgroundColor: Colors.red);
+                                }
+                              },
+                              child: const Text('Submit & Get Result'))),
+                    ),
                     const SizedBox(
                       height: 20,
                     ),
