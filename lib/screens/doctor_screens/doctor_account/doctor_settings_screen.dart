@@ -31,12 +31,13 @@ class _DoctorSettingsScreen extends State<DoctorSettingsScreen> {
     super.initState();
 
     userName = userInfo.getUserName ?? 'Hi User';
+          allSettingsController.getIsFreeTrailActive();
   }
  final AllSettingsController allSettingsController =
       Get.put(AllSettingsController());
   @override
   Widget build(BuildContext context) {
-      allSettingsController.getIsFreeTrailActive();
+
     userName = userInfo.getUserName ?? 'Hi User';
     return MediaQuery.removePadding(
       context: context,

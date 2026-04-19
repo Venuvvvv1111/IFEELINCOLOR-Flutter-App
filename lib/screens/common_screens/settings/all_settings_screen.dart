@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ifeelin_color/controllers/common_controllers/all_settings_controller.dart';
+import 'package:ifeelin_color/controllers/patient_controllers/home_controller.dart';
 import 'package:ifeelin_color/services/tts_service.dart';
 
 import 'package:ifeelin_color/utils/Route/app_routes.dart';
@@ -24,9 +25,15 @@ class AllSettingsScreenState extends State<AllSettingsScreen> {
   final AllSettingsController notificationController =
       Get.put(AllSettingsController());
 
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+        notificationController.getIsFreeTrailActive();
+  }
   @override
   Widget build(BuildContext context) {
-      notificationController.getIsFreeTrailActive();
+  
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
@@ -160,6 +167,7 @@ class AllSettingsScreenState extends State<AllSettingsScreen> {
                           onpress: () {
                             var userInfo = Get.put(UserInfo());
                             userInfo.removeData();
+                            Get.delete<HomeController>(); 
                             Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                 builder: (BuildContext context) =>

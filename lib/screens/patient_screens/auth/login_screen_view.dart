@@ -7,6 +7,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:ifeelin_color/services/tts_service.dart';
 import 'package:ifeelin_color/utils/Route/app_Routes.dart';
 import 'package:ifeelin_color/utils/constants/my_toast.dart';
 import 'package:ifeelin_color/utils/constants/user_data.dart';
@@ -64,9 +65,19 @@ class _LoginScreenState extends State<LoginScreen> {
               child: const Text("Text Only"),
             ),
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async{
                 userInfo.setTtsEnabled = true;
                 Navigator.pop(context); // 🔥 return value
+                await TTSService().speak(
+                "Thank you for selecting voice assistance. Now I will assist you in using the app."
+              );
+
+              await Future.delayed(const Duration(milliseconds: 500));
+
+              // ✅ STEP 2: Ask role
+              await TTSService().speak(
+                "Please select whether you are a patient or a doctor."
+              );
               },
               child: const Text("Enable Voice"),
             ),
@@ -470,8 +481,18 @@ class _LoginScreenState extends State<LoginScreen> {
     double textSize = screenWidth * 0.03;
 
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
         controller.selectCard(title); // Update the selected card
+        final userInfo = Get.find<UserInfo>();
+
+        if (userInfo.isTtsEnabled.value) {
+          await TTSService().speak("You selected $title");
+
+          await Future.delayed(const Duration(milliseconds: 500));
+
+          await TTSService()
+              .speak("Please enter your email and password to continue.");
+        }
       },
       child: Obx(() {
         bool isSelected =

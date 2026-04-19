@@ -1,7 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:ifeelin_color/controllers/common_controllers/all_settings_controller.dart';
+import 'package:ifeelin_color/controllers/patient_controllers/home_controller.dart';
 import 'package:ifeelin_color/models/patient_models/organization_model.dart';
+import 'package:ifeelin_color/screens/patient_screens/auth/login_screen_view.dart';
 import 'package:ifeelin_color/utils/medial_query_util/media_query_util.dart';
 import 'package:ifeelin_color/utils/Route/app_routes.dart';
 import 'package:ifeelin_color/utils/constants/load_neatwork_image.dart';
@@ -33,6 +35,7 @@ class _SettingsScreen extends State<SettingsScreen> {
     super.initState();
 
     userName = UserInfo().getUserName ?? 'Hi User';
+     allSettingsController.getIsFreeTrailActive();
   }
 
   @override
@@ -44,7 +47,6 @@ class _SettingsScreen extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    allSettingsController.getIsFreeTrailActive();
     userName = UserInfo().getUserName ?? 'Hi User';
     return MediaQuery.removePadding(
       context: context,
@@ -250,9 +252,17 @@ class _SettingsScreen extends State<SettingsScreen> {
                         builder: (context) {
                           return LogoutDailog(
                             onpress: () async {
-                              UserInfo().removeData();
-                              Navigator.pushNamedAndRemoveUntil(context,
-                                  AppRoutes.loginScreen, (route) => false);
+                             var userInfo = Get.put(UserInfo());
+                            userInfo.removeData();
+                            Get.delete<HomeController>(); 
+                            
+                            Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    const LoginScreen(),
+                              ),
+                              (route) => false,
+                            );
 
                               // Navigator.of(context).pushAndRemoveUntil(
                               //   MaterialPageRoute(

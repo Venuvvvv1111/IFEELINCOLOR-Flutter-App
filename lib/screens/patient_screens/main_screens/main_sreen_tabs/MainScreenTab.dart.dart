@@ -2,6 +2,7 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ifeelin_color/services/tts_service.dart';
 
 
 import 'package:ifeelin_color/utils/constants/user_data.dart';
@@ -140,7 +141,8 @@ class _MainTabsScreenState extends State<MainTabsScreen>
             ),
           ],
           index: homeController.selectedIndex.value,
-          onTap: (index) {
+          onTap: (index) async{
+            await TTSService().stop();
             homeController.changePage(index);
           },
         );

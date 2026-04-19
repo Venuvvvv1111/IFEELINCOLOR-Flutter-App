@@ -34,8 +34,12 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     checkAndRequestLocationPermission();
-    fetchNearbyDoctors();
-    fetchSubscribeDoctors();
+    if (UserInfo().getUserToken == null || UserInfo().getUserToken!.isEmpty) {
+      return; // 🚫 Stop API call after logout
+    } else {
+      fetchNearbyDoctors();
+      fetchSubscribeDoctors();
+    }
   }
 
   void changePage(int index) {

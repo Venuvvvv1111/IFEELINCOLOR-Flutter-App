@@ -40,7 +40,10 @@ class _MoodInfoScreenViewState extends State<MoodInfoScreenView>
     final userInfo = Get.find<UserInfo>();
     isTtsOn = userInfo.isTtsEnabled.value;
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _speakFullScreen();
+      if(isTtsOn){
+ _speakFullScreen();
+      }
+     
     });
   }
 
