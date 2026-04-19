@@ -78,11 +78,12 @@ class TreatmentHistoryController extends GetxController {
             answers[currentQuestionIndex.value]['answer'] ?? '';
         reasonController.text =
             answers[currentQuestionIndex.value]['reason'] ?? '';
+        TTSService().speak("${questions[currentQuestionIndex.value]}");
       } else {
         showReviewDialog(context);
       }
     } else {
-        TTSService().speak("Please select any one");
+      TTSService().speak("Please select any one");
       Get.snackbar('Error', 'Please select any one',
           colorText: Colors.white, backgroundColor: Colors.red);
     }
@@ -130,8 +131,8 @@ class TreatmentHistoryController extends GetxController {
                       ? SizedBox()
                       : Text(
                           'Reason: ${answer['reason']}',
-                    style: Get.textTheme.bodyMedium,
-                  ),
+                          style: Get.textTheme.bodyMedium,
+                        ),
                   const SizedBox(height: 10),
                 ],
               );
@@ -144,20 +145,27 @@ class TreatmentHistoryController extends GetxController {
             child: TextButton(
               onPressed: () {
                 // Post data to the server
-            
+
                 Get.back();
               },
-              child: const Text('Go Back'),
+              child: const Text(
+                'Go Back',
+                style: TextStyle(color: Colors.grey),
+              ),
             ),
           ),
           Speakable(
-            text:"Click this to submit the form" ,
+            text: "Click this to submit the form",
             child: TextButton(
               onPressed: () {
                 // Post data to the server
                 submitAnswers(context);
               },
-              child: const Text('Submit'),
+              child: const Text(
+                'Submit',
+                style:
+                    TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
+              ),
             ),
           ),
         ],
@@ -199,19 +207,19 @@ class TreatmentHistoryController extends GetxController {
         userinfo.addTreatmentHistory = true;
 
         userinfo.refreshData();
-     TTSService().speak("Answers submitted successfully");
+        TTSService().speak("Answers submitted successfully");
         Get.snackbar('Success', 'Answers submitted successfully',
             backgroundColor: greenColor, colorText: whiteColor);
 
         Navigator.pop(context);
         Navigator.pop(context);
       } else {
-         TTSService().speak("Failed to submit answers");
+        TTSService().speak("Failed to submit answers");
         Get.snackbar('Error', 'Failed to submit answers',
             colorText: Colors.white, backgroundColor: Colors.red);
       }
     } catch (e) {
-       TTSService().speak("Failed to submit answers");
+      TTSService().speak("Failed to submit answers");
       Get.snackbar('Error', 'Failed to submit answers',
           colorText: Colors.white, backgroundColor: Colors.red);
     }

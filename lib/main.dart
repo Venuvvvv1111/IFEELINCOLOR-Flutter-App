@@ -136,7 +136,7 @@ void main() async {
   //   options: DefaultFirebaseOptions.currentPlatform,
   // );
   Get.put(UserInfo(), permanent: true);
-    await TTSService().init(); 
+  await TTSService().init();
   runApp(const MyApp());
 }
 
@@ -168,12 +168,13 @@ class _MyAppState extends State<MyApp> {
   late bool isOnline;
   @override
   void initState() {
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       const AndroidNotificationChannel channel = AndroidNotificationChannel(
         'IFEELINCOLOR', // id
         'IFEELINCOLOR', // name
         // description
         importance: Importance.high,
+        sound: RawResourceAndroidNotificationSound('notification'),
       );
 
       if (message.notification != null) {
@@ -186,9 +187,20 @@ class _MyAppState extends State<MyApp> {
               channel.id,
               channel.name,
               icon: '@drawable/ic_notification',
+              importance: Importance.high,
+              priority: Priority.high,
+              playSound: true,
+              enableVibration: true,
             ),
           ),
           payload: jsonEncode(message.data),
+        );
+      }
+      // 🔊 TTS for foreground only
+      final userInfo = Get.find<UserInfo>();
+      if (userInfo.isTtsEnabled.value) {
+        await TTSService().speak(
+          message.notification!.title ?? "New notification",
         );
       }
     });
@@ -257,13 +269,13 @@ class _MyAppState extends State<MyApp> {
         initialRoute: AppRoutes.splash,
         onGenerateRoute: AppRouter.generateRoute,
         theme: themdata(context),
-          builder: (context, child) {
-    final padding = MediaQuery.of(context).padding;
-    return Padding(
-      padding: EdgeInsets.only(bottom: padding.bottom),
-      child: child!,
-    );
-  },
+        builder: (context, child) {
+          final padding = MediaQuery.of(context).padding;
+          return Padding(
+            padding: EdgeInsets.only(bottom: padding.bottom),
+            child: child!,
+          );
+        },
       ),
     );
   }

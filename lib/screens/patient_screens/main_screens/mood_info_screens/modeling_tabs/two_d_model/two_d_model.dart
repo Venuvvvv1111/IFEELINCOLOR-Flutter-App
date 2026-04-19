@@ -21,12 +21,13 @@ class TwoDModelScreen extends StatefulWidget {
 class _TwoDModelScreenState extends State<TwoDModelScreen> {
   final TwoDModelController controller = Get.put(TwoDModelController());
 
-@override
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
     TTSService().speak("Please select a black circle to get assesment form");
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,9 +91,15 @@ class _TwoDModelScreenState extends State<TwoDModelScreen> {
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 30),
                 child: Speakable(
                   text: 'Please select a circle to get assessment.',
-                  child: Text(
-                    'Please select a circle to get assessment.',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                  child: Column(
+                    children: [
+                      Text(
+                        'Please select a circle to get assessment.',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Image(
+                          image: AssetImage("assets/images/no_data_found.avif"))
+                    ],
                   ),
                 ),
               );
@@ -126,7 +133,7 @@ class _TwoDModelScreenState extends State<TwoDModelScreen> {
                         ),
                         const SizedBox(height: 16),
                         Speakable(
-                          text:   currentQuestion.question ?? '',
+                          text: currentQuestion.question ?? '',
                           child: Text(
                             currentQuestion.question ?? '',
                             style: Theme.of(context).textTheme.titleSmall,

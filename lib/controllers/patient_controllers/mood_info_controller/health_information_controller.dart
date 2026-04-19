@@ -80,12 +80,13 @@ class HealthController extends GetxController {
 
       if (currentQuestionIndex.value < questions.length - 1) {
         currentQuestionIndex.value++;
+        TTSService().speak("${questions[currentQuestionIndex.value]}");
       } else {
         // Show review dialog at the end
         showReviewDialog(context);
       }
     } else {
-       TTSService().speak("Please select any one");
+      TTSService().speak("Please select any one");
       MyToast.showGetToast(
         title: "Error",
         message: "Please select an answer",
@@ -123,25 +124,25 @@ class HealthController extends GetxController {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Speakable(
-                       text: "${answer['question']}",
+                    text: "${answer['question']}",
                     child: Text(
                       '${answer['question']}',
                       style: Get.textTheme.titleSmall,
                     ),
                   ),
                   Speakable(
-                    text:  'Answer: ${answer['answer']}',
+                    text: 'Answer: ${answer['answer']}',
                     child: Text(
                       'Answer: ${answer['answer']}',
                       style: Get.textTheme.bodyMedium,
                     ),
                   ),
-                   answer['reason'] != null || answer['reason']!.isEmpty
+                  answer['reason'] != null || answer['reason']!.isEmpty
                       ? SizedBox()
                       : Text(
                           'Reason: ${answer['reason']}',
-                    style: Get.textTheme.bodyMedium,
-                  ),
+                          style: Get.textTheme.bodyMedium,
+                        ),
                   const SizedBox(height: 10),
                 ],
               );
@@ -155,17 +156,24 @@ class HealthController extends GetxController {
               onPressed: () {
                 Get.back(); // Go back to the questionnaire
               },
-              child: const Text('Go back'),
+              child: const Text(
+                'Go Back',
+                style: TextStyle(color: Colors.grey),
+              ),
             ),
           ),
           Speakable(
-             text:"Click this to submit the form" ,
+            text: "Click this to submit the form",
             child: TextButton(
               onPressed: () {
                 // Post data to the server
                 submitAnswers(context);
               },
-              child: const Text('Submit'),
+              child: const Text(
+                'Submit',
+                style:
+                    TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
+              ),
             ),
           ),
         ],

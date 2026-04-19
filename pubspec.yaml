@@ -108,6 +108,7 @@ flutter:
     - assets/icons/
     - assets/images/
     - assets/animations/
+    - assets/images/no_data_found.avif
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

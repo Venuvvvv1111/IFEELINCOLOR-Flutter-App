@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:ifeelin_color/utils/Route/app_Routes.dart';
 import 'package:ifeelin_color/utils/constants/my_toast.dart';
+import 'package:ifeelin_color/utils/constants/user_data.dart';
 import 'package:ifeelin_color/utils/helpers/app_icons.dart';
 import 'package:ifeelin_color/utils/helpers/app_images.dart';
 
@@ -35,6 +36,44 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
+    final userInfo = Get.find<UserInfo>();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!userInfo.isTtsEnabled.value) {
+        showTtsSelectionDialog(context);
+      }
+    });
+  }
+
+  Future<bool?> showTtsSelectionDialog(BuildContext context) {
+    final userInfo = Get.find<UserInfo>();
+
+    return showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) {
+        return AlertDialog(
+          title: const Text("Voice Assistance"),
+          content: const Text("Do you want to use voice assistance?"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                userInfo.setTtsEnabled = false;
+                Navigator.pop(context); // 🔥 return value
+              },
+              child: const Text("Text Only"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                userInfo.setTtsEnabled = true;
+                Navigator.pop(context); // 🔥 return value
+              },
+              child: const Text("Enable Voice"),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -216,6 +255,15 @@ class _LoginScreenState extends State<LoginScreen> {
                               SizedBox(
                                 width: MediaQueryUtil.size(context).width,
                                 child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: primaryColorDark,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                      side: BorderSide(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
                                   onPressed: () {
                                     if (controller.selectedCard!.value ==
                                         "Patient") {

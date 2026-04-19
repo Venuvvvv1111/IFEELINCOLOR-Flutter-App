@@ -21,6 +21,28 @@ class HealthSocialInformation extends StatefulWidget {
 class _HealthSocialInformationState extends State<HealthSocialInformation> {
   final HealthController controller = Get.put(HealthController());
   final UserInfo userInfo = Get.put(UserInfo());
+  bool isTtsOn = false;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    final userInfo = Get.find<UserInfo>();
+    isTtsOn = userInfo.isTtsEnabled.value;
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (isTtsOn) {
+        ever(controller.questions, (_) async {
+          if (isTtsOn && controller.questions.isNotEmpty) {
+            await Future.delayed(const Duration(milliseconds: 300));
+
+            TTSService().speak(
+              controller.questions[controller.currentQuestionIndex.value],
+            );
+          }
+        });
+      }
+    });
+  }
+
   @override
   void dispose() {
     Get.delete<HealthController>();
@@ -160,7 +182,7 @@ class _HealthSocialInformationState extends State<HealthSocialInformation> {
                             children: [
                               Speakable(
                                 text: controller.questions[
-                                      controller.currentQuestionIndex.value],
+                                    controller.currentQuestionIndex.value],
                                 child: Text(
                                   controller.questions[
                                       controller.currentQuestionIndex.value],
@@ -171,26 +193,45 @@ class _HealthSocialInformationState extends State<HealthSocialInformation> {
                               ...['Yes', 'No', 'I don\'t know']
                                   .map((String value) {
                                 return Speakable(
-                                   text: value,
+                                  text: value,
                                   child: CheckboxListTile(
                                     visualDensity: VisualDensity.compact,
                                     contentPadding: const EdgeInsets.all(0),
                                     controlAffinity:
                                         ListTileControlAffinity.leading,
                                     dense: true,
-                                    title: Text(value),
+                                    title: isTtsOn
+                                        ? Text(
+                                            value,
+                                            style: TextStyle(
+                                              color: value == 'Yes'
+                                                  ? Colors.green
+                                                  : value == 'No'
+                                                      ? Colors.red
+                                                      : Colors.black,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          )
+                                        : Text(value),
                                     value: controller.selectedAnswers[controller
                                             .currentQuestionIndex.value] ==
                                         value, // Check current answer for each question
-                                    onChanged: (bool? checked) {
+                                    onChanged: (bool? checked) async {
                                       controller.selectedAnswers[
                                           controller.currentQuestionIndex
                                               .value] = checked == true
                                           ? value
                                           : ''; // Update only the current question's answer
-                                            if (checked == true) {
-                                        TTSService()
+
+                                      if (isTtsOn) {
+                                        await TTSService()
                                             .speak("You selected $value");
+
+                                        // small pause (important for UX)
+                                        await Future.delayed(
+                                            const Duration(milliseconds: 500));
+
+                                        controller.nextQuestion(context);
                                       }
                                     },
                                   ),
@@ -250,8 +291,13 @@ class _HealthSocialInformationState extends State<HealthSocialInformation> {
                                     child: Speakable(
                                       text: "Click here to go back",
                                       child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                            backgroundColor: isTtsOn
+                                                ? Colors.red
+                                                : primaryColor),
                                         onPressed: controller
-                                                    .currentQuestionIndex.value >
+                                                    .currentQuestionIndex
+                                                    .value >
                                                 0
                                             ? () {
                                                 controller.previousQuestion();
@@ -268,11 +314,13 @@ class _HealthSocialInformationState extends State<HealthSocialInformation> {
                                     width: MediaQueryUtil.size(context).width /
                                         3.5,
                                     child: Speakable(
-                                       text: "This is for ${ controller.currentQuestionIndex.value <
-                                                controller.questions.length - 1
-                                            ? 'Go to next question'
-                                            : 'Review the form and submit'}",
+                                      text:
+                                          "This is for ${controller.currentQuestionIndex.value < controller.questions.length - 1 ? 'Go to next question' : 'Review the form and submit'}",
                                       child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                            backgroundColor: isTtsOn
+                                                ? Colors.green
+                                                : primaryColor),
                                         onPressed: () {
                                           // Check if the selected answer is not empty for the current question
                                           if (controller
@@ -289,7 +337,8 @@ class _HealthSocialInformationState extends State<HealthSocialInformation> {
                                           }
                                         },
                                         child: Text(controller
-                                                    .currentQuestionIndex.value <
+                                                    .currentQuestionIndex
+                                                    .value <
                                                 controller.questions.length - 1
                                             ? 'Next'
                                             : 'Submit'),

@@ -19,6 +19,27 @@ class TreatmentHistory extends StatefulWidget {
 
 class _TreatmentHistoryState extends State<TreatmentHistory> {
   final controller = Get.put(TreatmentHistoryController());
+  bool isTtsOn = false;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    final userInfo = Get.find<UserInfo>();
+    isTtsOn = userInfo.isTtsEnabled.value;
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (isTtsOn) {
+        ever(controller.questions, (_) async {
+          if (isTtsOn && controller.questions.isNotEmpty) {
+            await Future.delayed(const Duration(milliseconds: 300));
+
+            TTSService().speak(
+              controller.questions[controller.currentQuestionIndex.value],
+            );
+          }
+        });
+      }
+    });
+  }
 
   @override
   void dispose() {
@@ -157,7 +178,7 @@ class _TreatmentHistoryState extends State<TreatmentHistory> {
                             children: [
                               Speakable(
                                 text: controller.questions[
-                                      controller.currentQuestionIndex.value],
+                                    controller.currentQuestionIndex.value],
                                 child: Text(
                                   controller.questions[
                                       controller.currentQuestionIndex.value],
@@ -165,47 +186,86 @@ class _TreatmentHistoryState extends State<TreatmentHistory> {
                                 ),
                               ),
                               const SizedBox(height: 16),
-                              Speakable(
-                                text: "Please select any one. Options are Yes or No.",
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    border:
-                                        Border.all(color: primaryColor, width: 1),
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  child: DropdownButtonHideUnderline(
-                                    child: DropdownButton<String>(
-                                      isDense: true,
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10, vertical: 10),
-                                      isExpanded: true,
-                                      hint: const Text('Please select any one'),
-                                      style:
-                                          Theme.of(context).textTheme.labelLarge,
-                                      value:
-                                          controller.selectedAnswer.value.isEmpty
-                                              ? null
-                                              : controller.selectedAnswer.value,
-                                      items: <String>[
-                                        'Yes',
-                                        'No',
-                                      ].map<DropdownMenuItem<String>>(
-                                        (String value) {
+                              Obx(() {
+                                final userInfo = Get.find<UserInfo>();
+                                final isTtsOn = userInfo.isTtsEnabled.value;
+                                final selected =
+                                    controller.selectedAnswer.value;
+
+                                Color getColor(String value) {
+                                  if (!isTtsOn) return Colors.black;
+
+                                  if (value == "Yes") return Colors.green;
+                                  if (value == "No") return Colors.red;
+
+                                  return Colors.black;
+                                }
+
+                                return Speakable(
+                                  text:
+                                      "Please select any one. Options are Yes or No.",
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: primaryColor, width: 1),
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    child: DropdownButtonHideUnderline(
+                                      child: DropdownButton<String>(
+                                        isDense: true,
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 10, vertical: 10),
+                                        isExpanded: true,
+                                        hint:
+                                            const Text('Please select any one'),
+                                        value:
+                                            selected.isEmpty ? null : selected,
+
+                                        // 🔥 Selected item style
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelLarge
+                                            ?.copyWith(
+                                              color: getColor(selected),
+                                            ),
+
+                                        items: ['Yes', 'No'].map((value) {
                                           return DropdownMenuItem<String>(
                                             value: value,
-                                            child: Text(value),
+                                            child: Text(
+                                              value,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                color: isTtsOn
+                                                    ? (value == "Yes"
+                                                        ? Colors.green
+                                                        : Colors.red)
+                                                    : Colors.black,
+                                              ),
+                                            ),
                                           );
+                                        }).toList(),
+
+                                        onChanged: (String? newValue) async {
+                                          controller.selectedAnswer.value =
+                                              newValue!;
+
+                                          if (isTtsOn) {
+                                            await TTSService().speak(
+                                                "You selected $newValue");
+
+                                            // small pause (important for UX)
+                                            await Future.delayed(const Duration(
+                                                milliseconds: 500));
+
+                                            controller.nextQuestion(context);
+                                          }
                                         },
-                                      ).toList(),
-                                      onChanged: (String? newValue) {
-                                        controller.selectedAnswer.value =
-                                            newValue!;
-                                             TTSService().speak("You selected $newValue");
-                                      },
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ),
+                                );
+                              }),
                               const SizedBox(height: 20),
                               Text('Reason (optional)',
                                   style: Theme.of(context).textTheme.bodySmall),
@@ -248,6 +308,10 @@ class _TreatmentHistoryState extends State<TreatmentHistory> {
                                   Speakable(
                                     text: "This is for Go Back",
                                     child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          backgroundColor: isTtsOn
+                                              ? Colors.red
+                                              : primaryColor),
                                       onPressed: () {
                                         controller.previousQuestion(context);
                                       },
@@ -256,11 +320,13 @@ class _TreatmentHistoryState extends State<TreatmentHistory> {
                                   ),
                                   const SizedBox(width: 16),
                                   Speakable(
-                                       text: "This is for ${ controller.currentQuestionIndex.value <
-                                                controller.questions.length - 1
-                                            ? 'Go to next question'
-                                            : 'Review the form'}",
+                                    text:
+                                        "This is for ${controller.currentQuestionIndex.value < controller.questions.length - 1 ? 'Go to next question' : 'Review the form'}",
                                     child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          backgroundColor: isTtsOn
+                                              ? Colors.green
+                                              : primaryColor),
                                       onPressed: () {
                                         controller.nextQuestion(context);
                                       },

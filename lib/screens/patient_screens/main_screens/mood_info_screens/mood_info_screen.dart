@@ -32,11 +32,57 @@ class _MoodInfoScreenViewState extends State<MoodInfoScreenView>
   final UserInfo userInfo = Get.put(UserInfo());
   var announcementController = Get.put(AnnouncementController());
   final subscriptionController = Get.put(CheckPortalController());
-
+  bool isTtsOn = false;
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    final userInfo = Get.find<UserInfo>();
+    isTtsOn = userInfo.isTtsEnabled.value;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _speakFullScreen();
+    });
+  }
+
+  void _speakFullScreen() async {
+    final userName = userInfo.getUserName ?? "User";
+
+    final text = """
+      Hello! Welcome $userName.
+
+      This is Clinic Intake Form.
+
+      The clinic intake form is an important document used to collect essential information from patients before their appointment. 
+      It includes personal details, medical history, current medications, and reason for visit.
+
+      Below options are available:
+
+      Treatment History. It will open Treatment History Form.
+
+      Health And Social Information.
+
+      Assessment. It will open Assessment Form.
+
+      Finally, Submit and Get Result button is available at the bottom.
+      """;
+
+    await TTSService().speak(text);
+    await Future.delayed(const Duration(seconds: 1));
+
+    // Step 3: Guide action
+
+    // Step 4: Navigate
+    if (!mounted) return;
+    if (!userInfo.getTreatmentHistory.value) {
+      await TTSService().speak("Let's fill Treatment History form first");
+      Navigator.pushNamed(context, AppRoutes.treatmentHistory);
+    } else if (!userInfo.getSocialHealthHistory.value) {
+      await TTSService().speak("Let's fill Health And Social Information");
+      Navigator.pushNamed(context, AppRoutes.healthSocialInformation);
+    } else if (userInfo.getBodyAssesment.value) {
+      await TTSService().speak("Let's fill Assessment form");
+      Navigator.pushNamed(context, AppRoutes.twodModel);
+    }
   }
 
   @override
@@ -323,7 +369,7 @@ class _MoodInfoScreenViewState extends State<MoodInfoScreenView>
 
                     Obx(() {
                       return Speakable(
-                         text: "It will open Treatment History Form",
+                        text: "It will open Treatment History Form",
                         child: ArrowButton(
                           text: "Treatment History",
                           image: AppIcons.treatmentHistory,
@@ -333,16 +379,19 @@ class _MoodInfoScreenViewState extends State<MoodInfoScreenView>
                             //     .checkFreeTrailActive();
                             // await subscriptionController
                             //     .checkPremiumActiveSubscription();
-                        
+
                             if (await subscriptionController
-                                .checkFreeTrailActive() ||await subscriptionController
-                                .checkPremiumActiveSubscription()) {
+                                    .checkFreeTrailActive() ||
+                                await subscriptionController
+                                    .checkPremiumActiveSubscription()) {
                               if (!context.mounted) {
                                 return;
                               }
                               Navigator.pushNamed(
                                   context, AppRoutes.treatmentHistory);
                             } else {
+                              TTSService().speak(
+                                  "Please subscribe or start a free trial from Doctor/Portal Plans in Settings.");
                               MyToast.showGetToast(
                                 title: 'Error',
                                 message:
@@ -351,7 +400,7 @@ class _MoodInfoScreenViewState extends State<MoodInfoScreenView>
                                 backgroundColor: Colors.red,
                               );
                             }
-                        
+
                             // Navigator.push(
                             //     context,
                             //     MaterialPageRoute(
@@ -368,22 +417,23 @@ class _MoodInfoScreenViewState extends State<MoodInfoScreenView>
                     Obx(() {
                       return Speakable(
                         text: "Health And Social Information",
-
                         child: ArrowButton(
                           text: "Health And Social Information",
                           image: AppIcons.socialInformationIcon,
                           submitType: userInfo.getSocialHealthHistory.value,
                           onTap: () async {
-                        
                             if (await subscriptionController
-                                .checkFreeTrailActive() ||await subscriptionController
-                                .checkPremiumActiveSubscription()) {
+                                    .checkFreeTrailActive() ||
+                                await subscriptionController
+                                    .checkPremiumActiveSubscription()) {
                               if (!context.mounted) {
                                 return;
                               }
                               Navigator.pushNamed(
                                   context, AppRoutes.healthSocialInformation);
                             } else {
+                              TTSService().speak(
+                                  "Please subscribe or start a free trial from Doctor/Portal Plans in Settings.");
                               MyToast.showGetToast(
                                 title: 'Error',
                                 message:
@@ -392,7 +442,7 @@ class _MoodInfoScreenViewState extends State<MoodInfoScreenView>
                                 backgroundColor: Colors.red,
                               );
                             }
-                        
+
                             // Navigator.push(
                             //     context,
                             //     MaterialPageRoute(
@@ -406,7 +456,7 @@ class _MoodInfoScreenViewState extends State<MoodInfoScreenView>
                     ),
                     Obx(() {
                       return Speakable(
-                            text: "It will open Assesment Form",
+                        text: "It will open Assesment Form",
                         child: ArrowButton(
                           text: "Assesment",
                           submitType: userInfo.getAssesment.value
@@ -414,19 +464,26 @@ class _MoodInfoScreenViewState extends State<MoodInfoScreenView>
                               : userInfo.getBodyAssesment.value,
                           image: AppIcons.familyMentalHealthHistoryIcon,
                           onTap: () async {
-                                          
-                          if (await subscriptionController
-                                .checkFreeTrailActive() ||await subscriptionController
-                                .checkPremiumActiveSubscription()) {
+                            if (await subscriptionController
+                                    .checkFreeTrailActive() ||
+                                await subscriptionController
+                                    .checkPremiumActiveSubscription()) {
                               if (!context.mounted) {
                                 return;
                               }
-                              showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return const AssessmentDialog();
-                                  });
+                              if (isTtsOn) {
+                                Navigator.pushNamed(
+                                    context, AppRoutes.twodModel);
+                              } else {
+                                showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return const AssessmentDialog();
+                                    });
+                              }
                             } else {
+                              TTSService().speak(
+                                  "Please subscribe or start a free trial from Doctor/Portal Plans in Settings.");
                               MyToast.showGetToast(
                                 title: 'Error',
                                 message:
@@ -435,7 +492,7 @@ class _MoodInfoScreenViewState extends State<MoodInfoScreenView>
                                 backgroundColor: Colors.red,
                               );
                             }
-                        
+
                             // Navigator.pushNamed(
                             //     context, AppRoutes.familyMentalHealth);
                             // Navigator.push(context,
@@ -452,6 +509,9 @@ class _MoodInfoScreenViewState extends State<MoodInfoScreenView>
                       child: Align(
                           alignment: Alignment.centerRight,
                           child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      isTtsOn ? Colors.green : primaryColor),
                               onPressed: () {
                                 if ((userInfo.getAssesment.value ||
                                         userInfo.getBodyAssesment.value) &&
@@ -461,7 +521,8 @@ class _MoodInfoScreenViewState extends State<MoodInfoScreenView>
                                   Navigator.pushReplacementNamed(
                                       context, AppRoutes.modelingTabsScreen);
                                 } else {
-                                  TTSService().speak("Please fill required forms");
+                                  TTSService()
+                                      .speak("Please fill required forms");
                                   MyToast.showGetToast(
                                       title: 'Error',
                                       message: 'Please fill required forms',

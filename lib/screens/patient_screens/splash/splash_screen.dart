@@ -22,47 +22,10 @@ class SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
-  void showTtsSelectionDialog(BuildContext context) {
-    final userInfo = Get.find<UserInfo>();
-
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (_) {
-        return AlertDialog(
-          title: Text("Choose Mode"),
-          content: Text("Do you want to use voice assistance?"),
-          actions: [
-            TextButton(
-              onPressed: () {
-                userInfo.setTtsEnabled = false;
-                Navigator.pop(context);
-              },
-              child: Text("Text Only"),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                userInfo.setTtsEnabled = true;
-                Navigator.pop(context);
-              },
-              child: Text("Enable Voice"),
-            ),
-          ],
-        );
-      },
-    );
-  }
 
   @override
   void initState() {
     super.initState();
-    final userInfo = Get.find<UserInfo>();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!userInfo.isTtsEnabled.value) {
-        showTtsSelectionDialog(context);
-      }
-    });
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 700),
