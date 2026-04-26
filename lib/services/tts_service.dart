@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:ui';
 
+import 'package:flutter/widgets.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
 import '../utils/constants/user_data.dart';
@@ -26,7 +28,9 @@ class TTSService {
 
   Future speak(String text) async {
     final userInfo = Get.find<UserInfo>();
-
+ if (WidgetsBinding.instance.lifecycleState != AppLifecycleState.resumed) {
+    return; // ❌ don't speak if app not active
+  }
     if (!userInfo.isTtsEnabled.value) return;
     if (text.trim().isEmpty) return;
 

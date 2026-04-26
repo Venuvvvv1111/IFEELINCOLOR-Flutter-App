@@ -28,6 +28,12 @@ class _TwoDModelScreenState extends State<TwoDModelScreen> {
     TTSService().speak("Please select a black circle to get assesment form");
   }
 
+// @override
+//   void dispose() {
+//     // TODO: implement dispose
+//     super.dispose();
+//    controller. resetAll();
+//   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -165,10 +171,10 @@ class _TwoDModelScreenState extends State<TwoDModelScreen> {
                                   .toList(),
                               onChanged: (String? newValue) {
                                 controller.selectAnswer(
-                                    currentQuestion.sId ?? '', newValue ?? '');
-                                if (newValue != null && newValue.isNotEmpty) {
-                                  TTSService().speak(newValue);
-                                }
+                                    currentQuestion.sId ?? '', newValue ?? '',context);
+                                // if (aewValue != null && newValue.isNotEmpty) {
+                                //   TTSService().speak(newValue);
+                                // }
                               },
                             ),
                           ),
@@ -282,4 +288,5 @@ class _TwoDModelScreenState extends State<TwoDModelScreen> {
         return const Offset(0, 0);
     }
   }
+
 }

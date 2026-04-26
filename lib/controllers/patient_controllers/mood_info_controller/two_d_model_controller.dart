@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:ifeelin_color/screens/patient_screens/main_screens/mood_info_screens/widgets/nested_question_dailog.dart';
+import 'package:ifeelin_color/services/tts_service.dart';
 import 'package:ifeelin_color/utils/constants/string_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:ifeelin_color/utils/constants/loader.dart';
@@ -19,8 +21,12 @@ class TwoDModelController extends GetxController {
   Rx<String> description = ''.obs;
   Rx<bool> moodResult = false.obs;
   // API URLs
-  final String fetchQuestionsUrl = '${Constants.baseUrl}/questions-by-parts';
-  final String submitAnswersUrl = '${Constants.baseUrl}/bodytest/take';
+  final String fetchQuestionsUrl =
+      '${Constants.baseUrl}/body-part-questionnaires';
+  final String submitAnswersUrl =
+      '${Constants.baseUrl}/submit-body-part-questionnaires';
+        final String getBodyAssesmentResult =
+      '${Constants.baseUrl}/final-result';
   Rx<String> colorTitle = ''.obs;
   Rx<String> colorSubtitle = ''.obs;
   Rx<String> colorCategory = ''.obs;
@@ -28,6 +34,8 @@ class TwoDModelController extends GetxController {
   Rx<Color> colorCircle = Colors.transparent.obs;
 
   Rx<int> colorValue = 0.obs;
+  final userInfo = Get.find<UserInfo>();
+  bool get isTtsOn => userInfo.isTtsEnabled.value;
   Future<void> selectCircle(int index) async {
     if (isSelected[index]) {
       selectedCircles.remove(index);
@@ -39,6 +47,31 @@ class TwoDModelController extends GetxController {
 
       await fetchQuestions(selectedCircles);
     }
+  }
+
+  Future<void> speakCurrentQuestion() async {
+    if (questions.isEmpty) return;
+
+    final q = questions[currentQuestionIndex.value];
+
+    // 🔴 Stop previous speech (VERY IMPORTANT)
+    await TTSService().stop();
+
+    // 🟢 Speak question
+    await TTSService().speak(q.question ?? '');
+
+    await Future.delayed(const Duration(milliseconds: 400));
+
+    // 🟢 Speak options
+    if (q.mcqOptions != null) {
+      for (var opt in q.mcqOptions!) {
+        await TTSService().speak(opt.text ?? '');
+        await Future.delayed(const Duration(milliseconds: 250));
+      }
+    }
+
+    // 🟢 Guide user
+    await TTSService().speak("Please select your answer");
   }
 
   // Fetch questions based on selected part IDs
@@ -92,7 +125,7 @@ class TwoDModelController extends GetxController {
         Uri.parse(fetchQuestionsUrl),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({
-          "partIds": selectedCircles.map((id) {
+          "bodyPartIds": selectedCircles.map((id) {
             switch (id) {
               case 1:
                 //heart
@@ -120,9 +153,23 @@ class TwoDModelController extends GetxController {
       if (response.statusCode == 200) {
         moodResult.value = false;
         var data = json.decode(response.body);
-        questions.value =
-            (data['body'] as List).map((json) => Body.fromJson(json)).toList();
+        List<Body> tempQuestions = [];
+
+        List questionnaires = data['data']['questions'];
+
+        for (var qSet in questionnaires) {
+          List innerQuestions = qSet['questions'];
+
+          for (var q in innerQuestions) {
+            if (q['options'] != null && q['options'].isNotEmpty) {
+              tempQuestions.add(Body.fromNewApiJson(q));
+            }
+          }
+        }
+
+        questions.value = tempQuestions;
         currentQuestionIndex.value = 0; // Start from the first question
+        await speakCurrentQuestion();
       }
     } catch (e) {
       if (kDebugMode) {
@@ -132,8 +179,21 @@ class TwoDModelController extends GetxController {
   }
 
   // Select an answer for the current question
-  void selectAnswer(String questionId, String answer) {
+  void selectAnswer(
+      String questionId, String answer, BuildContext context) async {
     selectedAnswers[questionId] = answer;
+    if (isTtsOn) {
+      // 🔊 Speak selected answer
+      await TTSService().speak("You selected $answer");
+
+      // ⏱ Small delay for UX
+      await Future.delayed(const Duration(milliseconds: 500));
+      if (!context.mounted) {
+        return;
+      }
+      // 🚀 Auto move to next
+      nextQuestion(context);
+    }
   }
 
   String get selectedAnswer {
@@ -142,7 +202,7 @@ class TwoDModelController extends GetxController {
   }
 
   // Handle next question or submit
-  void nextQuestion(BuildContext context) {
+  void nextQuestion(BuildContext context) async {
     final currentQuestionId = questions[currentQuestionIndex.value].sId;
     if (selectedAnswers[currentQuestionId] == null ||
         selectedAnswers[currentQuestionId]!.isEmpty) {
@@ -157,6 +217,7 @@ class TwoDModelController extends GetxController {
     } else {
       if (currentQuestionIndex.value < questions.length - 1) {
         currentQuestionIndex.value++;
+        await speakCurrentQuestion();
       } else {
         showDialog(
             context: context,
@@ -212,13 +273,17 @@ class TwoDModelController extends GetxController {
             // Proceed to submit answers
             submitAnswers(context);
           },
-          child: const Text('Submit'),
+          child: const Text(
+            'Submit',
+            style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold),
+          ),
         ),
       ],
     );
   }
 
   Future<void> submitAnswers(context) async {
+    final userInfo = Get.find<UserInfo>();
     if (kDebugMode) {
       print(
         json.encode({
@@ -234,7 +299,7 @@ class TwoDModelController extends GetxController {
     try {
       LoaderHelper.showLoader(context);
       final response = await http.post(
-        Uri.parse(submitAnswersUrl),
+        Uri.parse(submitAnswersUrl + "/" + "${userInfo.getPatientId}"),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({
           "answers": selectedAnswers.entries
@@ -246,8 +311,8 @@ class TwoDModelController extends GetxController {
         }),
       );
       LoaderHelper.hideLoader(context);
-      if (response.statusCode == 200) {
-        final json = jsonDecode(response.body);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        // final json = jsonDecode(response.body);
 
         UserInfo userinfo = Get.put(UserInfo());
         userinfo.addAssesment = false;
@@ -256,11 +321,11 @@ class TwoDModelController extends GetxController {
         update();
 
         moodResult.value = true;
-        colorTitle.value = json['body']['maxCategoryDetails']['hexColor'];
-        updateColorValue(colorTitle.value);
-        colorSubtitle.value =
-            json['body']['maxCategoryDetails']['description'] ?? "";
-        colorCategory.value = json['body']['maxCategoryDetails']['mood'] ?? "";
+        // colorTitle.value = json['body']['maxCategoryDetails']['hexColor'];
+        // updateColorValue(colorTitle.value);
+        // colorSubtitle.value =
+        //     json['body']['maxCategoryDetails']['description'] ?? "";
+        // colorCategory.value = json['body']['maxCategoryDetails']['mood'] ?? "";
         // mood.value =
         //     json["body"]["maxCategoryDetails"]["mood"].toString() ?? "Stress";
         // description.value =
@@ -268,20 +333,63 @@ class TwoDModelController extends GetxController {
         Get.snackbar('Success', 'Answers submitted successfully',
             colorText: Colors.white,
             backgroundColor: Colors.green.withValues(alpha: 0.7));
+        if (isTtsOn) {
+          TTSService().speak("Answers submitted successfully");
+        }
 
         // Handle success, show result, etc.
         if (kDebugMode) {
           print("Answers submitted successfully");
         }
         Navigator.pop(context);
+        Get.dialog(QuestionDialog());
+        // Navigator.pop(context);
+      } else {
+        if (isTtsOn) {
+          TTSService().speak("Failed to submit answers");
+        }
+
         Navigator.pop(context);
       }
     } catch (e) {
       LoaderHelper.hideLoader(context);
+      if (isTtsOn) {
+        TTSService().speak("Failed to submit answers");
+      }
       if (kDebugMode) {
         print("Error submitting answers: $e");
       }
     }
+  }
+
+  Future<void> getFinalResult(context) async {
+    final userInfo = Get.find<UserInfo>();
+
+    
+      // LoaderHelper.showLoader(context);
+      final response = await http.get(
+        Uri.parse("${getBodyAssesmentResult}/${userInfo.getPatientId}"),
+        headers: {'Content-Type': 'application/json'},
+   
+      );
+      // LoaderHelper.hideLoader(context);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final json = jsonDecode(response.body);
+        colorTitle.value = json['result']['colorCode'];
+        updateColorValue(colorTitle.value);
+        colorSubtitle.value =
+            json['result']['aboutCondition'] ?? "";
+        colorCategory.value = json['result']['patientCondition'] ?? "";
+        mood.value =
+            json["result"]["patientCondition"].toString() ?? "Stress";
+        description.value =
+            json['result']['aboutCondition'] ?? 'desc';
+
+
+
+        // Handle success, show result, etc.
+        // Navigator.pop(context);
+      }
   }
 
   void updateColorValue(String getColorValue) {
@@ -316,9 +424,24 @@ class TwoDModelController extends GetxController {
         mainColor.value = 'Indigo';
         colorCircle.value = const Color(0xFF6f0fe3);
         break;
-      default:
+      case '#F59E0B':
         colorValue.value = 6;
+        mainColor.value = 'Amber';
+        colorCircle.value = const Color(0xFFF59E0B);
+        break;
+        
+      default:
+        colorValue.value = 7;
         break;
     }
   }
+//     void resetAll() {
+      
+//   selectedCircles.clear();
+//   questions.clear();
+//   selectedAnswers.clear();
+//   currentQuestionIndex.value = 0;
+//   isSelected.value = List.generate(6, (index) => false);
+//   TTSService().stop(); // 🔥 stop any running speech
+// }
 }

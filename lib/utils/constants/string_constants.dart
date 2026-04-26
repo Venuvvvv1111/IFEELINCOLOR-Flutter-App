@@ -18,7 +18,7 @@ class Constants {
   static const String appSign =
       "800faa6ea313423c8f0065d9163ccfdecba172997b717b0666f00bbe2e83baaf";
 //local
-  static const String baseUrl = "https://ifeelincolorvps.projexino.com/api";
+  static const String baseUrl = "https://feelincolor.projexino.com/api";
   //emulator
   // static const String baseUrl = "http://10.0.2.2:3000/api";
   //render
@@ -47,6 +47,7 @@ class Constants {
   static const String portalRecommendations = "rec/portal_recommendations";
   static const String assesmentTestQuestions = "test";
   static const String assesmentsubmit = "test/take-assessment";
+  static const String submitFeelingAnsers="submit-feeling-answers/67bbf056b1dd6c42c57861e7";
   static const String level2Assesmentsubmit = "patients/mood-assessment";
   static const String patientNotifications = "patients/notifications";
   static const String sendAlert = "patients/alert";
@@ -103,7 +104,7 @@ class Constants {
 
   static const String notificationStatusChange = "notification-alerts";
 
- static const String chekPreviusSubscriptionPatient = "patients/check-previous-subscription";
-  static const String chekPreviusSubscriptionDoctor = "doctorsub/check-previous-subscription";
+ static const String chekPreviusSubscriptionPatient = "patients/check-patient-clinicist-subscription";
+  static const String chekPreviusSubscriptionDoctor = "doctorsub/check-patient-clinicist-subscription";
 
 }

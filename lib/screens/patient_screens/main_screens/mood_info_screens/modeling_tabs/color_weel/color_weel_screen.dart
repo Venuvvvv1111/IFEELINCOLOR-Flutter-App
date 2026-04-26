@@ -42,6 +42,7 @@ class ColorWheelScreenState extends State<ColorWheelScreen> {
     {'emoji': '😔', 'title': 'Pink'},
     {'emoji': '😰', 'title': 'Brown'},
     {'emoji': '😱', 'title': 'Indigo'},
+     {'emoji': '😊', 'title': 'Amber'},
   ];
 
   final List<Color> itemColors = [
@@ -51,6 +52,8 @@ class ColorWheelScreenState extends State<ColorWheelScreen> {
     const Color(0xFF961cca),
     const Color(0xFF8c4622),
     const Color(0xFF6f0fe3),
+    const Color(0xFFF59E0B),
+    
   ];
 
   @override
@@ -77,11 +80,11 @@ class ColorWheelScreenState extends State<ColorWheelScreen> {
                   height: MediaQuery.of(context).size.width / 1.4,
                   child: FortuneWheel(
                     selected: Stream.value(widget.isAssesment
-                        ? assessmentController.colorValue.value == 6
-                            ? 5
+                        ? assessmentController.colorValue.value == 7
+                            ? 6
                             : assessmentController.colorValue.value
-                        : bodyController.colorValue.value == 6
-                            ? 5
+                        : bodyController.colorValue.value == 7
+                            ? 6
                             : bodyController.colorValue.value),
                     items: [
                       for (var i = 0; i < itemColors.length; i++)
@@ -340,7 +343,9 @@ class ColorWheelScreenState extends State<ColorWheelScreen> {
                                                                       : bodyController.colorValue.value ==
                                                                               5
                                                                           ? itemColors[
-                                                                              5]
+                                                                              5]: bodyController.colorValue.value ==
+                                                                              6?itemColors[
+                                                                              6]
                                                                           : const Color(
                                                                               0xFFFFFFFF),
                                                 );
@@ -493,6 +498,7 @@ class ColorWheelScreenState extends State<ColorWheelScreen> {
                                                   if (bodyController
                                                           .mainColor.value ==
                                                       "Black") {
+                                                          userInfo.removeAssememt();
                                                     Navigator.pushNamed(
                                                         context,
                                                         AppRoutes
@@ -628,7 +634,7 @@ class CircularContainerWithSectors extends StatelessWidget {
       height: MediaQuery.of(context).size.width / 1.2,
       child: CustomPaint(
         painter: CircleWithSectorsPainter(
-          numSectors: 5,
+          numSectors: 6,
           sectorColors: [
             const Color(0xFF000000),
             const Color(0xFF0C57E9),

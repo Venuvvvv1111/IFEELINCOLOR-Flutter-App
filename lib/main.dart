@@ -164,10 +164,11 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver{
   late bool isOnline;
   @override
   void initState() {
+      WidgetsBinding.instance.addObserver(this);
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       const AndroidNotificationChannel channel = AndroidNotificationChannel(
         'IFEELINCOLOR', // id
@@ -216,7 +217,17 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     // initConnectivity();
   }
-
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state != AppLifecycleState.resumed) {
+      TTSService().stop(); // ✅ immediately stop when not active
+    }
+  }
+    @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
   List<ConnectivityResult> _connectionStatus = [ConnectivityResult.none];
   final Connectivity _connectivity = Connectivity();
 

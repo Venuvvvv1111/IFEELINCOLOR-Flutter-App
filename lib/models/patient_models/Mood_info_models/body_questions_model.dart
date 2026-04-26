@@ -76,6 +76,16 @@ class Body {
     }
     iV = json['__v'];
   }
+  factory Body.fromNewApiJson(Map<String, dynamic> json) {
+  return Body(
+    sId: json['questionId'],
+    question: json['text'],
+    type: json['type'],
+    mcqOptions: (json['options'] as List?)
+        ?.map((e) => McqOptions.fromNewApiJson(e))
+        .toList(),
+  );
+}
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -104,15 +114,17 @@ class McqOptions {
 
   McqOptions.fromJson(Map<String, dynamic> json) {
     text = json['text'];
-    isCorrect = json['isCorrect'];
-    sId = json['_id'];
-  }
 
+  }
+factory McqOptions.fromNewApiJson(Map<String, dynamic> json) {
+  return McqOptions(
+    text: json['label'],
+    sId: json['value'],
+  );
+}
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['text'] = text;
-    data['isCorrect'] = isCorrect;
-    data['_id'] = sId;
     return data;
   }
 }

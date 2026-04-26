@@ -5,6 +5,7 @@ import 'package:get_storage/get_storage.dart';
 class UserInfo extends GetxService {
   final _userData = GetStorage('user_data');
   RxBool isTtsEnabled = false.obs;
+    RxBool isMoodInfoAlreadyRead = false.obs;
   GetStorage box = GetStorage();
   var userName = ''.obs;
   RxBool getTreatmentHistory = false.obs;
@@ -19,6 +20,7 @@ class UserInfo extends GetxService {
     super.onInit();
     // Load the stored value into the observable when the service initializes
       isTtsEnabled.value = _userData.read('isTtsEnabled') ?? false;
+      isMoodInfoAlreadyRead.value = _userData.read('isMoodInfoAlreadyRead') ?? false;
 
     getTreatmentHistory.value =
         _userData.read('checkTreatmentHistory') ?? false;
@@ -31,6 +33,10 @@ class UserInfo extends GetxService {
 set setTtsEnabled(bool value) {
     _userData.write('isTtsEnabled', value);
     isTtsEnabled.value = value;
+  }
+  set setIsMoodInfoAlreadyReadEnabled(bool value) {
+    _userData.write('isMoodInfoAlreadyRead', value);
+    isMoodInfoAlreadyRead.value = value;
   }
 
   void refreshData() async {
