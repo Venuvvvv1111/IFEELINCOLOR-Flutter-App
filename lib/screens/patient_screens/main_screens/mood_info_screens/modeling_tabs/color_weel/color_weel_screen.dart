@@ -290,13 +290,13 @@ class ColorWheelScreenState extends State<ColorWheelScreen> {
                                                         .colorCategory.value ==
                                                     ''
                                                 ? "Error"
-                                                : "${assessmentController.mainColor.value} (${assessmentController.colorCategory.value})",
+                                                : "${assessmentController.mainColor.value}",
                                             child: Text(
-                                              assessmentController.colorCategory
+                                              assessmentController.mainColor
                                                           .value ==
                                                       ''
                                                   ? "Error"
-                                                  : "${assessmentController.mainColor.value} (${assessmentController.colorCategory.value})",
+                                                  : "${assessmentController.mainColor.value}",
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .titleMedium,
@@ -357,13 +357,13 @@ class ColorWheelScreenState extends State<ColorWheelScreen> {
                                                             .value ==
                                                         ''
                                                     ? 'Error'
-                                                    : "${bodyController.mainColor.value} (${bodyController.colorCategory.value})",
+                                                    : "${bodyController.mainColor.value}",
                                                 child: Text(
-                                                  bodyController.colorCategory
+                                                  bodyController.mainColor
                                                               .value ==
                                                           ''
                                                       ? 'Error'
-                                                      : "${bodyController.mainColor.value} (${bodyController.colorCategory.value})",
+                                                      : "${bodyController.mainColor.value}",
                                                   style: Theme.of(context)
                                                       .textTheme
                                                       .titleMedium,
@@ -430,8 +430,8 @@ class ColorWheelScreenState extends State<ColorWheelScreen> {
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                Obx(() {
-                                  return Row(
+                            
+                               Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       SizedBox(
@@ -556,8 +556,8 @@ class ColorWheelScreenState extends State<ColorWheelScreen> {
                                             )),
                                       ),
                                     ],
-                                  );
-                                }),
+                                  ),
+                            
                               ],
                             );
                           }),
