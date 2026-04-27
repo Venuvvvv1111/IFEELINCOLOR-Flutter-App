@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:ifeelin_color/controllers/patient_controllers/mood_info_controller/feeling_dailog_widget.dart';
 import 'package:ifeelin_color/screens/patient_screens/main_screens/mood_info_screens/widgets/nested_question_dailog.dart';
 import 'package:ifeelin_color/services/tts_service.dart';
 import 'package:ifeelin_color/utils/constants/string_constants.dart';
@@ -235,6 +236,7 @@ class TwoDModelController extends GetxController {
   }
 
   AlertDialog showResult(context) {
+      TTSService().speak("Please review the answers and submit");
     return AlertDialog(
       title: const Text('Review Answers'),
       content: SingleChildScrollView(
@@ -342,7 +344,7 @@ class TwoDModelController extends GetxController {
           print("Answers submitted successfully");
         }
         Navigator.pop(context);
-        Get.dialog(QuestionDialog());
+     Get.dialog(FeelingDialog());
         // Navigator.pop(context);
       } else {
         if (isTtsOn) {
@@ -392,49 +394,59 @@ class TwoDModelController extends GetxController {
       }
   }
 
+  
   void updateColorValue(String getColorValue) {
-    switch (colorTitle.value) {
-      case '#000000':
-        colorValue.value = 0;
-        mainColor.value = 'Black';
-        colorCircle.value = const Color(0xFF000000);
-        break;
-      case '#081844':
-        colorValue.value = 1;
-        mainColor.value = 'Blue';
-        colorCircle.value = const Color(0xFF081844);
-        break;
-      case '#ba2f24':
-        colorValue.value = 2;
-        mainColor.value = 'Red';
-        colorCircle.value = const Color(0xFFba2f24);
-        break;
-      case '#961cca':
-        colorValue.value = 3;
-        mainColor.value = 'Pink';
-        colorCircle.value = const Color(0xFF961cca);
-        break;
-      case '#8c4622':
-        colorValue.value = 4;
-        mainColor.value = 'Brown';
-        colorCircle.value = const Color(0xFF8c4622);
-        break;
-      case '#6f0fe3':
-        colorValue.value = 5;
-        mainColor.value = 'Indigo';
-        colorCircle.value = const Color(0xFF6f0fe3);
-        break;
-      case '#F59E0B':
-        colorValue.value = 6;
-        mainColor.value = 'Amber';
-        colorCircle.value = const Color(0xFFF59E0B);
-        break;
-        
-      default:
-        colorValue.value = 7;
-        break;
-    }
+  switch (getColorValue.toUpperCase()) {
+
+    case '#FFD700': // Happy (Gold)
+      colorValue.value = 0;
+      mainColor.value = 'Happy';
+      colorCircle.value = const Color(0xFFFFD700);
+      break;
+
+    case '#1E90FF': // Sad (Blue)
+      colorValue.value = 1;
+      mainColor.value = 'Sad';
+      colorCircle.value = const Color(0xFF1E90FF);
+      break;
+
+    case '#808080': // Disgusted (Gray)
+      colorValue.value = 2;
+      mainColor.value = 'Disgusted';
+      colorCircle.value = const Color(0xFF808080);
+      break;
+
+    case '#FF0000': // Angry (Red)
+      colorValue.value = 3;
+      mainColor.value = 'Angry';
+      colorCircle.value = const Color(0xFFFF0000);
+      break;
+
+    case '#FF8C00': // Fearful (Orange)
+      colorValue.value = 4;
+      mainColor.value = 'Fearful';
+      colorCircle.value = const Color(0xFFFF8C00);
+      break;
+
+    case '#00A36C': // Bad (Green)
+      colorValue.value = 5;
+      mainColor.value = 'Bad';
+      colorCircle.value = const Color(0xFF00A36C);
+      break;
+
+    case '#8A2BE2': // Surprised (Purple)
+      colorValue.value = 6;
+      mainColor.value = 'Surprised';
+      colorCircle.value = const Color(0xFF8A2BE2);
+      break;
+
+    default:
+      colorValue.value = 7;
+      break;
+      // mainColor.value = 'Error';
+      // colorCircle.value = const Color(0xFF000000);
   }
+}
 //     void resetAll() {
       
 //   selectedCircles.clear();

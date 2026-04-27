@@ -36,24 +36,23 @@ class ColorWheelScreenState extends State<ColorWheelScreen> {
 
   UserInfo userInfo = Get.put(UserInfo());
   final List<Map<String, String>> items = [
-    {'emoji': '🚨', 'title': 'Black'},
-    {'emoji': '😞', 'title': 'Blue'},
-    {'emoji': '😡', 'title': 'Red'},
-    {'emoji': '😔', 'title': 'Pink'},
-    {'emoji': '😰', 'title': 'Brown'},
-    {'emoji': '😱', 'title': 'Indigo'},
-     {'emoji': '😊', 'title': 'Amber'},
+    {'emoji': '😊', 'title': 'Happy'},
+    {'emoji': '😢', 'title': 'Sad'},
+    {'emoji': '🤢', 'title': 'Disgusted'},
+    {'emoji': '😡', 'title': 'Angry'},
+    {'emoji': '😨', 'title': 'Fearful'},
+    {'emoji': '😖', 'title': 'Bad'},
+    {'emoji': '😲', 'title': 'Surprised'},
   ];
 
   final List<Color> itemColors = [
-    const Color(0xFF000000),
-    const Color(0xFF081844),
-    const Color(0xFFba2f24),
-    const Color(0xFF961cca),
-    const Color(0xFF8c4622),
-    const Color(0xFF6f0fe3),
-    const Color(0xFFF59E0B),
-    
+    const Color(0xFFFFD700),
+    const Color(0xFF1E90FF),
+    const Color(0xFF808080),
+    const Color(0xFFFF0000),
+    const Color(0xFFFF8C00),
+    const Color(0xFF00A36C),
+    const Color(0xFF8A2BE2),
   ];
 
   @override
@@ -287,14 +286,14 @@ class ColorWheelScreenState extends State<ColorWheelScreen> {
                                             width: 5,
                                           ),
                                           Speakable(
-                                            text:   assessmentController
-                                                          .colorCategory.value ==
-                                                      ''
-                                                  ? "Error"
-                                                  : "${assessmentController.mainColor.value} (${assessmentController.colorCategory.value})",
+                                            text: assessmentController
+                                                        .colorCategory.value ==
+                                                    ''
+                                                ? "Error"
+                                                : "${assessmentController.mainColor.value} (${assessmentController.colorCategory.value})",
                                             child: Text(
-                                              assessmentController
-                                                          .colorCategory.value ==
+                                              assessmentController.colorCategory
+                                                          .value ==
                                                       ''
                                                   ? "Error"
                                                   : "${assessmentController.mainColor.value} (${assessmentController.colorCategory.value})",
@@ -343,22 +342,22 @@ class ColorWheelScreenState extends State<ColorWheelScreen> {
                                                                       : bodyController.colorValue.value ==
                                                                               5
                                                                           ? itemColors[
-                                                                              5]: bodyController.colorValue.value ==
-                                                                              6?itemColors[
-                                                                              6]
-                                                                          : const Color(
-                                                                              0xFFFFFFFF),
+                                                                              5]
+                                                                          : bodyController.colorValue.value == 6
+                                                                              ? itemColors[6]
+                                                                              : const Color(0xFFFFFFFF),
                                                 );
                                               }),
                                               const SizedBox(
                                                 width: 5,
                                               ),
                                               Speakable(
-                                                text: bodyController.colorCategory
-                                                              .value ==
-                                                          ''
-                                                      ? 'Error'
-                                                      : "${bodyController.mainColor.value} (${bodyController.colorCategory.value})",
+                                                text: bodyController
+                                                            .colorCategory
+                                                            .value ==
+                                                        ''
+                                                    ? 'Error'
+                                                    : "${bodyController.mainColor.value} (${bodyController.colorCategory.value})",
                                                 child: Text(
                                                   bodyController.colorCategory
                                                               .value ==
@@ -377,20 +376,20 @@ class ColorWheelScreenState extends State<ColorWheelScreen> {
                                 Obx(() {
                                   return Speakable(
                                     text: widget.isAssesment
-                                          ? assessmentController
-                                                      .colorSubtitle.value ==
-                                                  ''
-                                              ? 'Sorry! Please submit new assesment.'
-                                              : assessmentController
-                                                  .colorSubtitle.value
-                                          : widget.isBodyAssesment
-                                              ? bodyController
-                                                          .colorSubtitle.value ==
-                                                      ''
-                                                  ? 'Sorry! Please submit new assesment.'
-                                                  : bodyController
-                                                      .colorSubtitle.value
-                                              : "Sorry! Please submit new assesment.",
+                                        ? assessmentController
+                                                    .colorSubtitle.value ==
+                                                ''
+                                            ? 'Sorry! Please submit new assesment.'
+                                            : assessmentController
+                                                .colorSubtitle.value
+                                        : widget.isBodyAssesment
+                                            ? bodyController
+                                                        .colorSubtitle.value ==
+                                                    ''
+                                                ? 'Sorry! Please submit new assesment.'
+                                                : bodyController
+                                                    .colorSubtitle.value
+                                            : "Sorry! Please submit new assesment.",
                                     child: ReadMoreText(
                                       widget.isAssesment
                                           ? assessmentController
@@ -400,8 +399,8 @@ class ColorWheelScreenState extends State<ColorWheelScreen> {
                                               : assessmentController
                                                   .colorSubtitle.value
                                           : widget.isBodyAssesment
-                                              ? bodyController
-                                                          .colorSubtitle.value ==
+                                              ? bodyController.colorSubtitle
+                                                          .value ==
                                                       ''
                                                   ? 'Sorry! Please submit new assesment.'
                                                   : bodyController
@@ -443,31 +442,32 @@ class ColorWheelScreenState extends State<ColorWheelScreen> {
                                             ? ElevatedButton(
                                                 style: ElevatedButton.styleFrom(
                                                     backgroundColor:
-                                                        assessmentController
-                                                                    .mainColor
-                                                                    .value !=
-                                                                "Black"
-                                                            ? greyColor
-                                                                .withValues(
-                                                                    alpha: 0.3)
-                                                            : alertColor),
+                                                        // assessmentController
+                                                        //             .mainColor
+                                                        //             .value !=
+                                                        //         "Black"
+                                                        //     ? greyColor
+                                                        //         .withValues(
+                                                        //             alpha: 0.3)
+                                                        //     :
+                                                        alertColor),
                                                 onPressed: () {
-                                                  if (assessmentController
-                                                          .mainColor.value ==
-                                                      "Black") {
-                                                    Navigator.pushNamed(
-                                                        context,
-                                                        AppRoutes
-                                                            .sendAlertscreen);
-                                                  } else {
-                                                    MyToast.showGetToast(
-                                                        title: 'Safe 😊',
-                                                        message:
-                                                            'You are already safe from emergency',
-                                                        backgroundColor:
-                                                            Colors.green,
-                                                        color: whiteColor);
-                                                  }
+                                                  // if (assessmentController
+                                                  //         .mainColor.value ==
+                                                  //     "Black") {
+                                                  Navigator.pushNamed(
+                                                      context,
+                                                      AppRoutes
+                                                          .sendAlertscreen);
+                                                  // } else {
+                                                  //   MyToast.showGetToast(
+                                                  //       title: 'Safe 😊',
+                                                  //       message:
+                                                  //           'You are already safe from emergency',
+                                                  //       backgroundColor:
+                                                  //           Colors.green,
+                                                  //       color: whiteColor);
+                                                  // }
                                                 },
                                                 child: const Row(
                                                   mainAxisAlignment:
@@ -484,34 +484,35 @@ class ColorWheelScreenState extends State<ColorWheelScreen> {
                                             : ElevatedButton(
                                                 style: ElevatedButton.styleFrom(
                                                     backgroundColor:
-                                                        bodyController.mainColor
-                                                                    .value !=
-                                                                "Black"
-                                                            ? greyColor
-                                                                .withValues(
-                                                                    alpha: 0.3)
-                                                            : alertColor),
+                                                        // bodyController.mainColor
+                                                        //             .value !=
+                                                        //         "Black"
+                                                        //     ? greyColor
+                                                        //         .withValues(
+                                                        //             alpha: 0.3)
+                                                        //     :
+                                                        alertColor),
                                                 onPressed: () {
-                                                  if (kDebugMode) {
-                                                    print('clicked');
-                                                  }
-                                                  if (bodyController
-                                                          .mainColor.value ==
-                                                      "Black") {
-                                                          userInfo.removeAssememt();
-                                                    Navigator.pushNamed(
-                                                        context,
-                                                        AppRoutes
-                                                            .sendAlertscreen);
-                                                  } else {
-                                                    MyToast.showGetToast(
-                                                        title: 'Safe 😊',
-                                                        message:
-                                                            'You are already safe from emergency',
-                                                        backgroundColor:
-                                                            Colors.green,
-                                                        color: whiteColor);
-                                                  }
+                                                  // if (kDebugMode) {
+                                                  //   print('clicked');
+                                                  // }
+                                                  // if (bodyController
+                                                  //         .mainColor.value ==
+                                                  //     "Black") {
+                                                  userInfo.removeAssememt();
+                                                  Navigator.pushNamed(
+                                                      context,
+                                                      AppRoutes
+                                                          .sendAlertscreen);
+                                                  // } else {
+                                                  //   MyToast.showGetToast(
+                                                  //       title: 'Safe 😊',
+                                                  //       message:
+                                                  //           'You are already safe from emergency',
+                                                  //       backgroundColor:
+                                                  //           Colors.green,
+                                                  //       color: whiteColor);
+                                                  // }
                                                 },
                                                 child: const Row(
                                                   mainAxisAlignment:
@@ -636,12 +637,13 @@ class CircularContainerWithSectors extends StatelessWidget {
         painter: CircleWithSectorsPainter(
           numSectors: 6,
           sectorColors: [
-            const Color(0xFF000000),
-            const Color(0xFF0C57E9),
-            const Color(0xFFDBC928),
-            const Color(0xFF972492),
-            const Color(0xFFF12222),
-            const Color(0xFF248E31),
+            const Color(0xFFFFD700),
+            const Color(0xFF1E90FF),
+            const Color(0xFF808080),
+            const Color(0xFFFF0000),
+            const Color(0xFFFF8C00),
+            const Color(0xFF00A36C),
+            const Color(0xFF8A2BE2),
           ],
         ),
         child: Center(

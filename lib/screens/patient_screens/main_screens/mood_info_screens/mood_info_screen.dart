@@ -71,10 +71,11 @@ class _MoodInfoScreenViewState extends State<MoodInfoScreenView>
 
       Finally, Submit and Get Result button is available at the bottom.
       """;
-if(userInfo.isMoodInfoAlreadyRead.value==false){
- await TTSService().speak(text);
-   userInfo.setIsMoodInfoAlreadyReadEnabled=true;
-}
+     UserInfo userinfo1 = Get.put(UserInfo());
+    if (userinfo1.isMoodInfoAlreadyRead.value == false) {
+      userinfo1.setIsMoodInfoAlreadyReadEnabled = true;
+      await TTSService().speak(text);
+    }
    
   
     await Future.delayed(const Duration(seconds: 1));

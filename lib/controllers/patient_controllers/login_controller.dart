@@ -5,7 +5,9 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:ifeelin_color/services/tts_service.dart';
 import 'package:ifeelin_color/utils/Route/app_routes.dart';
 import 'package:ifeelin_color/utils/constants/string_constants.dart';
 import 'package:ifeelin_color/utils/constants/loader.dart';
@@ -75,14 +77,14 @@ class LoginController extends GetxController {
   Future<void> login(
       context, bool isGmail, String? gMail, String? gPassword) async {
     try {
-      if(Platform.isIOS){
-    await getAPNSToken();
+      if (Platform.isIOS) {
+        await getAPNSToken();
       }
-  
+
       if (kDebugMode) {
         print('token in login $gMail $isGmail ');
       }
-String deviceToken = await FirebaseMessaging.instance.getToken() ?? "";
+      String deviceToken = await FirebaseMessaging.instance.getToken() ?? "";
       LoaderHelper.showLoader(context);
       // ProgressDialogue.showw(context, 'logging in...');
       // isLoggedIn.value = true;
@@ -97,7 +99,7 @@ String deviceToken = await FirebaseMessaging.instance.getToken() ?? "";
         body: jsonEncode({
           "email": isGmail ? gMail : emailController.text,
           "password": isGmail ? gPassword : passwordController.text,
-          "deviceToken":deviceToken,
+          "deviceToken": deviceToken,
         }),
         headers: {
           'Content-Type': 'application/json',
@@ -149,6 +151,7 @@ String deviceToken = await FirebaseMessaging.instance.getToken() ?? "";
           (Route<dynamic> route) => false, // This removes all previous routes
         );
       } else {
+        TTSService().speak(json['message']);
         MyToast.showGetToast(
             title: "Error",
             message: json['message'],

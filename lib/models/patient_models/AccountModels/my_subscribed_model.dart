@@ -60,16 +60,16 @@ class Body {
       this.clinicianName});
 
   Body.fromJson(Map<String, dynamic> json) {
-    sId = json['_id'];
-    patient = json['patient'];
+    sId = json['_id']??'';
+    patient = json['patient']??'';
     plan = json['plan'] != null ? Plan.fromJson(json['plan']) : null;
-    clinisist = json['clinisist'];
-    startDate = json['startDate'];
-    endDate = json['endDate'];
-    createdAt = json['createdAt'];
-    updatedAt = json['updatedAt'];
+    clinisist = json['clinisist']??'';
+    startDate = json['startDate']??'';
+    endDate = json['endDate']??'';
+    createdAt = json['createdAt']??'';
+    updatedAt = json['updatedAt']??'';
 
-    clinicianName = json['clinicianName'];
+    clinicianName = json['clinicianName']??'';
   }
 
   Map<String, dynamic> toJson() {

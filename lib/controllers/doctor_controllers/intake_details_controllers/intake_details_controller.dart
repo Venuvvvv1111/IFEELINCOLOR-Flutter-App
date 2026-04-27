@@ -13,6 +13,8 @@ class IntakeDetailsController extends GetxController {
   var assessmentInfos = <AssessmentInfo>[].obs;
   RxBool isLoading = false.obs;
   RxString error = ''.obs;
+  var bodyQuestions = [].obs;
+  var feelingQuestions = [].obs;
 
   Future<void> fetchPatientData(String patientId) async {
     try {
@@ -48,6 +50,36 @@ class IntakeDetailsController extends GetxController {
       if (kDebugMode) {
         print(e);
       }
+    }
+  }
+
+  Future<void> fetchAssessmentAnswers(String patientId) async {
+    try {
+      isLoading.value = true;
+
+      final response = await http.get(
+        Uri.parse('${Constants.baseUrl}/getpatient-answers/$patientId'),
+        headers: {
+          'Content-Type': 'application/json',
+          'authorization': 'Bearer ${UserInfo().getUserToken}'
+        },
+      );
+
+      final json = jsonDecode(response.body);
+
+      if (response.statusCode == 200 && json['status'] == 'success') {
+        final body = json['body'];
+
+        bodyQuestions.value = body['bodyQuestions'] ?? [];
+        feelingQuestions.value = body['feelingQuestions'] ?? [];
+      } else {
+        error.value = 'error';
+      }
+    } catch (e) {
+      error.value = 'error';
+      if (kDebugMode) print(e);
+    } finally {
+      isLoading.value = false;
     }
   }
 }

@@ -24,6 +24,7 @@ class _PatientIntakeDetailsScreenState
   void initState() {
     super.initState();
     controller.fetchPatientData(widget.patientId);
+     controller.fetchAssessmentAnswers(widget.patientId); 
   }
 
   @override
@@ -111,7 +112,10 @@ class _PatientIntakeDetailsScreenState
                     ),
                   ),
                   isActive: _currentStep >= 2,
-                  content: _buildAssessmentContent(assessmentInfos),
+                  content: _buildNewAssessmentContent(
+  controller.bodyQuestions,
+  controller.feelingQuestions,
+),
                 ),
               ],
               currentStep: _currentStep,
@@ -201,4 +205,65 @@ class _PatientIntakeDetailsScreenState
           .toList(),
     );
   }
+  Widget _buildNewAssessmentContent(List bodyQs, List feelingQs) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+
+      /// ✅ BODY QUESTIONS
+      ...bodyQs.map((item) => Card(
+            elevation: 4,
+            margin: const EdgeInsets.symmetric(vertical: 8),
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Question: ${item['question']}",
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    "Answer: ${item['answer']}",
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ],
+              ),
+            ),
+          )),
+
+      const SizedBox(height: 12),
+
+      /// ✅ FEELING QUESTIONS
+      if (feelingQs.isNotEmpty)
+        Text(
+          "Feelings",
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+
+      ...feelingQs.map((item) => Card(
+            elevation: 4,
+            margin: const EdgeInsets.symmetric(vertical: 8),
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Key: ${item['key']}",
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    "Answer: ${item['answer']}",
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ],
+              ),
+            ),
+          )),
+    ],
+  );
+}
 }

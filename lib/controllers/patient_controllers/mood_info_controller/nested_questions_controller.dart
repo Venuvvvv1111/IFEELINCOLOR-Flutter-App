@@ -40,14 +40,14 @@ class QuestionController extends GetxController {
   /// Answers list
   var answers = <QA>[].obs;
 
-  @override
-  void onInit() {
-    fetchQuestions();
-    super.onInit();
-  }
+  // @override
+  // void onInit() {
+  //   fetchQuestions();
+  //   super.onInit();
+  // }
 
   // ✅ FETCH API
-  void fetchQuestions() async {
+  void fetchQuestions(String partId) async {
     try {
       isLoading(true);
 
@@ -57,17 +57,18 @@ class QuestionController extends GetxController {
           'Content-Type': 'application/json',
           'authorization': 'Bearer ${UserInfo().getUserToken}'
         },
-        body: json.encode({"partIds": ["Happy", "sad"]}),
+        body: json.encode({"partId": partId}),
       );
 
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
         final data = QuestionResponse.fromJson(json);
 
-        if (data.body != null && data.body!.isNotEmpty) {
-          rootQuestion = data.body!.first;
-          currentQuestion.value = rootQuestion;
-        }
+       if (data.body != null) {
+  rootQuestion = data.body;
+  currentQuestion.value = rootQuestion;
+}
+        
       }
     } catch (e) {
       print("Error: $e");
@@ -102,7 +103,7 @@ class QuestionController extends GetxController {
   }
 
   // Navigate or submit
-  if (option.options != null && option.options!.isNotEmpty) {
+  if (option.options!.isNotEmpty) {
     if (history.length > stepIndex) {
       history[stepIndex] = option;
     } else {
@@ -121,12 +122,22 @@ class QuestionController extends GetxController {
     try {
      isLoading(true);
      final userInfo = Get.find<UserInfo>();
-    final payload = {
-      "answers": answers.map((e) => {
-            "key": e.answerKey,
-            "answer": e.answerLabel,
-          }).toList(),
+   final payload = {
+      "answers": [
+        // ✅ ADD ROOT LEVEL FIRST
+        {
+          "key": rootQuestion?.key,
+          "answer": rootQuestion?.label,
+        },
+
+        // ✅ THEN ADD ALL SELECTED ANSWERS
+        ...answers.map((e) => {
+              "key": e.answerKey,
+              "answer": e.answerLabel,
+            }).toList(),
+      ],
     };
+
 
     print("FINAL PAYLOAD: ${jsonEncode(payload)}");
 

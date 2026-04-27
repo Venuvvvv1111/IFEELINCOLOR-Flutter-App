@@ -3,6 +3,10 @@ import 'package:get/get.dart';
 import 'package:ifeelin_color/controllers/patient_controllers/mood_info_controller/nested_questions_controller.dart';
 
 class QuestionDialog extends StatefulWidget {
+  final String partId;
+
+  const QuestionDialog({Key? key, required this.partId}) : super(key: key);
+
   @override
   State<QuestionDialog> createState() => _QuestionDialogState();
 }
@@ -18,8 +22,7 @@ class _QuestionDialogState extends State<QuestionDialog> {
   @override
   void initState() {
     super.initState();
-    controller.fetchQuestions();
-    
+    controller.fetchQuestions(widget.partId);
   }
 
   @override
@@ -89,8 +92,7 @@ class _QuestionDialogState extends State<QuestionDialog> {
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w500,
-                            color:
-                                isSelected ? Colors.white : Colors.black87,
+                            color: isSelected ? Colors.white : Colors.black87,
                           ),
                         ),
                       ),
@@ -123,7 +125,8 @@ class _QuestionDialogState extends State<QuestionDialog> {
                     },
                     child: Text(
                       (controller.selectedOption.value?.options != null &&
-                              controller.selectedOption.value!.options!.isNotEmpty)
+                              controller
+                                  .selectedOption.value!.options!.isNotEmpty)
                           ? "Next"
                           : "Submit",
                     ),

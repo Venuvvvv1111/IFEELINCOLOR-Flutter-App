@@ -5,7 +5,7 @@ import 'package:get_storage/get_storage.dart';
 class UserInfo extends GetxService {
   final _userData = GetStorage('user_data');
   RxBool isTtsEnabled = false.obs;
-    RxBool isMoodInfoAlreadyRead = false.obs;
+  RxBool isMoodInfoAlreadyRead = false.obs;
   GetStorage box = GetStorage();
   var userName = ''.obs;
   RxBool getTreatmentHistory = false.obs;
@@ -15,12 +15,14 @@ class UserInfo extends GetxService {
   set addTreatmentHistory(bool url) {
     _userData.write('checkTreatmentHistory', url);
   }
+
   @override
   void onInit() {
     super.onInit();
     // Load the stored value into the observable when the service initializes
-      isTtsEnabled.value = _userData.read('isTtsEnabled') ?? false;
-      isMoodInfoAlreadyRead.value = _userData.read('isMoodInfoAlreadyRead') ?? false;
+    isTtsEnabled.value = _userData.read('isTtsEnabled') ?? false;
+    isMoodInfoAlreadyRead.value =
+        _userData.read('isMoodInfoAlreadyRead') ?? false;
 
     getTreatmentHistory.value =
         _userData.read('checkTreatmentHistory') ?? false;
@@ -30,13 +32,10 @@ class UserInfo extends GetxService {
     getBodyAssesment.value = _userData.read('bodyAssesment') ?? false;
     userName.value = _userData.read('name') ?? 'Hi User';
   }
-set setTtsEnabled(bool value) {
+
+  set setTtsEnabled(bool value) {
     _userData.write('isTtsEnabled', value);
     isTtsEnabled.value = value;
-  }
-  set setIsMoodInfoAlreadyReadEnabled(bool value) {
-    _userData.write('isMoodInfoAlreadyRead', value);
-    isMoodInfoAlreadyRead.value = value;
   }
 
   void refreshData() async {
@@ -68,6 +67,10 @@ set setTtsEnabled(bool value) {
 
   set addSocialHealthHistory(bool url) {
     _userData.write('socialHealthHistory', url);
+  }
+
+  set setIsMoodInfoAlreadyReadEnabled(bool value) {
+    _userData.write('isMoodInfoAlreadyRead', value);
   }
 
   set addAssesment(bool url) {
@@ -279,8 +282,8 @@ set setTtsEnabled(bool value) {
   }
 
   removeAssememt() {
-    getTreatmentHistory.value = false;
-    getSocialHealthHistory.value = false;
+    // getTreatmentHistory.value = false;
+    // getSocialHealthHistory.value = false;
     getAssesment.value = false;
     getBodyAssesment.value = false;
     _userData.remove('assesment');

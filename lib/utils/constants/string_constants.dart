@@ -47,7 +47,7 @@ class Constants {
   static const String portalRecommendations = "rec/portal_recommendations";
   static const String assesmentTestQuestions = "test";
   static const String assesmentsubmit = "test/take-assessment";
-  static const String submitFeelingAnsers="submit-feeling-answers/67bbf056b1dd6c42c57861e7";
+  static const String submitFeelingAnsers="submit-feeling-answers";
   static const String level2Assesmentsubmit = "patients/mood-assessment";
   static const String patientNotifications = "patients/notifications";
   static const String sendAlert = "patients/alert";
@@ -89,7 +89,7 @@ class Constants {
   static const String subscriptionStatsURL = "doctor/subscription-stats";
   static const String allRecomendedPatientsURL = "doctor/recommended-patients";
   static const String updateDoctorPrifileURL = "doctor/update-doctor";
-  static const String updateDoctorProfileImage = "doctor/update-dp";
+  static const String updateDoctorProfileImage = "doctor/upload-dp";
   static const String faqURL = "faq";
 
   static const String doctorChangePassword = "doctor/update-password";

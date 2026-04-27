@@ -1,16 +1,14 @@
 class QuestionResponse {
   String? status;
-  int? count;
-  List<QuestionNode>? body;
+  QuestionNode? body;
 
-  QuestionResponse({this.status, this.count, this.body});
+  QuestionResponse({this.status, this.body});
 
   QuestionResponse.fromJson(Map<String, dynamic> json) {
     status = json['status'];
-    count = json['count'];
-    body = (json['body'] as List?)
-        ?.map((e) => QuestionNode.fromJson(e))
-        .toList();
+    body = json['body'] != null
+        ? QuestionNode.fromJson(json['body'])
+        : null;
   }
 }
 
@@ -41,9 +39,9 @@ class QuestionNode {
     hexCode =
         json['hexCode'] != null ? HexCode.fromJson(json['hexCode']) : null;
     question = json['question'];
-    options = (json['options'] as List?)
-        ?.map((e) => QuestionNode.fromJson(e))
-        .toList();
+   options = (json['options'] as List?)
+    ?.map((e) => QuestionNode.fromJson(e))
+    .toList() ?? [];
   }
 }
 

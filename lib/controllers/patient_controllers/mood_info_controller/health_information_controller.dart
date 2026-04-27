@@ -73,14 +73,17 @@ class HealthController extends GetxController {
     update();
   }
 
-  void nextQuestion(context) {
+  Future<void> nextQuestion(context) async {
     if (selectedAnswers[currentQuestionIndex.value].isNotEmpty) {
       // Save the current answer and reason
       updateCurrentQuestion();
 
       if (currentQuestionIndex.value < questions.length - 1) {
         currentQuestionIndex.value++;
-        TTSService().speak("${questions[currentQuestionIndex.value]}");
+       await  TTSService().speak("${questions[currentQuestionIndex.value]}");
+
+        await Future.delayed(const Duration(seconds: 1));
+        await TTSService().speak("Please select any one Option. Yes, No, or I Don't know");
       } else {
         // Show review dialog at the end
         showReviewDialog(context);
@@ -112,6 +115,7 @@ class HealthController extends GetxController {
   }
 
   void showReviewDialog(context) {
+    TTSService().speak("Please review the answers and submit");
     Get.dialog(
       AlertDialog(
         title: const Text('Review Answers'),

@@ -28,12 +28,31 @@ class _TreatmentHistoryState extends State<TreatmentHistory> {
     isTtsOn = userInfo.isTtsEnabled.value;
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (isTtsOn) {
+        // ever(controller.questions, (_) async {
+        //   if (isTtsOn && controller.questions.isNotEmpty) {
+        //     await Future.delayed(const Duration(milliseconds: 300));
+
+        //    await TTSService().speak(
+        //       controller.questions[controller.currentQuestionIndex.value],
+        //     );
+        //                 await Future.delayed(const Duration(seconds: 2));
+
+        //    await TTSService().speak(
+        //       "Please select any one. Options are Yes or No.",
+        //     );
+        //   }
+        // });
+
         ever(controller.questions, (_) async {
           if (isTtsOn && controller.questions.isNotEmpty) {
-            await Future.delayed(const Duration(milliseconds: 300));
-
-            TTSService().speak(
+            await TTSService().speak(
               controller.questions[controller.currentQuestionIndex.value],
+            );
+
+            await Future.delayed(const Duration(seconds: 1));
+
+            await TTSService().speak(
+              "Please select any one. Options are Yes or No.",
             );
           }
         });

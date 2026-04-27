@@ -69,7 +69,7 @@ class TreatmentHistoryController extends GetxController {
     };
   }
 
-  void nextQuestion(context) {
+  void nextQuestion(context) async{
     if (selectedAnswer.isNotEmpty) {
       updateCurrentQuestion();
       if (currentQuestionIndex.value < questions.length - 1) {
@@ -78,7 +78,9 @@ class TreatmentHistoryController extends GetxController {
             answers[currentQuestionIndex.value]['answer'] ?? '';
         reasonController.text =
             answers[currentQuestionIndex.value]['reason'] ?? '';
-        TTSService().speak("${questions[currentQuestionIndex.value]}");
+       await TTSService().speak("${questions[currentQuestionIndex.value]}");
+                    await Future.delayed(const Duration(seconds: 1));
+          await  TTSService().speak("Please select any one");
       } else {
         showReviewDialog(context);
       }
@@ -102,6 +104,7 @@ class TreatmentHistoryController extends GetxController {
   }
 
   void showReviewDialog(context) {
+    TTSService().speak("Please review the answers and submit");
     Get.dialog(
       AlertDialog(
         title: const Text('Review Answers'),

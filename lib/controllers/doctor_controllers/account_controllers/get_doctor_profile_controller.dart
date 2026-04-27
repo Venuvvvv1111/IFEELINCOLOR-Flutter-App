@@ -328,15 +328,14 @@ class GetDoctorProfileController extends GetxController {
     }
     try {
       LoaderHelper.showLoader(context);
-      var url =
-          '${Constants.baseUrl}/${Constants.updateDoctorProfileImage}/${UserInfo().getPatientId}';
+      var url = '${Constants.baseUrl}/${Constants.updateDoctorProfileImage}';
       if (kDebugMode) {
         print('Upload URL: $url');
       }
       var request = http.MultipartRequest(
-        'PUT',
+        'POST',
         Uri.parse(
-          '${Constants.baseUrl}/${Constants.updateDoctorProfileImage}/${UserInfo().getPatientId}',
+          '${Constants.baseUrl}/${Constants.updateDoctorProfileImage}',
         ),
       );
       request.headers['authorization'] = 'Bearer ${UserInfo().getUserToken}';
