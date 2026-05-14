@@ -36,6 +36,7 @@ class _SettingsScreen extends State<SettingsScreen> {
 
     userName = UserInfo().getUserName ?? 'Hi User';
      allSettingsController.getIsFreeTrailActive();
+       allSettingsController.getActiveSubscriptionStatus(); 
   }
 
   @override
@@ -189,16 +190,22 @@ class _SettingsScreen extends State<SettingsScreen> {
                         context, AppRoutes.mySubscriptionScreen);
                   },
                 ),
-                SettingItems(
-                  image: AppIcons.paymentMenthodMainIcon,
-                  title: 'Portal Subscription',
-                  ontap: () {
-                    Navigator.pushNamed(
-                      context,
-                      AppRoutes.subscribePortalScreen,
-                    );
-                  },
-                ),
+                Obx(() {
+                  if (allSettingsController.hasActiveSubscription.value) {
+                    return const SizedBox.shrink(); // 👈 HIDE
+                  }
+
+                  return SettingItems(
+                    image: AppIcons.paymentMenthodMainIcon,
+                    title: 'Portal Subscription',
+                    ontap: () {
+                      Navigator.pushNamed(
+                        context,
+                        AppRoutes.subscribePortalScreen,
+                      );
+                    },
+                  );
+                }),
                 SettingItems(
                   image: AppIcons.paymentMenthodMainIcon,
                   title: 'Organization Subscription',

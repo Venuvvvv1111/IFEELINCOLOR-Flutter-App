@@ -541,7 +541,7 @@ class ColorWheelScreenState extends State<ColorWheelScreen> {
                                               Navigator.pushNamedAndRemoveUntil(
                                                   context,
                                                   AppRoutes.mainScreenTabs,
-                                                  (route) => false);
+                                                  (route) => false, arguments: 1,);
                                             },
                                             child: const Row(
                                               mainAxisAlignment:

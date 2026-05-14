@@ -33,9 +33,15 @@ class _MainTabsScreenState extends State<MainTabsScreen>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance
-        .addObserver(this); 
-         
+    WidgetsBinding.instance.addObserver(this);
+
+    Future.microtask(() {
+      final args = Get.arguments ?? ModalRoute.of(context)?.settings.arguments;
+
+      if (args != null && args is int) {
+        homeController.selectedIndex.value = args;
+      }
+    });
   }
 
   @override

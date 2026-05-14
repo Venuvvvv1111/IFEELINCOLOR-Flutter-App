@@ -12,12 +12,15 @@ import 'package:http/http.dart' as http;
 class AllSettingsController extends GetxController {
   RxBool notificationsEnabled = true.obs;
   Rx<bool> isFreeTrailActive = false.obs;
+  RxBool hasActiveSubscription = false.obs;
   void toggleNotification(bool value) {
     notificationsEnabled.value = value;
     String status = value ? "true" : "false";
     sendNotificationStatusToAPI(status);
   }
-
+Future<void> getActiveSubscriptionStatus() async {
+  hasActiveSubscription.value = await checkActiveSubscription();
+}
   Future<void> getIsFreeTrailActive() async {
     UserInfo userInfo = Get.put(UserInfo());
     if (kDebugMode) {
@@ -100,5 +103,49 @@ class AllSettingsController extends GetxController {
           backgroundColor: Colors.red,
           color: Colors.white);
     }
+  }
+    Future<bool> checkActiveSubscription() async {
+    UserInfo userInfo = Get.put(UserInfo());
+    if (kDebugMode) {
+      print('is user loged in ');
+      print(userInfo.getUserLogin);
+    }
+
+    try {
+      final response = await http.get(
+        Uri.parse(userInfo.getUserLogin
+            ? '${Constants.baseUrl}/${Constants.patientSubscriptionCheck}'
+            : '${Constants.baseUrl}/${Constants.doctorSubscriptionCheck}'),
+        headers: {
+          'Content-Type': 'application/json',
+          'authorization': 'Bearer ${userInfo.getUserToken}'
+        },
+      );
+
+      if (response.statusCode == 200) {
+        // Parse the response JSON
+        var data = jsonDecode(response.body);
+        if (kDebugMode) {
+          print(data['body']['hasActiveSubscription']);
+        }
+        bool hasActiveSubscription = data['body']['hasActiveSubscription'];
+
+        return hasActiveSubscription;
+      } else {
+        // Handle API error
+        if (kDebugMode) {
+          print('Error: Unable to fetch subscription status');
+        }
+        return true;
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+
+      // Handle any errors during the API request
+
+      return true;
+    } 
   }
 }

@@ -208,7 +208,7 @@ class Careerpath {
 class PlanDetails {
   String? sId;
   String? name;
-  double? price;
+  String? price;
   String? details;
   int? validity;
   String? status;
