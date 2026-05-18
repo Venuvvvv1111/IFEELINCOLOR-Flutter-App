@@ -108,7 +108,7 @@ class _NearestDoctorsState extends State<NearestDoctors> {
                                 height: 3,
                               ),
                               RatingBarIndicator(
-                                rating: double.parse(doctor.ratings.toString()),
+                                rating: double.tryParse(doctor.ratings??"0.0")??0.0,
 
                                 itemCount: 5,
                                 itemSize:

@@ -57,7 +57,7 @@ class SubscribePortalController extends GetxController {
           await subscribePortal(context, planId,title:currentPlan.name );
         } else {
           bool paymentSuccess = await stripeService.makePayment(
-              context, double.parse(currentPlan.price!), currentPlan.name);
+              context, double.tryParse(currentPlan.price??"0.0")??0.0, currentPlan.name);
 
           if (kDebugMode) {
             print('ID: ${currentPlan.sId}');

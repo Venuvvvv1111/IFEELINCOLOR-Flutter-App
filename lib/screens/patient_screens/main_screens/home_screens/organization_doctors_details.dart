@@ -112,10 +112,9 @@ class OrganizationDoctorDetailsScreen extends StatelessWidget {
                                     height: 10,
                                   ),
                                   RatingBarIndicator(
-                                    rating: double.parse(organizationDoctorsData
-                                            ?.ratings
-                                            .toString() ??
-                                        "3.0"),
+                                    rating: double.tryParse(organizationDoctorsData
+                                            ?.ratings??"0.0"
+                                        )??0.0,
 
                                     itemCount: 5,
                                     itemSize:

@@ -155,9 +155,9 @@ class _OrganizationDoctorsScreenState extends State<OrganizationDoctorsScreen> {
                                     height: 3,
                                   ),
                                   RatingBarIndicator(
-                                    rating: double.parse(doctor.ratings!.isEmpty
-                                        ? "4.0"
-                                        : doctor.ratings ?? "4.0"),
+                                    rating: double.tryParse(doctor.ratings??
+                                         "0.0"
+                                        )??0.0,
 
                                     itemCount: 5,
                                     itemSize:

@@ -117,8 +117,8 @@ class DoctorDashboard extends StatelessWidget {
                                     height: 10,
                                   ),
                                   RatingBarIndicator(
-                                    rating: double.parse(
-                                        userinfo.getDoctorRatings ?? "4.0"),
+                                    rating: double.tryParse(
+                                        userinfo.getDoctorRatings ?? "0.0")??0.0,
 
                                     itemCount: 5,
                                     itemSize:

@@ -83,7 +83,7 @@ class SubscribeClinicController extends GetxController {
           bool paymentSuccess = await stripeService.makePayment(
               // ignore: use_build_context_synchronously
               context,
-              double.parse(currentPlan.price!),
+              double.tryParse(currentPlan.price??"0.0")??0.0,
               currentPlan.name);
           // String planId = '${currentPlan.sId}';
           if (kDebugMode) {

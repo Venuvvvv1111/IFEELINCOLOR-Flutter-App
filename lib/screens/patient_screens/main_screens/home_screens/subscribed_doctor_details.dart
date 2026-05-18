@@ -118,11 +118,11 @@ class _SubscribedDoctorDetailsScreenState
                                     height: 10,
                                   ),
                                   RatingBarIndicator(
-                                    rating: double.parse(widget
+                                    rating: double.tryParse(widget
                                             .subscriedDoctorsModel
                                             ?.clinician
                                             ?.ratings ??
-                                        "3.0"),
+                                        "0.0")??0.0,
 
                                     itemCount: 5,
                                     itemSize:

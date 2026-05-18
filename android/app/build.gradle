@@ -41,8 +41,12 @@ if (flutterVersionName == null) {
 android {
     namespace = "com.ifeelin_color.ifeelin_color"
     compileSdk = 36
-    ndkVersion = flutter.ndkVersion
-
+    ndkVersion = "27.0.12077973"
+  packagingOptions {
+        jniLibs {
+            useLegacyPackaging false
+        }
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8

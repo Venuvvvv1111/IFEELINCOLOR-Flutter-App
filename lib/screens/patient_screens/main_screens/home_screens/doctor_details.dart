@@ -107,10 +107,10 @@ class DoctorDetailsScreen extends StatelessWidget {
                                     height: 10,
                                   ),
                                   RatingBarIndicator(
-                                    rating: double.parse(nearbyDoctorsModel
+                                    rating: double.tryParse(nearbyDoctorsModel
                                             ?.ratings
                                             .toString() ??
-                                        "3.0"),
+                                        "0.0")??0.0,
 
                                     itemCount: 5,
                                     itemSize:

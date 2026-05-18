@@ -107,8 +107,8 @@ class _SubscribedDoctorsState extends State<SubscribedDoctors> {
                                 height: 5,
                               ),
                               RatingBarIndicator(
-                                rating: double.parse(
-                                    doctor.clinician?.ratings ?? "3.0"),
+                                rating: double.tryParse(
+                                    doctor.clinician?.ratings ?? "0.0")??0.0,
 
                                 itemCount: 5,
                                 itemSize:
