@@ -699,57 +699,61 @@ class RegistrationScreenViewState extends State<RegistrationScreenView> {
       }),
     );
   }
+final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
 
-  final GoogleSignIn _googleSignIn = GoogleSignIn(
-    clientId: Platform.isAndroid
-        ? '7093278234-mdp7jpvool8baiqiobf7tf4a8agnpu2o.apps.googleusercontent.com'
-        : "7093278234-v47g69ugtmdppjfjfl55k1kq10jrvku3.apps.googleusercontent.com",
-    scopes: ['email', 'https://www.googleapis.com/auth/contacts.readonly'],
-  );
+Future<void> signInWithGoogle(context) async {
+  if (controller.selectedCard!.value == "Patient") {
+    try {
 
-  Future<void> signInWithGoogle(context) async {
-    if (controller.selectedCard!.value == "Patient") {
-      try {
-        await _googleSignIn.signOut();
-        final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      await _googleSignIn.initialize(
+        clientId: Platform.isIOS
+            ? "7093278234-v47g69ugtmdppjfjfl55k1kq10jrvku3.apps.googleusercontent.com"
+            : null,
+        serverClientId:
+            "7093278234-mdp7jpvool8baiqiobf7tf4a8agnpu2o.apps.googleusercontent.com",
+      );
 
-        if (googleUser != null) {
-          if (kDebugMode) {
-            print('User ID: ${googleUser.id}');
-          }
+      await _googleSignIn.signOut();
 
-          if (kDebugMode) {
-            print('Photo URL: ${googleUser.photoUrl}');
-          }
-          controller.register(
-            context,
-            true,
-            googleUser.email,
-            "${googleUser.displayName}",
-            "${googleUser.displayName}",
-          );
-        } else {
-          if (kDebugMode) {
-            print('Sign-In canceled by the user.');
-          }
-        }
-      } catch (error) {
-        if (kDebugMode) {
-          print('Google Sign-In failed: $error');
-        }
+      final GoogleSignInAccount googleUser =
+          await _googleSignIn.authenticate();
+
+      if (kDebugMode) {
+        print('User ID: ${googleUser.id}');
+        print('Photo URL: ${googleUser.photoUrl}');
+        print('Email: ${googleUser.email}');
       }
-    } else if (controller.selectedCard!.value != "Patient") {
-      MyToast.showGetToast(
-          title: 'Error',
-          message: 'Please select valid role',
-          backgroundColor: Colors.red,
-          color: Colors.white);
-    } else {
-      MyToast.showGetToast(
-          title: 'Error',
-          message: 'Google registration failed try again',
-          backgroundColor: Colors.red,
-          color: Colors.white);
+
+      controller.register(
+        context,
+        true,
+        googleUser.email,
+        "${googleUser.displayName}",
+        "${googleUser.displayName}",
+      );
+
+    } catch (error) {
+      if (kDebugMode) {
+        print('Google Sign-In failed: $error');
+      }
     }
+
+  } else if (controller.selectedCard!.value != "Patient") {
+
+    MyToast.showGetToast(
+      title: 'Error',
+      message: 'Please select valid role',
+      backgroundColor: Colors.red,
+      color: Colors.white,
+    );
+
+  } else {
+
+    MyToast.showGetToast(
+      title: 'Error',
+      message: 'Google registration failed try again',
+      backgroundColor: Colors.red,
+      color: Colors.white,
+    );
   }
-}
+}}

@@ -418,63 +418,73 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-
-  final GoogleSignIn _googleSignIn = GoogleSignIn(
-    clientId: Platform.isAndroid
-        ? '7093278234-mdp7jpvool8baiqiobf7tf4a8agnpu2o.apps.googleusercontent.com'
-        : "7093278234-v47g69ugtmdppjfjfl55k1kq10jrvku3.apps.googleusercontent.com",
-    scopes: ['email', 'https://www.googleapis.com/auth/contacts.readonly'],
-  );
+final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
+  // final GoogleSignIn _googleSignIn = GoogleSignIn(
+  //   clientId: Platform.isAndroid
+  //       ? '7093278234-mdp7jpvool8baiqiobf7tf4a8agnpu2o.apps.googleusercontent.com'
+  //       : "7093278234-v47g69ugtmdppjfjfl55k1kq10jrvku3.apps.googleusercontent.com",
+  //   scopes: ['email', 'https://www.googleapis.com/auth/contacts.readonly'],
+  // );
 
   Future<void> signInWithGoogle(context) async {
-    try {
-      await _googleSignIn.signOut();
-      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+  try {
 
-      if (googleUser != null) {
-        if (kDebugMode) {
-          print('User ID: ${googleUser.id}');
-          print('Name: ${googleUser.displayName}');
-          print('Photo URL: ${googleUser.photoUrl}');
-          print('Email: ${googleUser.email}');
-        }
+    await _googleSignIn.initialize(
+      clientId: Platform.isIOS
+          ? "7093278234-v47g69ugtmdppjfjfl55k1kq10jrvku3.apps.googleusercontent.com"
+          : null,
+      serverClientId:
+          "7093278234-mdp7jpvool8baiqiobf7tf4a8agnpu2o.apps.googleusercontent.com",
+    );
 
-        if (controller.selectedCard!.value == "Patient") {
-          controller.login(
-              context, true, googleUser.email, "${googleUser.displayName}");
-        } else if (controller.selectedCard!.value == "Doctor") {
-          MyToast.showGetToast(
-              title: 'Error',
-              message: 'Google Sign-In Failed',
-              backgroundColor: Colors.red,
-              color: Colors.white);
-        } else if (controller.selectedCard!.value == "Organization") {
-          MyToast.showGetToast(
-              title: 'Error',
-              message: 'Invalid role',
-              color: Colors.white,
-              backgroundColor: Colors.red);
-        } else {
-          MyToast.showGetToast(
-              title: 'Error',
-              message: 'Please select your role',
-              color: Colors.white,
-              backgroundColor: Colors.red);
-        }
-        // controller.doctorLogin(context);
-        // Navigator.pushNamed(
-        //     context, AppRoutes.mainScreenTabs);
-      } else {
-        if (kDebugMode) {
-          print('Sign-In canceled by the user.');
-        }
-      }
-    } catch (error) {
-      if (kDebugMode) {
-        print('Google Sign-In failed: $error');
-      }
+    await _googleSignIn.signOut();
+
+    final GoogleSignInAccount googleUser =
+        await _googleSignIn.authenticate();
+
+    if (kDebugMode) {
+      print('User ID: ${googleUser.id}');
+      print('Name: ${googleUser.displayName}');
+      print('Photo URL: ${googleUser.photoUrl}');
+      print('Email: ${googleUser.email}');
+    }
+
+    if (controller.selectedCard!.value == "Patient") {
+      controller.login(
+        context,
+        true,
+        googleUser.email,
+        "${googleUser.displayName}",
+      );
+    } else if (controller.selectedCard!.value == "Doctor") {
+      MyToast.showGetToast(
+        title: 'Error',
+        message: 'Google Sign-In Failed',
+        backgroundColor: Colors.red,
+        color: Colors.white,
+      );
+    } else if (controller.selectedCard!.value == "Organization") {
+      MyToast.showGetToast(
+        title: 'Error',
+        message: 'Invalid role',
+        color: Colors.white,
+        backgroundColor: Colors.red,
+      );
+    } else {
+      MyToast.showGetToast(
+        title: 'Error',
+        message: 'Please select your role',
+        color: Colors.white,
+        backgroundColor: Colors.red,
+      );
+    }
+
+  } catch (error) {
+    if (kDebugMode) {
+      print('Google Sign-In failed: $error');
     }
   }
+}
 
   Widget buildCard(String title, String imagePath) {
     double screenWidth = MediaQuery.of(context).size.width;
